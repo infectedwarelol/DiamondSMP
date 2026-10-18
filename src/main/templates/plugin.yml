@@ -537,6 +537,14 @@ permissions:
       diamondsmp.killeffect.witch_magic: true
       diamondsmp.killeffect.crit_storm: true
       diamondsmp.killeffect.end_rod_burst: true
+      diamondsmp.killeffect.anvil_drop: true
+      diamondsmp.killeffect.skull_rise: true
+      diamondsmp.killeffect.diamond_rain: true
+      diamondsmp.killeffect.dragon_roar: true
+      diamondsmp.killeffect.trident_storm: true
+      diamondsmp.killeffect.gold_rush: true
+      diamondsmp.killeffect.pumpkin_pop: true
+      diamondsmp.killeffect.royal_crown: true
   diamondsmp.killeffect:
     description: Open the kill effect menu.
     default: true
@@ -596,6 +604,30 @@ permissions:
     default: false
   diamondsmp.killeffect.end_rod_burst:
     description: Unlock the star burst kill effect.
+    default: false
+  diamondsmp.killeffect.anvil_drop:
+    description: Unlock the anvil drop kill effect.
+    default: false
+  diamondsmp.killeffect.skull_rise:
+    description: Unlock the skull rise kill effect.
+    default: false
+  diamondsmp.killeffect.diamond_rain:
+    description: Unlock the diamond rain kill effect.
+    default: false
+  diamondsmp.killeffect.dragon_roar:
+    description: Unlock the dragon roar kill effect.
+    default: false
+  diamondsmp.killeffect.trident_storm:
+    description: Unlock the trident storm kill effect.
+    default: false
+  diamondsmp.killeffect.gold_rush:
+    description: Unlock the gold rush kill effect.
+    default: false
+  diamondsmp.killeffect.pumpkin_pop:
+    description: Unlock the pumpkin pop kill effect.
+    default: false
+  diamondsmp.killeffect.royal_crown:
+    description: Unlock the royal crown kill effect.
     default: false
 
   diamondsmp.stats.*:

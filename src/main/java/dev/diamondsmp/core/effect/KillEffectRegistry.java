@@ -90,6 +90,44 @@ public final class KillEffectRegistry {
                 List.of("&7Glowing stars scatter outward."),
                 (scheduler, at) -> burst(at, Particles.END_ROD, 60, 0.2D, 0.18D, Color.WHITE,
                         "entity.shulker.shoot", 1.3F));
+        register("anvil_drop", "&7Anvil Drop", Material.ANVIL,
+                List.of("&7A giant anvil crushes your victim."),
+                (scheduler, at) -> burst(at, Particles.CLOUD, 40, 0.6D, 0.02D, Color.GRAY, "block.anvil.land", 0.8F));
+        register("skull_rise", "&8Skull Rise", Material.WITHER_SKELETON_SKULL,
+                List.of("&7A cursed skull rises from the body."),
+                (scheduler, at) -> burst(at, Particles.LARGE_SMOKE, 45, 0.4D, 0.03D, Color.BLACK,
+                        "entity.wither.ambient", 1.2F));
+        register("diamond_rain", "&bDiamond Rain", Material.DIAMOND,
+                List.of("&7A huge diamond shines above the kill."),
+                (scheduler, at) -> burst(at, Particles.DUST, 80, 0.8D, 0.0D, Color.fromRGB(0x5CE1E6),
+                        "block.amethyst_block.chime", 1.0F));
+        register("dragon_roar", "&5Dragon Roar", Material.DRAGON_HEAD,
+                List.of("&7The ender dragon claims the kill."),
+                (scheduler, at) -> burst(at, Particles.PORTAL, 160, 0.6D, 1.0D, Color.PURPLE,
+                        "entity.ender_dragon.growl", 1.0F));
+        register("trident_storm", "&3Trident Storm", Material.TRIDENT,
+                List.of("&7A giant trident calls down the storm."),
+                KillEffectRegistry::tridentStorm);
+        register("gold_rush", "&6Gold Rush", Material.GOLD_BLOCK,
+                List.of("&7Your victim was worth their weight in gold."),
+                (scheduler, at) -> burst(at, Particles.DUST, 70, 0.7D, 0.0D, Color.fromRGB(0xFFD24D),
+                        "entity.player.levelup", 1.2F));
+        register("pumpkin_pop", "&6Pumpkin Pop", Material.JACK_O_LANTERN,
+                List.of("&7A spooky pumpkin pops out."),
+                (scheduler, at) -> burst(at, Particles.FLAME, 50, 0.5D, 0.05D, Color.ORANGE,
+                        "entity.witch.celebrate", 0.9F));
+        register("royal_crown", "&eRoyal Crown", Material.GOLDEN_HELMET,
+                List.of("&7Crown yourself after the kill."),
+                (scheduler, at) -> burst(at, Particles.END_ROD, 40, 0.5D, 0.05D, Color.YELLOW,
+                        "ui.toast.challenge_complete", 1.0F));
+    }
+
+    private static void tridentStorm(Scheduler scheduler, Location at) {
+        World world = at.getWorld();
+        if (world != null) {
+            world.strikeLightningEffect(at);
+        }
+        burst(at, Particles.SPLASH, 90, 0.6D, 0.3D, Color.AQUA, "item.trident.thunder", 1.0F);
     }
 
     private void register(String id, String name, Material icon, List<String> description,

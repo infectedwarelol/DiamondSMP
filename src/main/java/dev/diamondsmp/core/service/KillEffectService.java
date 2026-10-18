@@ -1,10 +1,12 @@
 package dev.diamondsmp.core.service;
 
 import dev.diamondsmp.core.DiamondSMP;
+import dev.diamondsmp.core.effect.Hologram;
 import dev.diamondsmp.core.effect.KillEffect;
 import dev.diamondsmp.core.effect.KillEffectRegistry;
 import dev.diamondsmp.core.gui.KillEffectMenu;
 import dev.diamondsmp.core.storage.PlayerProfile;
+import dev.diamondsmp.core.util.Format;
 import dev.diamondsmp.core.util.Lookup;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -36,6 +38,7 @@ public final class KillEffectService implements Service {
     private volatile Map<String, Configured> enabled = Map.of();
     private volatile Material lockedIcon = Material.GRAY_DYE;
     private volatile Material noneIcon = Material.BARRIER;
+    private volatile Hologram hologram = new Hologram(true, 2.5F, 50, 1.6D, 1.2D, 0.35D);
 
     public KillEffectService(DiamondSMP plugin) {
         this.plugin = plugin;
@@ -47,6 +50,12 @@ public final class KillEffectService implements Service {
         FileConfiguration config = plugin.settings();
         lockedIcon = Lookup.material(config.getString("kill-effects.locked-icon"), Material.GRAY_DYE);
         noneIcon = Lookup.material(config.getString("kill-effects.none-icon"), Material.BARRIER);
+        hologram = new Hologram(config.getBoolean("kill-effects.hologram.enabled", true),
+                (float) Math.max(0.1D, Math.min(8.0D, config.getDouble("kill-effects.hologram.scale", 2.5D))),
+                (int) Math.max(10L, Format.parseSeconds(config.getString("kill-effects.hologram.duration"), 3L) * 20L),
+                config.getDouble("kill-effects.hologram.height", 1.6D),
+                config.getDouble("kill-effects.hologram.rise", 1.2D),
+                config.getDouble("kill-effects.hologram.spin", 0.35D));
         Map<String, Configured> parsed = new LinkedHashMap<>();
         for (KillEffect effect : registry.all()) {
             ConfigurationSection section = config.getConfigurationSection("kill-effects.effects." + effect.id());
@@ -119,7 +128,11 @@ public final class KillEffectService implements Service {
             return;
         }
         Location location = at.clone();
-        plugin.scheduler().region(location, () -> configured.effect().animation().play(plugin.scheduler(), location));
+        Hologram style = hologram;
+        plugin.scheduler().region(location, () -> {
+            configured.effect().animation().play(plugin.scheduler(), location);
+            style.show(plugin.scheduler(), location, configured.icon());
+        });
     }
 
     public void open(Player player, int page) {
