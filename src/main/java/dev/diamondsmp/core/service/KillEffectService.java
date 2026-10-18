@@ -1,6 +1,7 @@
 package dev.diamondsmp.core.service;
 
 import dev.diamondsmp.core.DiamondSMP;
+import dev.diamondsmp.core.effect.Corpse;
 import dev.diamondsmp.core.effect.EffectSession;
 import dev.diamondsmp.core.effect.KillEffect;
 import dev.diamondsmp.core.effect.KillEffectRegistry;
@@ -156,7 +157,7 @@ public final class KillEffectService implements Service {
         return profile != null && profile.hidesEffects();
     }
 
-    public void play(Player killer, Location at) {
+    public void play(Player killer, Player victim, Location at) {
         if (killer == null || at == null || at.getWorld() == null || active.size() >= maxActive) {
             return;
         }
@@ -169,8 +170,9 @@ public final class KillEffectService implements Service {
             return;
         }
         Location origin = safeOrigin(at);
+        Corpse corpse = victim == null ? null : Corpse.of(victim);
         double load = active.size() >= reduceAbove ? reducedDensity : 1.0D;
-        plugin.scheduler().region(origin, () -> start(configured, origin, killer, load));
+        plugin.scheduler().region(origin, () -> start(configured, origin, killer, corpse, load));
     }
 
     private Configured pick(Player killer) {
@@ -189,7 +191,7 @@ public final class KillEffectService implements Service {
         return new Location(world, at.getX(), y, at.getZ());
     }
 
-    private void start(Configured configured, Location origin, Player killer, double load) {
+    private void start(Configured configured, Location origin, Player killer, Corpse corpse, double load) {
         World world = origin.getWorld();
         if (world == null || !world.isChunkLoaded(origin.getBlockX() >> 4, origin.getBlockZ() >> 4)
                 || active.size() >= maxActive) {
@@ -213,7 +215,7 @@ public final class KillEffectService implements Service {
         EffectSession.Settings settings = new EffectSession.Settings(density * configured.intensity() * load,
                 configured.duration(), configured.volume(), particleBudget, maxTicks);
         EffectSession[] holder = new EffectSession[1];
-        holder[0] = new EffectSession(plugin, plugin.scheduler(), origin, killer, viewers, hidden, settings,
+        holder[0] = new EffectSession(plugin, plugin.scheduler(), origin, killer, corpse, viewers, hidden, settings,
                 () -> active.remove(holder[0]));
         active.add(holder[0]);
         try {

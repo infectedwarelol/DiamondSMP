@@ -12,11 +12,14 @@ import org.bukkit.SoundCategory;
 import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.block.data.BlockData;
+import org.bukkit.entity.ArmorStand;
 import org.bukkit.entity.BlockDisplay;
 import org.bukkit.entity.Display;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.ItemDisplay;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.TextDisplay;
+import org.bukkit.inventory.EntityEquipment;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.util.Transformation;
@@ -43,13 +46,14 @@ public final class EffectSession {
     private final Location origin;
     private final World world;
     private final Player killer;
+    private final Corpse corpse;
     private final List<Player> viewers;
     private final List<Player> hidden;
     private final Settings settings;
     private final Runnable onFinish;
     private final List<Step> steps = new ArrayList<>();
     private List<Step> timeline = List.of();
-    private final List<Display> displays = new ArrayList<>();
+    private final List<Entity> entities = new ArrayList<>();
     private final Set<Location> illusions = new LinkedHashSet<>();
     private final AtomicBoolean finished = new AtomicBoolean();
     private Task task = Task.NONE;
@@ -57,13 +61,14 @@ public final class EffectSession {
     private int lastTick;
     private int particlesThisTick;
 
-    public EffectSession(Plugin plugin, Scheduler scheduler, Location origin, Player killer, List<Player> viewers,
-                         List<Player> hidden, Settings settings, Runnable onFinish) {
+    public EffectSession(Plugin plugin, Scheduler scheduler, Location origin, Player killer, Corpse corpse,
+                         List<Player> viewers, List<Player> hidden, Settings settings, Runnable onFinish) {
         this.plugin = plugin;
         this.scheduler = scheduler;
         this.origin = new Location(origin.getWorld(), origin.getX(), origin.getY(), origin.getZ(), 0.0F, 0.0F);
         this.world = origin.getWorld();
         this.killer = killer;
+        this.corpse = corpse;
         this.viewers = List.copyOf(viewers);
         this.hidden = List.copyOf(hidden);
         this.settings = settings;
@@ -158,12 +163,12 @@ public final class EffectSession {
     }
 
     private void cleanup() {
-        for (Display display : displays) {
-            if (display.isValid()) {
-                display.remove();
+        for (Entity entity : entities) {
+            if (entity.isValid()) {
+                entity.remove();
             }
         }
-        displays.clear();
+        entities.clear();
         for (Location location : illusions) {
             if (!Bukkit.isOwnedByCurrentRegion(location)) {
                 continue;
@@ -272,12 +277,16 @@ public final class EffectSession {
         return display;
     }
 
-    @SuppressWarnings("deprecation")
     public TextDisplay text(Component text, Transformation start) {
+        return text(text, start, Display.Billboard.CENTER);
+    }
+
+    @SuppressWarnings("deprecation")
+    public TextDisplay text(Component text, Transformation start, Display.Billboard billboard) {
         TextDisplay display = spawn(TextDisplay.class, start);
         if (display != null) {
             display.text(text);
-            display.setBillboard(Display.Billboard.CENTER);
+            display.setBillboard(billboard);
             display.setBackgroundColor(Color.fromARGB(0, 0, 0, 0));
             display.setShadowed(true);
             display.setSeeThrough(false);
@@ -285,7 +294,6 @@ public final class EffectSession {
         return display;
     }
 
-    @SuppressWarnings("UnstableApiUsage")
     private <T extends Display> T spawn(Class<T> type, Transformation start) {
         if (finished.get() || !Bukkit.isOwnedByCurrentRegion(origin)) {
             return null;
@@ -294,10 +302,7 @@ public final class EffectSession {
         display.setPersistent(false);
         display.setBrightness(new Display.Brightness(15, 15));
         display.setTransformation(start);
-        displays.add(display);
-        for (Player player : hidden) {
-            scheduler.entity(player, () -> player.hideEntity(plugin, display));
-        }
+        track(display);
         return display;
     }
 
@@ -310,11 +315,85 @@ public final class EffectSession {
         display.setTransformation(target);
     }
 
-    public void remove(Display display) {
-        if (display != null && display.isValid()) {
-            display.remove();
-            displays.remove(display);
+    @SuppressWarnings("UnstableApiUsage")
+    private void track(Entity entity) {
+        entities.add(entity);
+        for (Player player : hidden) {
+            scheduler.entity(player, () -> player.hideEntity(plugin, entity));
         }
+    }
+
+    public void remove(Entity entity) {
+        if (entity != null && entity.isValid()) {
+            entity.remove();
+            entities.remove(entity);
+        }
+    }
+
+    public String victimName() {
+        return corpse == null ? "?" : corpse.name();
+    }
+
+    public ArmorStand corpse(CorpsePose pose, double dx, double dz, float yaw) {
+        return corpse(pose, dx, pose.floorOffset(), dz, yaw);
+    }
+
+    public ArmorStand corpse(CorpsePose pose, double dx, double dy, double dz, float yaw) {
+        Location spot = new Location(world, origin.getX() + dx, origin.getY() + dy, origin.getZ() + dz, yaw, 0.0F);
+        if (corpse == null || finished.get() || !Bukkit.isOwnedByCurrentRegion(spot)) {
+            return null;
+        }
+        ArmorStand stand = world.spawn(spot, ArmorStand.class);
+        stand.setPersistent(false);
+        stand.setMarker(true);
+        stand.setInvulnerable(true);
+        stand.setGravity(false);
+        stand.setSilent(true);
+        stand.setBasePlate(false);
+        stand.setArms(true);
+        stand.setCollidable(false);
+        stand.setCanTick(false);
+        EntityEquipment equipment = stand.getEquipment();
+        equipment.setHelmet(corpse.head().clone());
+        equipment.setChestplate(corpse.chest().clone());
+        equipment.setLeggings(corpse.legs().clone());
+        equipment.setBoots(corpse.boots().clone());
+        if (corpse.weapon() != null) {
+            equipment.setItemInMainHand(corpse.weapon().clone());
+        }
+        pose.apply(stand);
+        track(stand);
+        return stand;
+    }
+
+    public void decapitate(ArmorStand stand) {
+        if (stand != null && stand.isValid()) {
+            stand.getEquipment().setHelmet(null);
+        }
+    }
+
+    public void pose(ArmorStand stand, CorpsePose pose) {
+        if (stand != null && stand.isValid() && !finished.get()) {
+            pose.apply(stand);
+        }
+    }
+
+    public void place(Entity entity, double dx, double dy, double dz, float yaw) {
+        if (entity == null || !entity.isValid() || finished.get()) {
+            return;
+        }
+        Location target = new Location(world, origin.getX() + dx, origin.getY() + dy, origin.getZ() + dz, yaw, 0.0F);
+        if (Bukkit.isOwnedByCurrentRegion(target)) {
+            entity.teleportAsync(target);
+        }
+    }
+
+    public ItemDisplay head(Transformation start) {
+        ItemDisplay display = spawn(ItemDisplay.class, start);
+        if (display != null && corpse != null) {
+            display.setItemStack(corpse.head().clone());
+        }
+        return display;
     }
 
     public void floor(int dx, int dz, Material material) {

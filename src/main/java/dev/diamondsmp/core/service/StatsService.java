@@ -54,7 +54,7 @@ public final class StatsService implements Service {
         }
         plugin.killStreaks().killed(killer, streak);
         plugin.killStreaks().ended(victim, killer, endedStreak);
-        plugin.killEffects().play(killer, victim.getLocation());
+        plugin.killEffects().play(killer, victim, victim.getLocation());
         plugin.killTokens().reward(killer);
     }
 
