@@ -67,6 +67,7 @@ import dev.diamondsmp.core.listener.SpawnListener;
 import dev.diamondsmp.core.listener.TotemListener;
 import dev.diamondsmp.core.message.Messages;
 import dev.diamondsmp.core.scheduler.Scheduler;
+import dev.diamondsmp.core.service.Announcer;
 import dev.diamondsmp.core.service.BlockClearer;
 import dev.diamondsmp.core.service.ChatFilter;
 import dev.diamondsmp.core.service.ChatService;
@@ -144,6 +145,7 @@ public final class DiamondSMP extends JavaPlugin {
     private CommandHider commandHider;
     private PlayerHeads heads;
     private TotemLimit totems;
+    private Announcer announcer;
     private boolean ready;
 
     @Override
@@ -220,6 +222,7 @@ public final class DiamondSMP extends JavaPlugin {
         commandHider = register(new CommandHider(this));
         heads = register(new PlayerHeads(this));
         totems = register(new TotemLimit(this));
+        announcer = register(new Announcer(this));
     }
 
     private <T extends Service> T register(T service) {

@@ -592,6 +592,44 @@ broadcast:
     volume: 1.0
     pitch: 1.0
 
+# Automatic announcements. Every group runs on its own timer and shows its
+# messages one after another, starting over at the end. A message is one line,
+# or a list of lines sent together. & colors, &#hex colors and MiniMessage tags
+# such as <click:open_url:'https://...'> work, and so do %prefix%, %store% and
+# %discord%. Add as many groups as you like.
+announcer:
+  enabled: true
+  groups:
+    tips:
+      interval: 10m
+      sound:
+        enabled: true
+        sound: minecraft:block.note_block.pling
+        volume: 0.8
+        pitch: 1.2
+      messages:
+        - - ""
+          - "%prefix% &#ddededUse %accent%/killeffect &#ddededto pick an effect for your kills."
+          - ""
+        - - ""
+          - "%prefix% &#ddededCheck the best players with %accent%/leaderboard&#ddeded."
+          - ""
+        - - ""
+          - "%prefix% &#ddededEvery placed block is cleared every few minutes, so build fast!"
+          - ""
+    links:
+      interval: 15m
+      sound:
+        enabled: true
+        sound: minecraft:entity.experience_orb.pickup
+        volume: 1.0
+        pitch: 1.0
+      messages:
+        - - ""
+          - "%prefix% &#ddededSupport the server: <click:open_url:'https://%store%'><hover:show_text:'Open the store'>%accent%&n%store%</hover></click>"
+          - "%prefix% &#ddededJoin the community: <click:open_url:'https://%discord%'><hover:show_text:'Join the Discord'>%accent%&n%discord%</hover></click>"
+          - ""
+
 # Totem limit. A player carrying more totems than this (inventory and
 # offhand together) has the extra ones moved into their ender chest; when it
 # is full they drop at their feet. -1 disables the limit.
