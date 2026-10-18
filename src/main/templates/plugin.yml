@@ -1,0 +1,698 @@
+name: DiamondSMP
+version: '${version}'
+main: dev.diamondsmp.core.DiamondSMP
+api-version: '1.20'
+author: Jules
+description: Core Plugin For PigFFA Diamond SMP.
+folia-supported: true
+softdepend: [PlaceholderAPI, ajLeaderboards]
+
+commands:
+  gamemode:
+    description: Change a game mode.
+    usage: /<command> <survival|creative|adventure|spectator> [player]
+    aliases: [gm]
+  gmc:
+    description: Switch to creative.
+    usage: /<command> [player]
+  gms:
+    description: Switch to survival.
+    usage: /<command> [player]
+  gma:
+    description: Switch to adventure.
+    usage: /<command> [player]
+  gmsp:
+    description: Switch to spectator.
+    usage: /<command> [player]
+  heal:
+    description: Restore health, hunger and remove fire.
+    usage: /<command> [player]
+  feed:
+    description: Fill the hunger bar.
+    usage: /<command> [player]
+  fly:
+    description: Toggle flight.
+    usage: /<command> [player]
+  god:
+    description: Toggle god mode.
+    usage: /<command> [player]
+    aliases: [godmode]
+  speed:
+    description: Set the walk or fly speed.
+    usage: /<command> <1-10> [player]
+  clear:
+    description: Clear an inventory.
+    usage: /<command> [player]
+    aliases: [ci, clearinventory]
+  repair:
+    description: Repair the held item or every item.
+    usage: /<command> [hand|all] [player]
+    aliases: [fix]
+  vanish:
+    description: Toggle vanish.
+    usage: /<command> [player]
+    aliases: [v]
+  trash:
+    description: Open a disposal menu.
+    usage: /<command> [player]
+    aliases: [disposal]
+  enderchest:
+    description: Open your ender chest.
+    usage: /<command>
+    aliases: [ec, echest]
+  ping:
+    description: Show a connection ping.
+    usage: /<command> [player]
+  near:
+    description: List nearby players.
+    usage: /<command>
+  seen:
+    description: Show when a player was last online.
+    usage: /<command> <player>
+  playtime:
+    description: Show how long a player has played.
+    usage: /<command> [player]
+    aliases: [pt]
+  store:
+    description: Show the store link.
+    usage: /<command>
+    aliases: [shop, buy]
+  discord:
+    description: Show the Discord invite.
+    usage: /<command>
+    aliases: [dc]
+  freeze:
+    description: Freeze a player and start a screenshare.
+    usage: /<command> <player> [point]
+    aliases: [ssfreeze]
+  unfreeze:
+    description: Unfreeze a player and end their screenshare.
+    usage: /<command> <player>
+    aliases: [ssunfreeze]
+  setfreezepoint:
+    description: Create a freeze point at your location.
+    usage: /<command>
+  delfreezepoint:
+    description: Delete a freeze point.
+    usage: /<command> <id>
+  freezepoints:
+    description: List the freeze points.
+    usage: /<command>
+  screenshare:
+    description: Screenshare information and administration.
+    usage: /<command> <info <player>|list|reload>
+    aliases: [ss]
+  list:
+    description: List online players.
+    usage: /<command>
+    aliases: [online, who]
+  teleport:
+    description: Teleport to a player or coordinates.
+    usage: /<command> <player> | <player> <player> | <x> <y> <z> [world]
+    aliases: [tp]
+  tphere:
+    description: Teleport a player to you.
+    usage: /<command> <player>
+    aliases: [s]
+  tpall:
+    description: Teleport every player to you.
+    usage: /<command>
+  back:
+    description: Return to your last location or death point.
+    usage: /<command>
+  top:
+    description: Teleport to the highest block above you.
+    usage: /<command>
+  setspawn:
+    description: Set the server spawn.
+    usage: /<command>
+  delspawn:
+    description: Delete the server spawn.
+    usage: /<command>
+  spawn:
+    description: Teleport to spawn.
+    usage: /<command> [player]
+  setwarp:
+    description: Create a warp.
+    usage: /<command> <name>
+  warp:
+    description: Teleport to a warp.
+    usage: /<command> <name>
+  delwarp:
+    description: Delete a warp.
+    usage: /<command> <name>
+  warps:
+    description: List the warps.
+    usage: /<command>
+  killeffect:
+    description: Choose a kill effect.
+    usage: /<command> [set <player> <effect>|reload]
+    aliases: [ke, killeffects]
+  stats:
+    description: Show kill statistics.
+    usage: /<command> [player]
+  leaderboard:
+    description: Show the top players.
+    usage: /<command> [kills|current|streak|kdr]
+    aliases: [lb, leaderboards]
+  killstreak:
+    description: View or manage kill streaks.
+    usage: /<command> [player|reload|set <player> <amount>|add <player> <amount>|clear <player>]
+    aliases: [ks, kstreak]
+  msg:
+    description: Send a private message.
+    usage: /<command> <player> <message>
+    aliases: [message, tell, w, whisper, m, pm]
+  reply:
+    description: Reply to your last private message.
+    usage: /<command> <message>
+    aliases: [r]
+  ignore:
+    description: Toggle ignoring a player's private messages.
+    usage: /<command> <player>
+  block:
+    description: Toggle blocking all private messages with a player.
+    usage: /<command> <player>
+  socialspy:
+    description: Toggle reading private messages.
+    usage: /<command>
+    aliases: [spy]
+  broadcast:
+    description: Broadcast a message.
+    usage: /<command> <message>
+    aliases: [bc, bcast, announce, announcement]
+  clearchat:
+    description: Clear the chat.
+    usage: /<command>
+    aliases: [cc]
+  mutechat:
+    description: Toggle the global chat mute.
+    usage: /<command>
+  day:
+    description: Set the time to day.
+    usage: /<command> [world]
+  night:
+    description: Set the time to night.
+    usage: /<command> [world]
+  time:
+    description: Change the world time.
+    usage: /<command> <set|add|day|noon|night|midnight> [value] [world]
+  weather:
+    description: Change the weather.
+    usage: /<command> <clear|rain|thunder> [world]
+  diamondsmp:
+    description: DiamondSMP administration.
+    usage: /<command> <reload|version>
+    aliases: [dsmp]
+
+permissions:
+  diamondsmp.*:
+    description: Every DiamondSMP permission.
+    default: op
+    children:
+      diamondsmp.gamemode.*: true
+      diamondsmp.player.*: true
+      diamondsmp.teleport.*: true
+      diamondsmp.spawn.*: true
+      diamondsmp.warp.*: true
+      diamondsmp.killeffect.*: true
+      diamondsmp.stats.*: true
+      diamondsmp.chat.*: true
+      diamondsmp.world.*: true
+      diamondsmp.screenshare.admin: true
+      diamondsmp.commandhider.bypass: true
+      diamondsmp.admin: true
+
+  diamondsmp.gamemode.*:
+    description: Every game mode command.
+    default: op
+    children:
+      diamondsmp.gamemode: true
+      diamondsmp.gamemode.survival: true
+      diamondsmp.gamemode.creative: true
+      diamondsmp.gamemode.adventure: true
+      diamondsmp.gamemode.spectator: true
+      diamondsmp.gamemode.others: true
+  diamondsmp.gamemode:
+    description: Use /gamemode.
+    default: op
+  diamondsmp.gamemode.survival:
+    description: Switch to survival with /gms or /gamemode survival.
+    default: op
+  diamondsmp.gamemode.creative:
+    description: Switch to creative with /gmc or /gamemode creative.
+    default: op
+  diamondsmp.gamemode.adventure:
+    description: Switch to adventure with /gma or /gamemode adventure.
+    default: op
+  diamondsmp.gamemode.spectator:
+    description: Switch to spectator with /gmsp or /gamemode spectator.
+    default: op
+  diamondsmp.gamemode.others:
+    description: Change another player's game mode.
+    default: op
+
+  diamondsmp.player.*:
+    description: Every player utility command.
+    default: op
+    children:
+      diamondsmp.heal: true
+      diamondsmp.heal.others: true
+      diamondsmp.feed: true
+      diamondsmp.feed.others: true
+      diamondsmp.fly: true
+      diamondsmp.fly.others: true
+      diamondsmp.god: true
+      diamondsmp.god.others: true
+      diamondsmp.speed: true
+      diamondsmp.speed.others: true
+      diamondsmp.clear: true
+      diamondsmp.clear.others: true
+      diamondsmp.repair: true
+      diamondsmp.repair.all: true
+      diamondsmp.repair.others: true
+      diamondsmp.vanish: true
+      diamondsmp.vanish.others: true
+      diamondsmp.vanish.see: true
+      diamondsmp.trash: true
+      diamondsmp.trash.others: true
+      diamondsmp.enderchest: true
+      diamondsmp.ping: true
+      diamondsmp.ping.others: true
+      diamondsmp.near: true
+      diamondsmp.seen: true
+      diamondsmp.list: true
+      diamondsmp.playtime: true
+      diamondsmp.playtime.others: true
+      diamondsmp.store: true
+      diamondsmp.discord: true
+  diamondsmp.heal:
+    description: Heal yourself.
+    default: op
+  diamondsmp.heal.others:
+    description: Heal another player.
+    default: op
+  diamondsmp.feed:
+    description: Feed yourself.
+    default: op
+  diamondsmp.feed.others:
+    description: Feed another player.
+    default: op
+  diamondsmp.fly:
+    description: Toggle your flight.
+    default: op
+  diamondsmp.fly.others:
+    description: Toggle another player's flight.
+    default: op
+  diamondsmp.god:
+    description: Toggle your god mode.
+    default: op
+  diamondsmp.god.others:
+    description: Toggle another player's god mode.
+    default: op
+  diamondsmp.speed:
+    description: Change your speed.
+    default: op
+  diamondsmp.speed.others:
+    description: Change another player's speed.
+    default: op
+  diamondsmp.clear:
+    description: Clear your inventory.
+    default: op
+  diamondsmp.clear.others:
+    description: Clear another player's inventory.
+    default: op
+  diamondsmp.repair:
+    description: Repair the item in your hand.
+    default: op
+  diamondsmp.repair.all:
+    description: Repair every item with /repair all.
+    default: op
+  diamondsmp.repair.others:
+    description: Repair another player's items.
+    default: op
+  diamondsmp.vanish:
+    description: Toggle your vanish.
+    default: op
+  diamondsmp.vanish.others:
+    description: Toggle another player's vanish.
+    default: op
+  diamondsmp.vanish.see:
+    description: See vanished players.
+    default: op
+  diamondsmp.trash:
+    description: Open the disposal menu.
+    default: true
+  diamondsmp.trash.others:
+    description: Open the disposal menu for another player.
+    default: op
+  diamondsmp.enderchest:
+    description: Open your own ender chest with /ec.
+    default: true
+  diamondsmp.ping:
+    description: Show your ping.
+    default: true
+  diamondsmp.ping.others:
+    description: Show another player's ping.
+    default: true
+  diamondsmp.near:
+    description: List nearby players.
+    default: op
+  diamondsmp.seen:
+    description: Show when a player was last online.
+    default: true
+  diamondsmp.list:
+    description: List online players.
+    default: true
+  diamondsmp.playtime:
+    description: Show your own playtime.
+    default: true
+  diamondsmp.playtime.others:
+    description: Show another player's playtime.
+    default: true
+  diamondsmp.store:
+    description: Show the store link.
+    default: true
+  diamondsmp.discord:
+    description: Show the Discord invite.
+    default: true
+
+  diamondsmp.screenshare.admin:
+    description: Full screenshare administration.
+    default: op
+    children:
+      diamondsmp.screenshare.staff: true
+      diamondsmp.screenshare.unfreeze.others: true
+      diamondsmp.screenshare.freezepoint.set: true
+      diamondsmp.screenshare.freezepoint.delete: true
+      diamondsmp.screenshare.reload: true
+  diamondsmp.screenshare.staff:
+    description: Run screenshares.
+    default: op
+    children:
+      diamondsmp.screenshare.freeze: true
+      diamondsmp.screenshare.unfreeze: true
+      diamondsmp.screenshare.freezepoint.list: true
+      diamondsmp.screenshare.info: true
+      diamondsmp.screenshare.list: true
+      diamondsmp.screenshare.notify: true
+  diamondsmp.screenshare.freeze:
+    description: Use /freeze.
+    default: op
+  diamondsmp.screenshare.unfreeze:
+    description: Use /unfreeze on your own screenshares.
+    default: op
+  diamondsmp.screenshare.unfreeze.others:
+    description: Unfreeze players screenshared by another staff member.
+    default: op
+  diamondsmp.screenshare.freezepoint.set:
+    description: Use /setfreezepoint.
+    default: op
+  diamondsmp.screenshare.freezepoint.delete:
+    description: Use /delfreezepoint.
+    default: op
+  diamondsmp.screenshare.freezepoint.list:
+    description: Use /freezepoints.
+    default: op
+  diamondsmp.screenshare.info:
+    description: Use /screenshare info.
+    default: op
+  diamondsmp.screenshare.list:
+    description: Use /screenshare list.
+    default: op
+  diamondsmp.screenshare.notify:
+    description: Receive screenshare notifications.
+    default: op
+  diamondsmp.screenshare.reload:
+    description: Use /screenshare reload.
+    default: op
+  diamondsmp.screenshare.bypass:
+    description: Can never be frozen. Must be granted explicitly.
+    default: false
+
+  diamondsmp.teleport.*:
+    description: Every teleport command.
+    default: op
+    children:
+      diamondsmp.teleport: true
+      diamondsmp.teleport.others: true
+      diamondsmp.teleport.coordinates: true
+      diamondsmp.teleport.bypass: true
+      diamondsmp.tphere: true
+      diamondsmp.tpall: true
+      diamondsmp.back: true
+      diamondsmp.top: true
+  diamondsmp.teleport:
+    description: Teleport yourself to a player with /tp.
+    default: op
+  diamondsmp.teleport.others:
+    description: Teleport one player to another with /tp.
+    default: op
+  diamondsmp.teleport.coordinates:
+    description: Teleport to coordinates with /tp.
+    default: op
+  diamondsmp.teleport.bypass:
+    description: Skip teleport warmups and cooldowns.
+    default: op
+  diamondsmp.tphere:
+    description: Teleport a player to you.
+    default: op
+  diamondsmp.tpall:
+    description: Teleport every player to you.
+    default: op
+  diamondsmp.back:
+    description: Return to your last location or death point.
+    default: op
+  diamondsmp.top:
+    description: Teleport to the highest block.
+    default: op
+  diamondsmp.spawn.*:
+    description: Every spawn permission.
+    default: op
+    children:
+      diamondsmp.spawn: true
+      diamondsmp.spawn.others: true
+      diamondsmp.setspawn: true
+      diamondsmp.delspawn: true
+      diamondsmp.spawn.protection.bypass: true
+  diamondsmp.spawn:
+    description: Teleport to spawn.
+    default: true
+  diamondsmp.spawn.others:
+    description: Send another player to spawn.
+    default: op
+  diamondsmp.setspawn:
+    description: Set the server spawn.
+    default: op
+  diamondsmp.delspawn:
+    description: Delete the server spawn.
+    default: op
+  diamondsmp.spawn.protection.bypass:
+    description: Build inside the spawn protection.
+    default: op
+
+
+  diamondsmp.warp.*:
+    description: Every warp permission, including every warp.
+    default: op
+    children:
+      diamondsmp.warp: true
+      diamondsmp.warps: true
+      diamondsmp.setwarp: true
+      diamondsmp.delwarp: true
+  diamondsmp.warp:
+    description: Teleport to warps.
+    default: true
+  diamondsmp.warps:
+    description: List the warps.
+    default: true
+  diamondsmp.setwarp:
+    description: Create warps.
+    default: op
+  diamondsmp.delwarp:
+    description: Delete warps.
+    default: op
+
+  diamondsmp.killeffect.*:
+    description: Every kill effect and the admin commands.
+    default: op
+    children:
+      diamondsmp.killeffect: true
+      diamondsmp.killeffect.admin: true
+      diamondsmp.killeffect.lightning: true
+      diamondsmp.killeffect.firework: true
+      diamondsmp.killeffect.flame_spiral: true
+      diamondsmp.killeffect.soul_rise: true
+      diamondsmp.killeffect.blood_burst: true
+      diamondsmp.killeffect.totem_pop: true
+      diamondsmp.killeffect.heart_burst: true
+      diamondsmp.killeffect.explosion_poof: true
+      diamondsmp.killeffect.smoke_trail: true
+      diamondsmp.killeffect.enchant_swirl: true
+      diamondsmp.killeffect.ender_burst: true
+      diamondsmp.killeffect.water_splash: true
+      diamondsmp.killeffect.note_burst: true
+      diamondsmp.killeffect.cloud_puff: true
+      diamondsmp.killeffect.villager_joy: true
+      diamondsmp.killeffect.witch_magic: true
+      diamondsmp.killeffect.crit_storm: true
+      diamondsmp.killeffect.end_rod_burst: true
+  diamondsmp.killeffect:
+    description: Open the kill effect menu.
+    default: true
+  diamondsmp.killeffect.admin:
+    description: Use /killeffect set and /killeffect reload.
+    default: op
+  diamondsmp.killeffect.lightning:
+    description: Unlock the lightning kill effect.
+    default: false
+  diamondsmp.killeffect.firework:
+    description: Unlock the firework kill effect.
+    default: false
+  diamondsmp.killeffect.flame_spiral:
+    description: Unlock the flame spiral kill effect.
+    default: false
+  diamondsmp.killeffect.soul_rise:
+    description: Unlock the soul rise kill effect.
+    default: false
+  diamondsmp.killeffect.blood_burst:
+    description: Unlock the blood burst kill effect.
+    default: false
+  diamondsmp.killeffect.totem_pop:
+    description: Unlock the totem pop kill effect.
+    default: false
+  diamondsmp.killeffect.heart_burst:
+    description: Unlock the heart burst kill effect.
+    default: false
+  diamondsmp.killeffect.explosion_poof:
+    description: Unlock the explosion poof kill effect.
+    default: false
+  diamondsmp.killeffect.smoke_trail:
+    description: Unlock the smoke trail kill effect.
+    default: false
+  diamondsmp.killeffect.enchant_swirl:
+    description: Unlock the enchant swirl kill effect.
+    default: false
+  diamondsmp.killeffect.ender_burst:
+    description: Unlock the ender burst kill effect.
+    default: false
+  diamondsmp.killeffect.water_splash:
+    description: Unlock the water splash kill effect.
+    default: false
+  diamondsmp.killeffect.note_burst:
+    description: Unlock the note burst kill effect.
+    default: false
+  diamondsmp.killeffect.cloud_puff:
+    description: Unlock the cloud puff kill effect.
+    default: false
+  diamondsmp.killeffect.villager_joy:
+    description: Unlock the villager joy kill effect.
+    default: false
+  diamondsmp.killeffect.witch_magic:
+    description: Unlock the witch magic kill effect.
+    default: false
+  diamondsmp.killeffect.crit_storm:
+    description: Unlock the crit storm kill effect.
+    default: false
+  diamondsmp.killeffect.end_rod_burst:
+    description: Unlock the star burst kill effect.
+    default: false
+
+  diamondsmp.stats.*:
+    description: Every statistics command.
+    default: op
+    children:
+      diamondsmp.stats: true
+      diamondsmp.stats.others: true
+      diamondsmp.leaderboard: true
+      diamondsmp.killstreak: true
+      diamondsmp.killstreak.reload: true
+      diamondsmp.killstreak.modify: true
+  diamondsmp.stats:
+    description: View your statistics.
+    default: true
+  diamondsmp.stats.others:
+    description: View another player's statistics.
+    default: true
+  diamondsmp.leaderboard:
+    description: View the leaderboards.
+    default: true
+  diamondsmp.killstreak:
+    description: View your own and other players' kill streaks.
+    default: true
+  diamondsmp.killstreak.reload:
+    description: Reload the configuration with /killstreak reload.
+    default: op
+  diamondsmp.killstreak.modify:
+    description: Set, add to or clear a player's kill streak.
+    default: op
+
+  diamondsmp.chat.*:
+    description: Every chat command and bypass.
+    default: op
+    children:
+      diamondsmp.msg: true
+      diamondsmp.reply: true
+      diamondsmp.ignore: true
+      diamondsmp.ignore.bypass: true
+      diamondsmp.block: true
+      diamondsmp.socialspy: true
+      diamondsmp.broadcast: true
+      diamondsmp.clearchat: true
+      diamondsmp.clearchat.bypass: true
+      diamondsmp.mutechat: true
+      diamondsmp.mutechat.bypass: true
+  diamondsmp.msg:
+    description: Send private messages.
+    default: true
+  diamondsmp.reply:
+    description: Reply to private messages.
+    default: true
+  diamondsmp.ignore:
+    description: Ignore players.
+    default: true
+  diamondsmp.ignore.bypass:
+    description: Message players who ignore or block you, and never be ignored or blocked.
+    default: op
+  diamondsmp.block:
+    description: Block private messages with a player in both directions.
+    default: true
+  diamondsmp.socialspy:
+    description: Read other players' private messages.
+    default: op
+  diamondsmp.broadcast:
+    description: Broadcast messages.
+    default: op
+  diamondsmp.clearchat:
+    description: Clear the chat.
+    default: op
+  diamondsmp.clearchat.bypass:
+    description: Keep your chat when it is cleared.
+    default: op
+  diamondsmp.mutechat:
+    description: Toggle the global chat mute.
+    default: op
+  diamondsmp.mutechat.bypass:
+    description: Talk while the chat is muted.
+    default: op
+
+  diamondsmp.world.*:
+    description: Every world command.
+    default: op
+    children:
+      diamondsmp.time: true
+      diamondsmp.weather: true
+  diamondsmp.time:
+    description: Use /day, /night and /time.
+    default: op
+  diamondsmp.weather:
+    description: Use /weather.
+    default: op
+
+  diamondsmp.commandhider.bypass:
+    description: See and use the commands in command-hider.hidden-commands and namespaced labels.
+    default: op
+
+  diamondsmp.admin:
+    description: Use /diamondsmp reload and /diamondsmp version.
+    default: op
