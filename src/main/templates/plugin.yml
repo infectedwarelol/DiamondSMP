@@ -549,6 +549,11 @@ permissions:
       diamondsmp.killeffect.supernova: true
       diamondsmp.killeffect.frozen_shatter: true
       diamondsmp.killeffect.inferno_tornado: true
+      diamondsmp.killeffect.guillotine: true
+      diamondsmp.killeffect.rest_in_peace: true
+      diamondsmp.killeffect.blade_storm: true
+      diamondsmp.killeffect.orbital_strike: true
+      diamondsmp.killeffect.kraken: true
   diamondsmp.killeffect:
     description: Open the kill effect menu and use /killeffect toggle.
     default: true
@@ -599,6 +604,21 @@ permissions:
     default: false
   diamondsmp.killeffect.inferno_tornado:
     description: Unlock the Inferno Tornado kill effect.
+    default: false
+  diamondsmp.killeffect.guillotine:
+    description: Unlock the Guillotine kill effect.
+    default: false
+  diamondsmp.killeffect.rest_in_peace:
+    description: Unlock the Rest in Peace kill effect.
+    default: false
+  diamondsmp.killeffect.blade_storm:
+    description: Unlock the Blade Storm kill effect.
+    default: false
+  diamondsmp.killeffect.orbital_strike:
+    description: Unlock the Orbital Strike kill effect.
+    default: false
+  diamondsmp.killeffect.kraken:
+    description: Unlock the Kraken kill effect.
     default: false
 
   diamondsmp.stats.*:

@@ -5,7 +5,7 @@
 # Your values are kept and the previous file is saved next to it as config.yml.old.
 # Durations accept 90s, 2m, 1m30s, 1h or a plain number of seconds.
 
-config-version: 7
+config-version: 8
 
 # Shown by /store and /discord, and usable in every message of messages.yml
 # as %store% and %discord%. Add more keys here to get more %key% tokens.
@@ -187,7 +187,8 @@ kill-tokens:
 kill-effects:
   # Every effect is a short show of 2 to 4 seconds: particles, display entities,
   # layered sounds and fake blocks that only the viewers see and that are put
-  # back afterward. Players pick one in /killeffect, or "Random" for a
+  # back afterward. Many of them show the victim's corpse, wearing their own
+  # skin, armor and weapon. Players pick one in /killeffect, or "Random" for a
   # surprise each kill. /killeffect toggle hides other players' effects.
   locked-icon: GRAY_DYE
   none-icon: BARRIER
@@ -357,6 +358,56 @@ kill-effects:
       description:
         - "&7A pillar of fire spins up from the"
         - "&7ground and swallows your victim."
+    guillotine:
+      enabled: true
+      name: "&7&lGuillotine"
+      icon: IRON_AXE
+      intensity: 1.0
+      duration: 1.0
+      volume: 1.0
+      description:
+        - "&7A guillotine rises, the drums roll"
+        - "&7and the blade comes down. Off with it!"
+    rest_in_peace:
+      enabled: true
+      name: "&8&lRest in Peace"
+      icon: MOSSY_STONE_BRICKS
+      intensity: 1.0
+      duration: 1.0
+      volume: 1.0
+      description:
+        - "&7The ground cracks, a tombstone rises"
+        - "&7and flowers bloom on the grave."
+    blade_storm:
+      enabled: true
+      name: "&b&lBlade Storm"
+      icon: NETHERITE_SWORD
+      intensity: 1.0
+      duration: 1.0
+      volume: 1.0
+      description:
+        - "&7A storm of swords circles faster and"
+        - "&7faster, then rains down on the body."
+    orbital_strike:
+      enabled: true
+      name: "&f&lOrbital Strike"
+      icon: END_CRYSTAL
+      intensity: 1.0
+      duration: 1.0
+      volume: 1.0
+      description:
+        - "&7A satellite locks on and fires a"
+        - "&7laser that vaporises the body."
+    kraken:
+      enabled: true
+      name: "&3&lKraken"
+      icon: HEART_OF_THE_SEA
+      intensity: 1.0
+      duration: 1.0
+      volume: 1.0
+      description:
+        - "&7The ground turns to sea, tentacles"
+        - "&7rise, grab the body and drag it under."
 
 # Clearer - removes PLAYER-PLACED blocks on a timer.
 #
