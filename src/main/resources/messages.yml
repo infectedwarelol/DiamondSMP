@@ -166,9 +166,10 @@ warp:
   none: "%prefix% &cThere are no warps."
   list: "%prefix% &#ddededWarps (%accent%%count%&#ddeded): %accent%%warps%"
 
-# %killer%, %victim%, %streak%, %weapon% and %health% (the killer's hearts).
+# %killer%, %victim%, %streak%, %health% (the killer's hearts) and %weapon%.
+# Hovering %weapon% shows the weapon with its name, enchantments and lore.
 kill:
-  message: "%prefix% %accent%%victim% &#ddededwas killed by %accent%%killer% &8(&c%health%❤&8) &#ddededusing %accent%%weapon% &8[&7%streak% streak&8]"
+  message: "%prefix% %accent%%victim% &#ddededwas killed by %accent%%killer% &#ddededusing %accent%%weapon%"
   no-weapon: "their fists"
   ranged-weapon: "a ranged attack"
 

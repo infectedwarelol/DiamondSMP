@@ -1,7 +1,6 @@
 package dev.diamondsmp.core.service;
 
 import dev.diamondsmp.core.DiamondSMP;
-import dev.diamondsmp.core.message.Text;
 import dev.diamondsmp.core.storage.PlayerProfile;
 import dev.diamondsmp.core.util.Format;
 import net.kyori.adventure.text.Component;
@@ -58,23 +57,23 @@ public final class StatsService implements Service {
         plugin.killEffects().play(killer, victim.getLocation());
     }
 
-    private String weapon(Player killer) {
+    private Component weapon(Player killer) {
         if (!Bukkit.isOwnedByCurrentRegion(killer)) {
-            return plain("kill.ranged-weapon");
+            return fallback("kill.ranged-weapon");
         }
         ItemStack item = killer.getInventory().getItemInMainHand();
         if (item.getType().isAir()) {
-            return plain("kill.no-weapon");
+            return fallback("kill.no-weapon");
         }
         ItemMeta meta = item.getItemMeta();
-        if (meta != null && meta.hasDisplayName()) {
-            return Text.plain(meta.displayName());
-        }
-        return Format.pretty(item.getType().name());
+        Component name = meta != null && meta.hasDisplayName() && meta.displayName() != null
+                ? meta.displayName()
+                : Component.translatable(item.translationKey());
+        return name.hoverEvent(item.clone().asHoverEvent());
     }
 
-    private String plain(String key) {
+    private Component fallback(String key) {
         Component component = plugin.messages().get(key);
-        return component == null ? "" : Text.plain(component);
+        return component == null ? Component.empty() : component;
     }
 }
