@@ -3,8 +3,8 @@ package dev.diamondsmp.core.command.killeffect;
 import dev.diamondsmp.core.DiamondSMP;
 import dev.diamondsmp.core.command.BaseCommand;
 import dev.diamondsmp.core.command.CommandContext;
-import dev.diamondsmp.core.message.Text;
 import dev.diamondsmp.core.service.KillEffectService;
+import dev.diamondsmp.core.storage.PlayerProfile;
 import net.kyori.adventure.text.Component;
 import org.bukkit.entity.Player;
 
@@ -27,6 +27,10 @@ public final class KillEffectCommand extends BaseCommand {
             return;
         }
         String action = context.arg(0).toLowerCase(Locale.ROOT);
+        if (action.equals("toggle")) {
+            toggle(context);
+            return;
+        }
         if (!context.sender().hasPermission(ADMIN)) {
             throw context.fail("general.no-permission");
         }
@@ -40,19 +44,26 @@ public final class KillEffectCommand extends BaseCommand {
         }
     }
 
+    private void toggle(CommandContext context) {
+        PlayerProfile profile = plugin.profiles().profile(context.player());
+        if (profile == null) {
+            throw context.fail("general.data-loading");
+        }
+        profile.hidesEffects(!profile.hidesEffects());
+        context.reply(profile.hidesEffects() ? "killeffect.view-off" : "killeffect.view-on");
+    }
+
     private void set(CommandContext context) {
         Player target = context.online(1);
         String id = context.arg(2).toLowerCase(Locale.ROOT);
         KillEffectService effects = plugin.killEffects();
-        if (!KillEffectService.NONE.equals(id) && effects.find(id) == null) {
+        if (effects.isUnknown(id)) {
             throw context.fail("killeffect.unknown", "effect", id);
         }
         if (!effects.select(target, id)) {
             throw context.fail("general.data-loading");
         }
-        KillEffectService.Configured effect = effects.find(id);
-        Component name = effect == null ? plugin.messages().display("menus.killeffect.none-name")
-                : Text.display(plugin.messages().theme(effect.name()));
+        Component name = effects.displayName(id);
         context.reply("killeffect.set", "player", target.getName(), "effect", name);
         if (!target.equals(context.sender())) {
             plugin.messages().send(target, "killeffect.selected", "effect", name);
@@ -61,11 +72,12 @@ public final class KillEffectCommand extends BaseCommand {
 
     @Override
     protected List<String> complete(CommandContext context) {
-        if (!context.sender().hasPermission(ADMIN)) {
-            return List.of();
-        }
+        boolean admin = context.sender().hasPermission(ADMIN);
         if (context.size() == 1) {
-            return matching(context, 0, List.of("set", "reload"));
+            return matching(context, 0, admin ? List.of("toggle", "set", "reload") : List.of("toggle"));
+        }
+        if (!admin) {
+            return List.of();
         }
         if (!context.arg(0).equalsIgnoreCase("set")) {
             return List.of();

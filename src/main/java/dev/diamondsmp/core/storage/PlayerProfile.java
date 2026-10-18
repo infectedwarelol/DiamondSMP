@@ -23,6 +23,7 @@ public final class PlayerProfile {
     private volatile String name;
     private volatile String killEffect;
     private volatile boolean socialSpy;
+    private volatile boolean hidesEffects;
     private volatile long lastSeen;
     private final AtomicLong playtime = new AtomicLong();
 
@@ -55,6 +56,7 @@ public final class PlayerProfile {
         profile.ignored.addAll(snapshot.ignored());
         profile.blocked.addAll(snapshot.blocked());
         profile.playtime.set(snapshot.playtime());
+        profile.hidesEffects = snapshot.hidesEffects();
         if (!currentName.equals(snapshot.name())) {
             profile.dirty.set(true);
         }
@@ -63,7 +65,7 @@ public final class PlayerProfile {
 
     public ProfileSnapshot snapshot() {
         return new ProfileSnapshot(uuid, name, kills.get(), deaths.get(), streak.get(), bestStreak.get(),
-                killEffect, socialSpy, ignored, blocked, firstJoinTime, lastSeen, playtime.get());
+                killEffect, socialSpy, ignored, blocked, firstJoinTime, lastSeen, playtime.get(), hidesEffects);
     }
 
     public String name() {
@@ -115,6 +117,15 @@ public final class PlayerProfile {
 
     public void killEffect(String effect) {
         this.killEffect = effect;
+        dirty.set(true);
+    }
+
+    public boolean hidesEffects() {
+        return hidesEffects;
+    }
+
+    public void hidesEffects(boolean hidden) {
+        this.hidesEffects = hidden;
         dirty.set(true);
     }
 

@@ -5,7 +5,7 @@
 # %prefix%, %primary% and %accent% are replaced everywhere.
 # %nl% starts a new line. Leave a message empty ("") to hide it.
 
-config-version: 7
+config-version: 8
 
 prefix: "&#1FD1F9&lD&#3BD6F9&lI&#57DBFA&lA&#73E0FA&lM&#8FE5FB&lO&#ABEAFB&lN&#C7EFFC&lD &8»&r"
 
@@ -224,6 +224,8 @@ killeffect:
   set: "%prefix% &#ddededSet %accent%%player%&#ddeded's kill effect to %effect%&#ddeded."
   unknown: "%prefix% &cUnknown kill effect %accent%%effect%&c."
   reloaded: "%prefix% &#ddededReloaded %accent%%count% &#ddededkill effects."
+  view-on: "%prefix% &#ddededYou now &asee &#ddededkill effects."
+  view-off: "%prefix% &#ddededYou now &chide &#ddededkill effects."
 
 msg:
   to: "&8[&7me &8» %accent%%player%&8] &f%message%"
@@ -432,6 +434,15 @@ menus:
     none-name: "&7No Effect"
     none-lore:
       - "&7Play no effect on kills."
+    random-name: "&d&lRandom"
+    random-lore:
+      - "&7A different effect you own"
+      - "&7every kill. Surprise!"
+    view-on: "&a&lShowing kill effects"
+    view-off: "&c&lHiding kill effects"
+    view-lore:
+      - "&7Click to show or hide every"
+      - "&7player's kill effects for you."
     locked-name: "&c&l🔒 &r%effect%"
     locked-lore:
       - ""

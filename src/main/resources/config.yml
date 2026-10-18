@@ -5,7 +5,7 @@
 # Your values are kept and the previous file is saved next to it as config.yml.old.
 # Durations accept 90s, 2m, 1m30s, 1h or a plain number of seconds.
 
-config-version: 6
+config-version: 7
 
 # Shown by /store and /discord, and usable in every message of messages.yml
 # as %store% and %discord%. Add more keys here to get more %key% tokens.
@@ -185,188 +185,178 @@ kill-tokens:
     pitch: 1.4
 
 kill-effects:
-  # Icon shown for effects the player does not own.
+  # Every effect is a short show of 2 to 4 seconds: particles, display entities,
+  # layered sounds and fake blocks that only the viewers see and that are put
+  # back afterward. Players pick one in /killeffect, or "Random" for a
+  # surprise each kill. /killeffect toggle hides other players' effects.
   locked-icon: GRAY_DYE
-  # Icon of the "no effect" entry.
   none-icon: BARRIER
+  random-icon: ENDER_CHEST
   # The glass on the bottom row of the menu.
   filler: GRAY_STAINED_GLASS_PANE
   sounds:
     select: ui.button.click
     locked: entity.villager.no
-  # A huge copy of the effect's icon spins above the victim while the
-  # particles play. It is a display entity: no hitbox, never saved to the world.
-  hologram:
-    enabled: true
-    # Size of the item. 1.0 is a normal dropped item.
-    scale: 2.5
-    duration: 3s
-    # Blocks above the victim's feet where it appears.
-    height: 1.6
-    # Blocks it floats up over its lifetime.
-    rise: 1.2
-    # Rotation per step in radians.
-    spin: 0.35
-  # Every effect needs diamondsmp.killeffect.<id>. Use "enabled: false" to
-  # hide one, and change name, icon or description freely.
+  # Multiplies the particle count of every effect.
+  density: 1.0
+  performance:
+    # Only players this close see and hear an effect.
+    view-distance: 48
+    # Effects running at once. Kills past this play no effect.
+    max-active: 6
+    # Past this many running effects, new ones use reduced-density.
+    reduce-above: 3
+    reduced-density: 0.5
+    # Particles a single effect may send in one tick.
+    particles-per-tick: 350
+    # Hard limit on how long one effect may run.
+    max-duration: 7s
+  # Every effect needs diamondsmp.killeffect.<id>; "random" needs
+  # diamondsmp.killeffect.random. Per effect:
+  #   intensity  particle multiplier (0.1 to 3)
+  #   duration   speed of the whole show, 0.5 is twice as fast, 2 twice as slow
+  #   volume     sound volume (0 mutes it)
   effects:
-    lightning:
+    chains:
       enabled: true
-      name: "&eLightning"
+      name: "&8&lChains of Judgement"
+      icon: IRON_CHAIN
+      intensity: 1.0
+      duration: 1.0
+      volume: 1.0
+      description:
+        - "&7Chains burst from the sky, bind"
+        - "&7your victim tight and snap apart."
+    black_hole:
+      enabled: true
+      name: "&5&lBlack Hole"
+      icon: ENDER_EYE
+      intensity: 1.0
+      duration: 1.0
+      volume: 1.0
+      description:
+        - "&7Space folds in on itself, swallows"
+        - "&7your victim and erupts outward."
+    thunder_god:
+      enabled: true
+      name: "&e&lThunder God"
       icon: LIGHTNING_ROD
+      intensity: 1.0
+      duration: 1.0
+      volume: 1.0
       description:
-        - "&7A harmless bolt strikes your victim."
-    firework:
+        - "&7A storm gathers, three bolts fall"
+        - "&7and a hammer of lightning lands."
+    soul_harvest:
       enabled: true
-      name: "&dFirework Burst"
-      icon: FIREWORK_ROCKET
-      description:
-        - "&7A colorful firework bursts where"
-        - "&7your victim fell."
-    flame_spiral:
-      enabled: true
-      name: "&6Flame Spiral"
-      icon: BLAZE_POWDER
-      description:
-        - "&7A spiral of flames rises up."
-    soul_rise:
-      enabled: true
-      name: "&3Soul Rise"
+      name: "&b&lSoul Harvest"
       icon: SOUL_LANTERN
+      intensity: 1.0
+      duration: 1.0
+      volume: 1.0
       description:
-        - "&7The victim's soul drifts away."
-    blood_burst:
+        - "&7The soul is torn out, spirals"
+        - "&7into the sky and vanishes in a flash."
+    blood_moon:
       enabled: true
-      name: "&4Blood Burst"
-      icon: REDSTONE
+      name: "&4&lBlood Moon"
+      icon: REDSTONE_BLOCK
+      intensity: 1.0
+      duration: 1.0
+      volume: 1.0
       description:
-        - "&7A burst of crimson dust."
-    totem_pop:
+        - "&7A crimson moon rises, blood rains"
+        - "&7down and the ground is stained red."
+    dragons_breath:
       enabled: true
-      name: "&aTotem Pop"
-      icon: TOTEM_OF_UNDYING
-      description:
-        - "&7A totem pops, but too late."
-    heart_burst:
-      enabled: true
-      name: "&cHeart Burst"
-      icon: POPPY
-      description:
-        - "&7Hearts fly out of your victim."
-    explosion_poof:
-      enabled: true
-      name: "&7Explosion Poof"
-      icon: TNT
-      description:
-        - "&7A harmless puff of an explosion."
-    smoke_trail:
-      enabled: true
-      name: "&8Smoke Trail"
-      icon: CAMPFIRE
-      description:
-        - "&7A column of smoke rises up."
-    enchant_swirl:
-      enabled: true
-      name: "&5Enchant Swirl"
-      icon: ENCHANTING_TABLE
-      description:
-        - "&7Arcane runes swirl around."
-    ender_burst:
-      enabled: true
-      name: "&5Ender Burst"
-      icon: ENDER_PEARL
-      description:
-        - "&7Your victim is pulled into the void."
-    water_splash:
-      enabled: true
-      name: "&9Water Splash"
-      icon: WATER_BUCKET
-      description:
-        - "&7A big splash of water."
-    note_burst:
-      enabled: true
-      name: "&bNote Burst"
-      icon: NOTE_BLOCK
-      description:
-        - "&7A cheerful burst of music notes."
-    cloud_puff:
-      enabled: true
-      name: "&fCloud Puff"
-      icon: WHITE_WOOL
-      description:
-        - "&7Your victim vanishes into a cloud."
-    villager_joy:
-      enabled: true
-      name: "&2Villager Joy"
-      icon: EMERALD
-      description:
-        - "&7The villagers celebrate your kill."
-    witch_magic:
-      enabled: true
-      name: "&5Witch Magic"
-      icon: BREWING_STAND
-      description:
-        - "&7A witch's curse lingers."
-    crit_storm:
-      enabled: true
-      name: "&eCrit Storm"
-      icon: IRON_SWORD
-      description:
-        - "&7A storm of critical hits."
-    end_rod_burst:
-      enabled: true
-      name: "&fStar Burst"
-      icon: END_ROD
-      description:
-        - "&7Glowing stars scatter outward."
-    anvil_drop:
-      enabled: true
-      name: "&7Anvil Drop"
-      icon: ANVIL
-      description:
-        - "&7A giant anvil crushes your victim."
-    skull_rise:
-      enabled: true
-      name: "&8Skull Rise"
-      icon: WITHER_SKELETON_SKULL
-      description:
-        - "&7A cursed skull rises from the body."
-    diamond_rain:
-      enabled: true
-      name: "&bDiamond Rain"
-      icon: DIAMOND
-      description:
-        - "&7A huge diamond shines above the kill."
-    dragon_roar:
-      enabled: true
-      name: "&5Dragon Roar"
+      name: "&d&lDragon's Breath"
       icon: DRAGON_HEAD
+      intensity: 1.0
+      duration: 1.0
+      volume: 1.0
       description:
-        - "&7The ender dragon claims the kill."
-    trident_storm:
+        - "&7A dragon swoops in and scorches"
+        - "&7your victim with a torrent of breath."
+    glitch:
       enabled: true
-      name: "&3Trident Storm"
-      icon: TRIDENT
+      name: "&a&lGlitch"
+      icon: COMMAND_BLOCK
+      intensity: 1.0
+      duration: 1.0
+      volume: 1.0
       description:
-        - "&7A giant trident calls down the storm."
-    gold_rush:
+        - "&7Reality corrupts, the matrix rains"
+        - "&7down and your victim is deleted."
+    shatter:
       enabled: true
-      name: "&6Gold Rush"
-      icon: GOLD_BLOCK
+      name: "&f&lShatter"
+      icon: GLASS
+      intensity: 1.0
+      duration: 1.0
+      volume: 1.0
       description:
-        - "&7Your victim was worth their weight in gold."
-    pumpkin_pop:
+        - "&7Your victim turns to glass, cracks,"
+        - "&7and explodes into a thousand shards."
+    meteor_strike:
       enabled: true
-      name: "&6Pumpkin Pop"
-      icon: JACK_O_LANTERN
+      name: "&6&lMeteor Strike"
+      icon: MAGMA_BLOCK
+      intensity: 1.0
+      duration: 1.0
+      volume: 1.0
       description:
-        - "&7A spooky pumpkin pops out."
-    royal_crown:
+        - "&7A burning meteor tears through the"
+        - "&7sky and leaves a smoking crater."
+    angel_ascension:
       enabled: true
-      name: "&eRoyal Crown"
-      icon: GOLDEN_HELMET
+      name: "&e&lAngel Ascension"
+      icon: FEATHER
+      intensity: 1.0
+      duration: 1.0
+      volume: 1.0
       description:
-        - "&7Crown yourself after the kill."
+        - "&7Heaven opens, wings unfold and"
+        - "&7your victim ascends in golden light."
+    void_rift:
+      enabled: true
+      name: "&5&lVoid Rift"
+      icon: CRYING_OBSIDIAN
+      intensity: 1.0
+      duration: 1.0
+      volume: 1.0
+      description:
+        - "&7Reality tears open, the void drinks"
+        - "&7in your victim and slams shut."
+    supernova:
+      enabled: true
+      name: "&6&lSupernova"
+      icon: NETHER_STAR
+      intensity: 1.0
+      duration: 1.0
+      volume: 1.0
+      description:
+        - "&7A star is born, burns out, collapses"
+        - "&7and explodes in a blinding supernova."
+    frozen_shatter:
+      enabled: true
+      name: "&b&lFrozen Shatter"
+      icon: BLUE_ICE
+      intensity: 1.0
+      duration: 1.0
+      volume: 1.0
+      description:
+        - "&7Ice spikes erupt, your victim freezes"
+        - "&7solid and bursts into frost."
+    inferno_tornado:
+      enabled: true
+      name: "&c&lInferno Tornado"
+      icon: BLAZE_POWDER
+      intensity: 1.0
+      duration: 1.0
+      volume: 1.0
+      description:
+        - "&7A pillar of fire spins up from the"
+        - "&7ground and swallows your victim."
 
 # Clearer - removes PLAYER-PLACED blocks on a timer.
 #

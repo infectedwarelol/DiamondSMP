@@ -1,15 +1,12 @@
 package dev.diamondsmp.core.listener;
 
 import dev.diamondsmp.core.DiamondSMP;
-import org.bukkit.entity.Firework;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
-import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.FoodLevelChangeEvent;
-import org.bukkit.persistence.PersistentDataType;
 
 public final class DamageListener implements Listener {
 
@@ -17,14 +14,6 @@ public final class DamageListener implements Listener {
 
     public DamageListener(DiamondSMP plugin) {
         this.plugin = plugin;
-    }
-
-    @EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
-    public void onEffectFirework(EntityDamageByEntityEvent event) {
-        if (event.getDamager() instanceof Firework firework
-                && firework.getPersistentDataContainer().has(plugin.killEffects().fireworkKey(), PersistentDataType.BYTE)) {
-            event.setCancelled(true);
-        }
     }
 
     @EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)

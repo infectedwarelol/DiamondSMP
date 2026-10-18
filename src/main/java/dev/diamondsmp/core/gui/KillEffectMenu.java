@@ -4,6 +4,7 @@ import dev.diamondsmp.core.DiamondSMP;
 import dev.diamondsmp.core.message.Messages;
 import dev.diamondsmp.core.message.Text;
 import dev.diamondsmp.core.service.KillEffectService;
+import dev.diamondsmp.core.storage.PlayerProfile;
 import dev.diamondsmp.core.util.Items;
 import dev.diamondsmp.core.util.Lookup;
 import net.kyori.adventure.text.Component;
@@ -23,6 +24,7 @@ public final class KillEffectMenu extends Menu {
     private static final int PREVIOUS_SLOT = PAGE_SIZE + 3;
     private static final int CLOSE_SLOT = PAGE_SIZE + 4;
     private static final int NEXT_SLOT = PAGE_SIZE + 5;
+    private static final int VIEW_SLOT = PAGE_SIZE + 8;
 
     private final DiamondSMP plugin;
     private final Player viewer;
@@ -65,6 +67,10 @@ public final class KillEffectMenu extends Menu {
             inventory.setItem(NEXT_SLOT, Items.create(Material.ARROW,
                     messages.display("menus.killeffect.next", "page", page + 2, "pages", pages), null, false));
         }
+        boolean hidden = effects.hidesEffects(viewer);
+        inventory.setItem(VIEW_SLOT, Items.create(hidden ? Material.ENDER_PEARL : Material.ENDER_EYE,
+                messages.display(hidden ? "menus.killeffect.view-off" : "menus.killeffect.view-on"),
+                messages.lore("menus.killeffect.view-lore"), !hidden));
         ItemStack filler = Items.create(Lookup.material(plugin.settings().getString("kill-effects.filler"),
                 Material.GRAY_STAINED_GLASS_PANE), Component.text(" "), null, false);
         for (int slot = PAGE_SIZE; slot < inventory.getSize(); slot++) {
@@ -81,6 +87,16 @@ public final class KillEffectMenu extends Menu {
             List<Component> lore = new ArrayList<>(messages.lore("menus.killeffect.none-lore"));
             lore.addAll(messages.lore(isSelected ? "menus.killeffect.selected-lore" : "menus.killeffect.select-lore"));
             return Items.create(effects.noneIcon(), messages.display("menus.killeffect.none-name"), lore, isSelected);
+        }
+        if (KillEffectService.RANDOM.equals(id)) {
+            List<Component> lore = new ArrayList<>(messages.lore("menus.killeffect.random-lore"));
+            if (effects.isLocked(viewer, id)) {
+                lore.addAll(messages.lore("menus.killeffect.locked-lore"));
+                return Items.create(effects.lockedIcon(), messages.display("menus.killeffect.locked-name",
+                        "effect", effects.displayName(id)), lore, false);
+            }
+            lore.addAll(messages.lore(isSelected ? "menus.killeffect.selected-lore" : "menus.killeffect.select-lore"));
+            return Items.create(effects.randomIcon(), effects.displayName(id), lore, isSelected);
         }
         KillEffectService.Configured effect = effects.find(id);
         Component name = Text.display(messages.theme(effect.name()));
@@ -116,6 +132,18 @@ public final class KillEffectMenu extends Menu {
             player.closeInventory();
             return;
         }
+        if (slot == VIEW_SLOT) {
+            PlayerProfile profile = plugin.profiles().profile(player);
+            if (profile == null) {
+                plugin.messages().error(player, "general.data-loading");
+                return;
+            }
+            profile.hidesEffects(!profile.hidesEffects());
+            plugin.messages().send(player, profile.hidesEffects() ? "killeffect.view-off" : "killeffect.view-on");
+            Lookup.sound(player, plugin.settings().getString("kill-effects.sounds.select"), 1.0F, 1.0F);
+            render();
+            return;
+        }
         int index = page * PAGE_SIZE + slot;
         if (slot >= PAGE_SIZE || index >= entries.size()) {
             return;
@@ -131,10 +159,7 @@ public final class KillEffectMenu extends Menu {
             return;
         }
         if (effects.select(player, id)) {
-            KillEffectService.Configured effect = effects.find(id);
-            Component name = effect == null ? plugin.messages().display("menus.killeffect.none-name")
-                    : Text.display(plugin.messages().theme(effect.name()));
-            plugin.messages().send(player, "killeffect.selected", "effect", name);
+            plugin.messages().send(player, "killeffect.selected", "effect", effects.displayName(id));
             Lookup.sound(player, plugin.settings().getString("kill-effects.sounds.select"), 1.0F, 1.2F);
             render();
         } else {

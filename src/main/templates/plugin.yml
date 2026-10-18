@@ -149,7 +149,7 @@ commands:
     usage: /<command>
   killeffect:
     description: Choose a kill effect.
-    usage: /<command> [set <player> <effect>|reload]
+    usage: /<command> [toggle|set <player> <effect>|reload]
     aliases: [ke, killeffects]
   killtoken:
     description: Give kill tokens or compressed kill tokens.
@@ -534,115 +534,71 @@ permissions:
     children:
       diamondsmp.killeffect: true
       diamondsmp.killeffect.admin: true
-      diamondsmp.killeffect.lightning: true
-      diamondsmp.killeffect.firework: true
-      diamondsmp.killeffect.flame_spiral: true
-      diamondsmp.killeffect.soul_rise: true
-      diamondsmp.killeffect.blood_burst: true
-      diamondsmp.killeffect.totem_pop: true
-      diamondsmp.killeffect.heart_burst: true
-      diamondsmp.killeffect.explosion_poof: true
-      diamondsmp.killeffect.smoke_trail: true
-      diamondsmp.killeffect.enchant_swirl: true
-      diamondsmp.killeffect.ender_burst: true
-      diamondsmp.killeffect.water_splash: true
-      diamondsmp.killeffect.note_burst: true
-      diamondsmp.killeffect.cloud_puff: true
-      diamondsmp.killeffect.villager_joy: true
-      diamondsmp.killeffect.witch_magic: true
-      diamondsmp.killeffect.crit_storm: true
-      diamondsmp.killeffect.end_rod_burst: true
-      diamondsmp.killeffect.anvil_drop: true
-      diamondsmp.killeffect.skull_rise: true
-      diamondsmp.killeffect.diamond_rain: true
-      diamondsmp.killeffect.dragon_roar: true
-      diamondsmp.killeffect.trident_storm: true
-      diamondsmp.killeffect.gold_rush: true
-      diamondsmp.killeffect.pumpkin_pop: true
-      diamondsmp.killeffect.royal_crown: true
+      diamondsmp.killeffect.random: true
+      diamondsmp.killeffect.chains: true
+      diamondsmp.killeffect.black_hole: true
+      diamondsmp.killeffect.thunder_god: true
+      diamondsmp.killeffect.soul_harvest: true
+      diamondsmp.killeffect.blood_moon: true
+      diamondsmp.killeffect.dragons_breath: true
+      diamondsmp.killeffect.glitch: true
+      diamondsmp.killeffect.shatter: true
+      diamondsmp.killeffect.meteor_strike: true
+      diamondsmp.killeffect.angel_ascension: true
+      diamondsmp.killeffect.void_rift: true
+      diamondsmp.killeffect.supernova: true
+      diamondsmp.killeffect.frozen_shatter: true
+      diamondsmp.killeffect.inferno_tornado: true
   diamondsmp.killeffect:
-    description: Open the kill effect menu.
+    description: Open the kill effect menu and use /killeffect toggle.
     default: true
   diamondsmp.killeffect.admin:
     description: Use /killeffect set and /killeffect reload.
     default: op
-  diamondsmp.killeffect.lightning:
-    description: Unlock the lightning kill effect.
+  diamondsmp.killeffect.random:
+    description: Pick the random kill effect, which plays a random owned effect.
+    default: true
+  diamondsmp.killeffect.chains:
+    description: Unlock the Chains of Judgement kill effect.
     default: false
-  diamondsmp.killeffect.firework:
-    description: Unlock the firework kill effect.
+  diamondsmp.killeffect.black_hole:
+    description: Unlock the Black Hole kill effect.
     default: false
-  diamondsmp.killeffect.flame_spiral:
-    description: Unlock the flame spiral kill effect.
+  diamondsmp.killeffect.thunder_god:
+    description: Unlock the Thunder God kill effect.
     default: false
-  diamondsmp.killeffect.soul_rise:
-    description: Unlock the soul rise kill effect.
+  diamondsmp.killeffect.soul_harvest:
+    description: Unlock the Soul Harvest kill effect.
     default: false
-  diamondsmp.killeffect.blood_burst:
-    description: Unlock the blood burst kill effect.
+  diamondsmp.killeffect.blood_moon:
+    description: Unlock the Blood Moon kill effect.
     default: false
-  diamondsmp.killeffect.totem_pop:
-    description: Unlock the totem pop kill effect.
+  diamondsmp.killeffect.dragons_breath:
+    description: Unlock the Dragon's Breath kill effect.
     default: false
-  diamondsmp.killeffect.heart_burst:
-    description: Unlock the heart burst kill effect.
+  diamondsmp.killeffect.glitch:
+    description: Unlock the Glitch kill effect.
     default: false
-  diamondsmp.killeffect.explosion_poof:
-    description: Unlock the explosion poof kill effect.
+  diamondsmp.killeffect.shatter:
+    description: Unlock the Shatter kill effect.
     default: false
-  diamondsmp.killeffect.smoke_trail:
-    description: Unlock the smoke trail kill effect.
+  diamondsmp.killeffect.meteor_strike:
+    description: Unlock the Meteor Strike kill effect.
     default: false
-  diamondsmp.killeffect.enchant_swirl:
-    description: Unlock the enchant swirl kill effect.
+  diamondsmp.killeffect.angel_ascension:
+    description: Unlock the Angel Ascension kill effect.
     default: false
-  diamondsmp.killeffect.ender_burst:
-    description: Unlock the ender burst kill effect.
+  diamondsmp.killeffect.void_rift:
+    description: Unlock the Void Rift kill effect.
     default: false
-  diamondsmp.killeffect.water_splash:
-    description: Unlock the water splash kill effect.
+  diamondsmp.killeffect.supernova:
+    description: Unlock the Supernova kill effect.
     default: false
-  diamondsmp.killeffect.note_burst:
-    description: Unlock the note burst kill effect.
+  diamondsmp.killeffect.frozen_shatter:
+    description: Unlock the Frozen Shatter kill effect.
     default: false
-  diamondsmp.killeffect.cloud_puff:
-    description: Unlock the cloud puff kill effect.
-    default: false
-  diamondsmp.killeffect.villager_joy:
-    description: Unlock the villager joy kill effect.
-    default: false
-  diamondsmp.killeffect.witch_magic:
-    description: Unlock the witch magic kill effect.
-    default: false
-  diamondsmp.killeffect.crit_storm:
-    description: Unlock the crit storm kill effect.
-    default: false
-  diamondsmp.killeffect.end_rod_burst:
-    description: Unlock the star burst kill effect.
-    default: false
-  diamondsmp.killeffect.anvil_drop:
-    description: Unlock the anvil drop kill effect.
-    default: false
-  diamondsmp.killeffect.skull_rise:
-    description: Unlock the skull rise kill effect.
-    default: false
-  diamondsmp.killeffect.diamond_rain:
-    description: Unlock the diamond rain kill effect.
-    default: false
-  diamondsmp.killeffect.dragon_roar:
-    description: Unlock the dragon roar kill effect.
-    default: false
-  diamondsmp.killeffect.trident_storm:
-    description: Unlock the trident storm kill effect.
-    default: false
-  diamondsmp.killeffect.gold_rush:
-    description: Unlock the gold rush kill effect.
-    default: false
-  diamondsmp.killeffect.pumpkin_pop:
-    description: Unlock the pumpkin pop kill effect.
-    default: false
-  diamondsmp.killeffect.royal_crown:
-    description: Unlock the royal crown kill effect.
+  diamondsmp.killeffect.inferno_tornado:
+    description: Unlock the Inferno Tornado kill effect.
     default: false
 
   diamondsmp.stats.*:
