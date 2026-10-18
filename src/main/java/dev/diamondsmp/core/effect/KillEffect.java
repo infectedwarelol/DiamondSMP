@@ -1,20 +1,18 @@
 package dev.diamondsmp.core.effect;
 
-import dev.diamondsmp.core.scheduler.Scheduler;
-import org.bukkit.Location;
 import org.bukkit.Material;
 
 import java.util.List;
 
-public record KillEffect(String id, String name, Material icon, List<String> description, Animation animation) {
+public interface KillEffect {
 
-    @FunctionalInterface
-    public interface Animation {
+    String id();
 
-        void play(Scheduler scheduler, Location location);
-    }
+    String name();
 
-    public KillEffect {
-        description = List.copyOf(description);
-    }
+    Material icon();
+
+    List<String> description();
+
+    void play(EffectSession session);
 }

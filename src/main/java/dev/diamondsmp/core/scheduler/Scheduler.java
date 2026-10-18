@@ -12,7 +12,6 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.TimeUnit;
 import java.util.function.Consumer;
 import java.util.function.Function;
-import java.util.function.IntConsumer;
 
 public final class Scheduler {
 
@@ -68,23 +67,12 @@ public final class Scheduler {
         Bukkit.getRegionScheduler().execute(plugin, world, chunkX, chunkZ, action);
     }
 
-    public void regionRepeat(Location location, long periodTicks, int times, IntConsumer step) {
-        if (times <= 0 || !plugin.isEnabled()) {
-            return;
+    public Task regionTimer(Location location, Runnable action, long delayTicks, long periodTicks) {
+        if (!plugin.isEnabled()) {
+            return Task.NONE;
         }
-        int[] counter = {0};
-        ScheduledTask scheduled = Bukkit.getRegionScheduler().runAtFixedRate(plugin, location, task -> {
-            int index = counter[0]++;
-            if (index >= times) {
-                finish(task);
-                return;
-            }
-            step.accept(index);
-            if (index + 1 >= times) {
-                finish(task);
-            }
-        }, 1L, ticks(periodTicks));
-        remember(scheduled);
+        return remember(Bukkit.getRegionScheduler()
+                .runAtFixedRate(plugin, location, task -> action.run(), ticks(delayTicks), ticks(periodTicks)));
     }
 
     public void entity(Entity entity, Runnable action) {
