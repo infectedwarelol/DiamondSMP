@@ -1,0 +1,481 @@
+# DiamondSMP core configuration.
+# Every message lives in messages.yml. Use /diamondsmp reload after editing.
+#
+# When a new jar adds options they are written into this file automatically.
+# Your values are kept and the previous file is saved next to it as config.yml.old.
+# Durations accept 90s, 2m, 1m30s, 1h or a plain number of seconds.
+
+config-version: 4
+
+# Shown by /store and /discord, and usable in every message of messages.yml
+# as %store% and %discord%. Add more keys here to get more %key% tokens.
+links:
+  store: "store.diamondsmp.net"
+  discord: "discord.gg/diamondsmp"
+
+storage:
+  # Only sqlite is bundled. The file lives in plugins/DiamondSMP/.
+  type: sqlite
+  file: data.db
+  # How often the data of online players is written to disk. They are also
+  # saved when they leave and when the server stops.
+  autosave: 5m
+
+teleport:
+  # Countdown before /spawn, /warp, /back and /top teleport. The remaining
+  # seconds are shown in chat and in the action bar every second. 0 teleports
+  # instantly. /tp, /tphere and /tpall never wait.
+  # diamondsmp.teleport.bypass skips the countdown and the cooldown.
+  warmup:
+    spawn: 5s
+    warp: 5s
+    back: 5s
+    top: 5s
+  # Time before the same kind of teleport can be used again.
+  cooldown:
+    spawn: 0s
+    warp: 5s
+    back: 10s
+    top: 0s
+  # Moving to another block or taking damage cancels a running warmup.
+  cancel-on-move: true
+  cancel-on-damage: true
+
+spawn:
+  # Players are sent to spawn the very first time they join.
+  teleport-on-first-join: true
+  # Players are sent to spawn every time they join.
+  teleport-on-join: true
+  # Players respawn at spawn after dying.
+  teleport-on-respawn: true
+  # A circle around spawn. diamondsmp.spawn.protection.bypass ignores the
+  # build rule. PvP is blocked when either fighter stands inside it.
+  protection:
+    enabled: true
+    radius: 30
+    disable-pvp: true
+    disable-build: true
+
+warps:
+  # When true, each warp also needs diamondsmp.warp.<name>.
+  per-warp-permission: false
+
+ffa:
+  # Keep items and levels on death.
+  keep-inventory: false
+  # The hunger bar never goes down.
+  no-hunger: true
+  # Skip the death screen. Sets the immediate respawn game rule in every world.
+  auto-respawn: true
+  # Replace the death messages with kill.message and death.message from messages.yml.
+  custom-death-messages: true
+
+# Kill streaks. A streak counts kills without dying and is stored with the
+# rest of the player data, so it survives restarts.
+killstreak:
+  # Streaks announced to the whole server.
+  milestones: [5, 10, 15, 20, 25, 50, 100]
+  # Above the highest milestone, keep announcing every this many kills.
+  # 0 stops announcing past the last milestone.
+  repeat-above-highest: 25
+  # A streak is only announced as ended when it was at least this high.
+  # 0 never announces it.
+  announce-end-minimum: 5
+  action-bar:
+    enabled: true
+    # Show the current streak to the killer after every kill.
+    on-kill: true
+  titles:
+    # Show a title to the killer on milestones.
+    enabled: true
+    fade-in-ticks: 10
+    stay-ticks: 40
+    fade-out-ticks: 10
+  sounds:
+    milestone:
+      enabled: true
+      sound: minecraft:entity.player.levelup
+      volume: 1.0
+      pitch: 1.0
+    streak-end:
+      enabled: true
+      sound: minecraft:entity.ender_dragon.growl
+      volume: 0.7
+      pitch: 1.0
+  leaderboard:
+    # Positions exposed by the top placeholders:
+    #   %diamondsmp_topcurrent_<1..size>_name%   ..._value%   ..._uuid%
+    #   %diamondsmp_tophighest_<1..size>_name%   ..._value%   ..._uuid%
+    size: 10
+    # The cached boards are rebuilt at most this often, and only after a
+    # streak changed.
+    refresh: 5s
+    # Shown for positions nobody holds yet.
+    empty-name: "---"
+    empty-value: "0"
+
+# PlaceholderAPI. Loaded only when PlaceholderAPI is installed.
+#   %diamondsmp_current%  %diamondsmp_highest%  %diamondsmp_kills%
+#   %diamondsmp_deaths%   %diamondsmp_kdr%      and the top placeholders above.
+placeholders:
+  # The same placeholders under more identifiers. Keeps old FoliaKillStreak
+  # placeholders such as %fokillstreak_current% working. Remove FoliaKillStreak
+  # itself, or these identifiers are already taken.
+  extra-identifiers:
+    - foliakillstreak
+    - fokillstreak
+
+# ajLeaderboards. When it is installed together with PlaceholderAPI, these boards
+# are created on startup and updated whenever a streak changes, so no /ajlb add
+# is needed. A board name is a placeholder without the % signs.
+ajleaderboards:
+  enabled: true
+  boards:
+    - diamondsmp_current
+    - diamondsmp_highest
+  # How often queued streak changes are pushed. Every push writes to the
+  # ajLeaderboards database, so keep it reasonable on a busy server.
+  push-interval: 5s
+
+kill-effects:
+  # Icon shown for effects the player does not own.
+  locked-icon: GRAY_DYE
+  # Icon of the "no effect" entry.
+  none-icon: BARRIER
+  # The glass on the bottom row of the menu.
+  filler: GRAY_STAINED_GLASS_PANE
+  sounds:
+    select: ui.button.click
+    locked: entity.villager.no
+  # Every effect needs diamondsmp.killeffect.<id>. Set enabled to false to
+  # hide one, and change name, icon or description freely.
+  effects:
+    lightning:
+      enabled: true
+      name: "&eLightning"
+      icon: LIGHTNING_ROD
+      description:
+        - "&7A harmless bolt strikes your victim."
+    firework:
+      enabled: true
+      name: "&dFirework Burst"
+      icon: FIREWORK_ROCKET
+      description:
+        - "&7A colorful firework bursts where"
+        - "&7your victim fell."
+    flame_spiral:
+      enabled: true
+      name: "&6Flame Spiral"
+      icon: BLAZE_POWDER
+      description:
+        - "&7A spiral of flames rises up."
+    soul_rise:
+      enabled: true
+      name: "&3Soul Rise"
+      icon: SOUL_LANTERN
+      description:
+        - "&7The victim's soul drifts away."
+    blood_burst:
+      enabled: true
+      name: "&4Blood Burst"
+      icon: REDSTONE
+      description:
+        - "&7A burst of crimson dust."
+    totem_pop:
+      enabled: true
+      name: "&aTotem Pop"
+      icon: TOTEM_OF_UNDYING
+      description:
+        - "&7A totem pops, but too late."
+    heart_burst:
+      enabled: true
+      name: "&cHeart Burst"
+      icon: POPPY
+      description:
+        - "&7Hearts fly out of your victim."
+    explosion_poof:
+      enabled: true
+      name: "&7Explosion Poof"
+      icon: TNT
+      description:
+        - "&7A harmless puff of an explosion."
+    smoke_trail:
+      enabled: true
+      name: "&8Smoke Trail"
+      icon: CAMPFIRE
+      description:
+        - "&7A column of smoke rises up."
+    enchant_swirl:
+      enabled: true
+      name: "&5Enchant Swirl"
+      icon: ENCHANTING_TABLE
+      description:
+        - "&7Arcane runes swirl around."
+    ender_burst:
+      enabled: true
+      name: "&5Ender Burst"
+      icon: ENDER_PEARL
+      description:
+        - "&7Your victim is pulled into the void."
+    water_splash:
+      enabled: true
+      name: "&9Water Splash"
+      icon: WATER_BUCKET
+      description:
+        - "&7A big splash of water."
+    note_burst:
+      enabled: true
+      name: "&bNote Burst"
+      icon: NOTE_BLOCK
+      description:
+        - "&7A cheerful burst of music notes."
+    cloud_puff:
+      enabled: true
+      name: "&fCloud Puff"
+      icon: WHITE_WOOL
+      description:
+        - "&7Your victim vanishes into a cloud."
+    villager_joy:
+      enabled: true
+      name: "&2Villager Joy"
+      icon: EMERALD
+      description:
+        - "&7The villagers celebrate your kill."
+    witch_magic:
+      enabled: true
+      name: "&5Witch Magic"
+      icon: BREWING_STAND
+      description:
+        - "&7A witch's curse lingers."
+    crit_storm:
+      enabled: true
+      name: "&eCrit Storm"
+      icon: IRON_SWORD
+      description:
+        - "&7A storm of critical hits."
+    end_rod_burst:
+      enabled: true
+      name: "&fStar Burst"
+      icon: END_ROD
+      description:
+        - "&7Glowing stars scatter outward."
+
+# Clearer - removes PLAYER-PLACED blocks on a timer.
+#
+# Only blocks a player was seen placing are ever removed. The world is never
+# scanned, so natural terrain stays. Before a block is removed the clearer
+# checks that the spot still holds the exact material that was placed, so a
+# block that was changed in the meantime is left alone. Water placed from a
+# bucket is tracked together with the water that flows out of it.
+#
+# The clearer ignores WorldGuard and every region plugin, and there is no
+# permission to keep a block: if a player placed it, it is cleared.
+# Tracked blocks are saved when the server stops and cleared after a restart.
+clearer:
+  enabled: true
+  interval: 5m
+  # Seconds before the clear at which a warning is broadcast.
+  warnings:
+    - 60
+    - 30
+    - 10
+    - 5
+    - 3
+    - 2
+    - 1
+  # The materials the clearer removes. Supports * wildcards.
+  blocks:
+    - WATER
+    - STONE
+    - STONE_PRESSURE_PLATE
+    - "*_BUTTON"
+    - COBWEB
+  # Restrict the clearer to these worlds. Leave empty for every world.
+  worlds: []
+  # Positions tracked at most. Past this, new placements wait for the next clear.
+  max-tracked: 500000
+
+# Reactive distance. The more players are online, the less each client is
+# sent, so a full server does not flood every connection with chunk and
+# movement packets.
+#
+# Every threshold is an online player count. The highest one reached is used.
+#   view-distance    chunks sent to each client. Never raised above the
+#                    world's own setting. 0 keeps the world's setting.
+#   player-distance  players further away than this many blocks are hidden
+#                    from each other. 0 shows everyone. Hidden players also
+#                    leave the tab list until they come closer again.
+reactive-distance:
+  enabled: true
+  # How often the online count is checked.
+  check-interval: 5s
+  # A tier is only left again once the count drops this many players below
+  # its threshold, so a count bouncing around a threshold does not resend
+  # chunks to everyone every few seconds.
+  hysteresis: 5
+  # Ticks between two player-distance passes.
+  visibility-interval: 10
+  thresholds:
+    0:
+      view-distance: 0
+      player-distance: 0
+    40:
+      view-distance: 8
+      player-distance: 96
+    80:
+      view-distance: 6
+      player-distance: 64
+    120:
+      view-distance: 5
+      player-distance: 48
+    160:
+      view-distance: 4
+      player-distance: 32
+
+# Command hider. Players only see the commands they have the permission for,
+# both in the command list and in tab completion. Running a command without
+# its permission, or one that does not exist, shows general.unknown-command
+# from messages.yml and plays the sound below, so hidden commands cannot be
+# told apart from missing ones. diamondsmp.commandhider.bypass ignores
+# hidden-commands and hide-namespaced, but never the permission check.
+command-hider:
+  enabled: true
+  # Hide plugin:command and minecraft:command labels.
+  hide-namespaced: true
+  # Always hidden and blocked, even when the player has the permission.
+  hidden-commands:
+    - pl
+    - plugins
+    - ver
+    - version
+    - about
+    - icanhasbukkit
+    - "?"
+    - help
+    - paper
+    - folia
+  sound:
+    enabled: true
+    sound: minecraft:entity.villager.no
+    volume: 1.0
+    pitch: 1.0
+
+# ScreenShare - /freeze a player at a freeze point and check them in voice.
+# Create freeze points with /setfreezepoint; they are kept in the database.
+# The Discord invite comes from links.discord above.
+screenshare:
+  # Time the frozen player has to join the voice channel.
+  voice-channel-time: 2m
+  # Show the timer in the frozen player's action bar.
+  action-bar: true
+  # Blocks in front of the frozen player where the staff member is placed.
+  # 0 puts the staff member on the freeze point itself.
+  staff-distance: 1.5
+  # Send both players back to where they were when the screenshare ends.
+  return-on-unfreeze: false
+  # End the screenshare when the staff member running it leaves.
+  unfreeze-on-staff-leave: false
+  titles:
+    fade-in-ticks: 10
+    stay-ticks: 100
+    fade-out-ticks: 20
+  punishments:
+    # Leaving for one of these reasons during a screenshare runs leave-commands.
+    leave-reasons:
+      - DISCONNECTED
+      - TIMED_OUT
+      - ERRONEOUS_STATE
+      - KICKED
+    # Kicks with these causes never count as leaving.
+    excused-kick-causes:
+      - PLUGIN
+      - KICK_COMMAND
+      - BANNED
+      - IP_BANNED
+      - WHITELIST
+      - RESTART_COMMAND
+      - IDLING
+    # Run from the console. %player%, %player_uuid%, %staff% and %freeze_point% work here.
+    leave-commands:
+      - "ban %player% 7d Refusing Screenshare - leaving during screenshare."
+  restrictions:
+    # Frozen players take no damage.
+    invulnerable: true
+    # The only commands a frozen player can use.
+    allowed-commands:
+      - msg
+      - message
+      - tell
+      - w
+      - r
+      - reply
+      - helpop
+  visuals:
+    # A block worn on the head of the frozen player.
+    ice-head:
+      enabled: true
+      material: ICE
+      scale: 0.62
+      offset: -0.2
+    # Particles circling the frozen player.
+    particles:
+      enabled: true
+      type: DUST
+      color: "#8BD7FF"
+      size: 0.8
+      amount: 2
+      radius: 0.45
+      height: 1.8
+      # Ticks between two particle rounds.
+      interval: 10
+  sounds:
+    freeze:
+      enabled: true
+      sound: block.glass.break
+      volume: 0.8
+      pitch: 1.4
+    unfreeze:
+      enabled: true
+      sound: block.amethyst_block.chime
+      volume: 1.0
+      pitch: 1.2
+    leave:
+      enabled: true
+      sound: block.note_block.bass
+      volume: 1.0
+      pitch: 0.6
+    voice-expired:
+      enabled: true
+      sound: block.note_block.pling
+      volume: 0.8
+      pitch: 1.0
+    point-created:
+      enabled: true
+      sound: entity.experience_orb.pickup
+      volume: 0.6
+      pitch: 1.2
+    point-deleted:
+      enabled: true
+      sound: entity.item.break
+      volume: 0.6
+      pitch: 1.0
+
+heal:
+  clear-effects: true
+  extinguish: true
+
+near:
+  radius: 200
+
+trash:
+  # Rows of the disposal menu, 1 to 6.
+  rows: 4
+
+chat:
+  # Empty lines sent by /clearchat.
+  clear-lines: 100
+
+join-quit:
+  # Replace the join and quit messages with the ones in messages.yml.
+  # Leave a message empty there to hide it.
+  enabled: true
