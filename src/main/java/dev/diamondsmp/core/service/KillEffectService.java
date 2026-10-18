@@ -27,10 +27,6 @@ public final class KillEffectService implements Service {
     public static final String PERMISSION_PREFIX = "diamondsmp.killeffect.";
 
     public record Configured(KillEffect effect, String name, Material icon, List<String> description) {
-
-        public String id() {
-            return effect.id();
-        }
     }
 
     private final DiamondSMP plugin;

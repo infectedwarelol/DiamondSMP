@@ -120,10 +120,6 @@ public final class Messages {
         }
     }
 
-    public void errorSound(CommandSender target) {
-        errorSound.play(target);
-    }
-
     public Title title(String key, Title.Times times, Object... placeholders) {
         Component title = get(key + ".title", placeholders);
         Component subtitle = get(key + ".subtitle", placeholders);

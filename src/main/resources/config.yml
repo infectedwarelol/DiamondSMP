@@ -104,8 +104,9 @@ killstreak:
       pitch: 1.0
   leaderboard:
     # Positions exposed by the top placeholders:
-    #   %diamondsmp_topcurrent_<1..size>_name%   ..._value%   ..._uuid%
-    #   %diamondsmp_tophighest_<1..size>_name%   ..._value%   ..._uuid%
+    #   %diamondsmp_topcurrent_<rank>_name%  _value%  _uuid%
+    #   %diamondsmp_tophighest_<rank>_name%  _value%  _uuid%
+    # where <rank> goes from 1 to size.
     size: 10
     # The cached boards are rebuilt at most this often, and only after a
     # streak changed.
@@ -206,7 +207,7 @@ kill-effects:
     rise: 1.2
     # Rotation per step in radians.
     spin: 0.35
-  # Every effect needs diamondsmp.killeffect.<id>. Set enabled to false to
+  # Every effect needs diamondsmp.killeffect.<id>. Use "enabled: false" to
   # hide one, and change name, icon or description freely.
   effects:
     lightning:

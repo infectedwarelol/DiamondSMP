@@ -66,10 +66,6 @@ public final class PlayerProfile {
                 killEffect, socialSpy, ignored, blocked, firstJoinTime, lastSeen, playtime.get());
     }
 
-    public UUID uuid() {
-        return uuid;
-    }
-
     public String name() {
         return name;
     }

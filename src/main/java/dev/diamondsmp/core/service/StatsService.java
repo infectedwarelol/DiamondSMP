@@ -67,9 +67,8 @@ public final class StatsService implements Service {
             return fallback("kill.no-weapon");
         }
         ItemMeta meta = item.getItemMeta();
-        Component name = meta != null && meta.hasDisplayName() && meta.displayName() != null
-                ? meta.displayName()
-                : Component.translatable(item.translationKey());
+        Component custom = meta != null && meta.hasDisplayName() ? meta.displayName() : null;
+        Component name = custom != null ? custom : Component.translatable(item.translationKey());
         return name.hoverEvent(item.clone().asHoverEvent());
     }
 

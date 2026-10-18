@@ -107,7 +107,7 @@ public final class KillEffectRegistry {
                         "entity.ender_dragon.growl", 1.0F));
         register("trident_storm", "&3Trident Storm", Material.TRIDENT,
                 List.of("&7A giant trident calls down the storm."),
-                KillEffectRegistry::tridentStorm);
+                (scheduler, at) -> tridentStorm(at));
         register("gold_rush", "&6Gold Rush", Material.GOLD_BLOCK,
                 List.of("&7Your victim was worth their weight in gold."),
                 (scheduler, at) -> burst(at, Particles.DUST, 70, 0.7D, 0.0D, Color.fromRGB(0xFFD24D),
@@ -122,7 +122,7 @@ public final class KillEffectRegistry {
                         "ui.toast.challenge_complete", 1.0F));
     }
 
-    private static void tridentStorm(Scheduler scheduler, Location at) {
+    private static void tridentStorm(Location at) {
         World world = at.getWorld();
         if (world != null) {
             world.strikeLightningEffect(at);

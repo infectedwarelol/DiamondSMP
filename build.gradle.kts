@@ -25,6 +25,8 @@ java {
 }
 
 val generateTemplates = tasks.register<Copy>("generateTemplates") {
+    group = "build"
+    description = "Fills the plugin version into plugin.yml."
     val properties = mapOf("version" to project.version)
     inputs.properties(properties)
     filteringCharset = "UTF-8"
