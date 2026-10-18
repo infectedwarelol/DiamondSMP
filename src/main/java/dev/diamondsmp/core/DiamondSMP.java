@@ -35,6 +35,7 @@ import dev.diamondsmp.core.command.spawn.DelSpawnCommand;
 import dev.diamondsmp.core.command.spawn.SetSpawnCommand;
 import dev.diamondsmp.core.command.spawn.SpawnCommand;
 import dev.diamondsmp.core.command.stats.KillStreakCommand;
+import dev.diamondsmp.core.command.stats.KillTokenCommand;
 import dev.diamondsmp.core.command.stats.LeaderboardCommand;
 import dev.diamondsmp.core.command.stats.StatsCommand;
 import dev.diamondsmp.core.command.teleport.BackCommand;
@@ -73,6 +74,7 @@ import dev.diamondsmp.core.service.FreezePointService;
 import dev.diamondsmp.core.service.GodService;
 import dev.diamondsmp.core.service.KillEffectService;
 import dev.diamondsmp.core.service.KillStreakService;
+import dev.diamondsmp.core.service.KillTokenService;
 import dev.diamondsmp.core.service.ProfileService;
 import dev.diamondsmp.core.service.ReactiveDistanceService;
 import dev.diamondsmp.core.service.ScreenShareService;
@@ -127,6 +129,7 @@ public final class DiamondSMP extends JavaPlugin {
     private KillEffectService killEffects;
     private StatsService stats;
     private KillStreakService killStreaks;
+    private KillTokenService killTokens;
     private PlaceholderHook placeholders;
     private BlockClearer clearer;
     private ChatService chat;
@@ -201,6 +204,7 @@ public final class DiamondSMP extends JavaPlugin {
         killEffects = register(new KillEffectService(this));
         stats = register(new StatsService(this));
         killStreaks = register(new KillStreakService(this));
+        killTokens = register(new KillTokenService(this));
         clearer = register(new BlockClearer(this));
         chat = register(new ChatService(this));
         chatFilter = register(new ChatFilter(this));
@@ -272,6 +276,7 @@ public final class DiamondSMP extends JavaPlugin {
         commands.add(new StatsCommand(this));
         commands.add(new LeaderboardCommand(this));
         commands.add(new KillStreakCommand(this));
+        commands.add(new KillTokenCommand(this));
         commands.add(new MsgCommand(this));
         commands.add(new ReplyCommand(this));
         commands.add(new RelationCommand(this, "ignore", false));
@@ -441,6 +446,10 @@ public final class DiamondSMP extends JavaPlugin {
 
     public KillStreakService killStreaks() {
         return killStreaks;
+    }
+
+    public KillTokenService killTokens() {
+        return killTokens;
     }
 
     public BlockClearer clearer() {

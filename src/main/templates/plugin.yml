@@ -148,6 +148,10 @@ commands:
     description: Choose a kill effect.
     usage: /<command> [set <player> <effect>|reload]
     aliases: [ke, killeffects]
+  killtoken:
+    description: Give kill tokens or compressed kill tokens.
+    usage: /<command> [token|compressed] [amount] [player]
+    aliases: [kt, givekilltoken]
   stats:
     description: Show kill statistics.
     usage: /<command> [player]
@@ -637,6 +641,7 @@ permissions:
       diamondsmp.stats: true
       diamondsmp.stats.others: true
       diamondsmp.leaderboard: true
+      diamondsmp.killtoken.give: true
       diamondsmp.killstreak: true
       diamondsmp.killstreak.reload: true
       diamondsmp.killstreak.modify: true
@@ -649,6 +654,9 @@ permissions:
   diamondsmp.leaderboard:
     description: View the leaderboards.
     default: true
+  diamondsmp.killtoken.give:
+    description: Give kill tokens and compressed kill tokens with /killtoken.
+    default: op
   diamondsmp.killstreak:
     description: View your own and other players' kill streaks.
     default: true

@@ -212,6 +212,17 @@ leaderboard:
   entry: "&8#%rank% %accent%%player% &8» &#ddeded%value%"
   empty: "&8» &7Nobody is ranked yet."
 
+# %amount% and %type% (one of types below).
+kill-tokens:
+  types:
+    token: "Kill Token"
+    compressed: "Compressed Kill Token"
+  reward: "%prefix% &#ddededYou earned %accent%%amount% &#ddededkill token(s)."
+  reward-dropped: "%prefix% &#ddededYour inventory is full, so your %accent%%amount% &#ddededkill token(s) dropped at your feet."
+  given-self: "%prefix% &#ddededYou received %accent%%amount%x %type%&#ddeded."
+  given-other: "%prefix% &#ddededGave %accent%%amount%x %type% &#ddededto %accent%%player%&#ddeded."
+  received: "%prefix% &#ddededYou received %accent%%amount%x %type% &#ddededfrom %accent%%player%&#ddeded."
+
 killeffect:
   locked: "%prefix% &cYou do not own this kill effect."
   selected: "%prefix% &#ddededKill effect set to %effect%&#ddeded."

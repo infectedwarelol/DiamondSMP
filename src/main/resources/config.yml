@@ -137,6 +137,33 @@ ajleaderboards:
   # ajLeaderboards database, so keep it reasonable on a busy server.
   push-interval: 5s
 
+# Kill tokens. The killer receives tokens straight into their inventory; when
+# it is full the rest drops at their feet. /killtoken [token|compressed]
+# [amount] [player] gives them to anyone (diamondsmp.killtoken.give, op).
+# Tokens carry a hidden tag, so renamed copies of the material never count,
+# and the clearer never removes them from the ground.
+kill-tokens:
+  enabled: true
+  per-kill: 1
+  token:
+    material: GOLD_NUGGET
+    name: "&6&lKill Token"
+    lore:
+      - "&7Earned by killing a player."
+    # Enchantment glint. The enchantment itself is always hidden.
+    glow: true
+  compressed:
+    material: NETHER_STAR
+    name: "&e&lCompressed Kill Token"
+    lore:
+      - "&7Worth a stack of kill tokens."
+    glow: true
+  sound:
+    enabled: true
+    sound: minecraft:entity.experience_orb.pickup
+    volume: 0.8
+    pitch: 1.4
+
 kill-effects:
   # Icon shown for effects the player does not own.
   locked-icon: GRAY_DYE
