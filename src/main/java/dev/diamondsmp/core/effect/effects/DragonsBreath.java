@@ -1,6 +1,7 @@
 package dev.diamondsmp.core.effect.effects;
 
 import dev.diamondsmp.core.effect.EffectMath;
+import dev.diamondsmp.core.effect.CorpsePose;
 import dev.diamondsmp.core.effect.EffectSession;
 import dev.diamondsmp.core.effect.KillEffect;
 import dev.diamondsmp.core.effect.Particles;
@@ -45,6 +46,7 @@ public final class DragonsBreath implements KillEffect {
         s.at(0, () -> {
             head[0] = s.item(Material.DRAGON_HEAD, EffectMath.item(START.x, START.y, START.z, HEAD_SCALE,
                     EffectMath.spin(-Math.PI / 2.0D, 0.3D, 0)));
+            s.corpse(CorpsePose.SLUMPED, 0.3D, 0, 90.0F);
             s.sound("entity.ender_dragon.flap", 1.0F, 0.8F);
         });
         s.at(1, () -> s.move(head[0], EffectMath.item(PERCH.x, PERCH.y, PERCH.z, HEAD_SCALE,

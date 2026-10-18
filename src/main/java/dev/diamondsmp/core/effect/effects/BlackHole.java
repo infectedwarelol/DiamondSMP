@@ -1,11 +1,13 @@
 package dev.diamondsmp.core.effect.effects;
 
 import dev.diamondsmp.core.effect.EffectMath;
+import dev.diamondsmp.core.effect.CorpsePose;
 import dev.diamondsmp.core.effect.EffectSession;
 import dev.diamondsmp.core.effect.KillEffect;
 import dev.diamondsmp.core.effect.Particles;
 import org.bukkit.Color;
 import org.bukkit.Material;
+import org.bukkit.entity.ArmorStand;
 import org.bukkit.entity.BlockDisplay;
 import org.joml.Vector3f;
 
@@ -40,7 +42,9 @@ public final class BlackHole implements KillEffect {
     @Override
     public void play(EffectSession s) {
         BlockDisplay[] core = new BlockDisplay[1];
+        ArmorStand[] body = new ArmorStand[1];
         s.at(0, () -> {
+            body[0] = s.corpse(CorpsePose.FLOATING, 0, 0, 0, 0.0F);
             core[0] = s.block(Material.BLACK_CONCRETE, EffectMath.cube(0, CORE_Y, 0, 0.02D, EffectMath.spin(0, 0, 0)));
             s.sound("block.portal.trigger", 0.7F, 0.5F);
             s.sound("block.beacon.deactivate", 1.0F, 0.5F);
@@ -61,7 +65,9 @@ public final class BlackHole implements KillEffect {
             s.particle(Particles.SQUID_INK, s.random(-3, 3), s.random(0, 3), s.random(-3, 3), 1, 0.0D, 0.0D);
         });
         s.every(0, 6, 6, step -> s.sound("entity.warden.heartbeat", 1.0F, 0.6F + step * 0.18F));
+        s.every(2, 3, 11, step -> s.place(body[0], 0, (step + 1) * 0.06D, 0, (step + 1) * 32.0F));
         s.at(22, () -> s.sound("entity.warden.sonic_charge", 1.0F, 0.8F));
+        s.at(36, () -> s.remove(body[0]));
         s.at(36, () -> s.move(core[0], EffectMath.cube(0, CORE_Y, 0, 0.05D, EffectMath.spin(3, 2, 1)), 4));
         s.at(40, () -> {
             s.remove(core[0]);

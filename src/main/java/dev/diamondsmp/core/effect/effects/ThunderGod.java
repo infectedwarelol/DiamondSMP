@@ -1,6 +1,7 @@
 package dev.diamondsmp.core.effect.effects;
 
 import dev.diamondsmp.core.effect.EffectMath;
+import dev.diamondsmp.core.effect.CorpsePose;
 import dev.diamondsmp.core.effect.EffectSession;
 import dev.diamondsmp.core.effect.KillEffect;
 import dev.diamondsmp.core.effect.Particles;
@@ -40,6 +41,7 @@ public final class ThunderGod implements KillEffect {
     @Override
     public void play(EffectSession s) {
         s.at(0, () -> {
+            s.corpse(CorpsePose.KNEELING, 0, 0, (float) s.random(0, 360));
             s.sound("entity.lightning_bolt.thunder", 0.6F, 0.5F);
             s.sound("weather.rain.above", 1.0F, 0.6F);
         });
@@ -66,10 +68,10 @@ public final class ThunderGod implements KillEffect {
         }
         ItemDisplay[] hammer = new ItemDisplay[1];
         s.at(32, () -> {
-            hammer[0] = s.item(Material.LIGHTNING_ROD, EffectMath.item(0, CLOUD_Y + 3, 0, 3.2D, EffectMath.spin(0, 0, Math.PI)));
+            hammer[0] = s.item(Material.LIGHTNING_ROD, EffectMath.item(1.2D, CLOUD_Y + 3, 0, 3.2D, EffectMath.spin(0, 0, Math.PI)));
             s.sound("item.trident.thunder", 1.0F, 0.8F);
         });
-        s.at(33, () -> s.move(hammer[0], EffectMath.item(0, 1.4D, 0, 3.2D, EffectMath.spin(Math.PI, 0, Math.PI)), 7));
+        s.at(33, () -> s.move(hammer[0], EffectMath.item(1.2D, 1.4D, 0, 3.2D, EffectMath.spin(Math.PI, 0, Math.PI)), 7));
         s.every(33, 1, 7, step -> s.line(Particles.END_ROD, 0, CLOUD_Y + 3 - step * 1.2D, 0, 0,
                 CLOUD_Y + 2 - step * 1.2D, 0, 0.25D, null, 1.0F));
         s.at(40, () -> {
@@ -87,7 +89,7 @@ public final class ThunderGod implements KillEffect {
             s.ring(Particles.CRIT, 0.1D, radius - 0.4D, 16, 0, null, 1.0F);
         });
         s.every(42, 3, 6, step -> s.particle(Particles.ELECTRIC_SPARK, 0, 0.5D + step * 0.2D, 0, 8, 0.6D, 0.1D));
-        s.at(56, () -> s.move(hammer[0], EffectMath.item(0, 1.4D, 0, 0.01D, EffectMath.spin(0, 0, Math.PI)), 5));
+        s.at(56, () -> s.move(hammer[0], EffectMath.item(1.2D, 1.4D, 0, 0.01D, EffectMath.spin(0, 0, Math.PI)), 5));
         s.every(46, 6, 3, step -> s.sound("entity.lightning_bolt.thunder", 0.4F - step * 0.1F, 0.5F));
     }
 }

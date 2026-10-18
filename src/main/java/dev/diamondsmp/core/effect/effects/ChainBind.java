@@ -1,12 +1,14 @@
 package dev.diamondsmp.core.effect.effects;
 
 import dev.diamondsmp.core.effect.EffectMath;
+import dev.diamondsmp.core.effect.CorpsePose;
 import dev.diamondsmp.core.effect.EffectSession;
 import dev.diamondsmp.core.effect.KillEffect;
 import dev.diamondsmp.core.effect.Particles;
 import dev.diamondsmp.core.util.Lookup;
 import org.bukkit.Color;
 import org.bukkit.Material;
+import org.bukkit.entity.ArmorStand;
 import org.bukkit.entity.BlockDisplay;
 import org.bukkit.util.Transformation;
 import org.joml.Quaternionf;
@@ -23,7 +25,8 @@ public final class ChainBind implements KillEffect {
     private static final double[] RING_HEIGHTS = {0.35D, 1.0D, 1.65D};
     private static final double ANCHOR_RADIUS = 5.0D;
     private static final double ANCHOR_HEIGHT = 7.0D;
-    private static final float CHEST = 1.2F;
+    private static final float CHEST = 1.45F;
+    private static final double LIFT = 0.3D;
 
     @Override
     public String id() {
@@ -49,7 +52,9 @@ public final class ChainBind implements KillEffect {
     public void play(EffectSession s) {
         BlockDisplay[] anchors = new BlockDisplay[ANCHORS];
         BlockDisplay[][] rings = new BlockDisplay[RING_HEIGHTS.length][RING_SEGMENTS];
+        ArmorStand[] body = new ArmorStand[1];
         s.at(0, () -> {
+            body[0] = s.corpse(CorpsePose.STANDING, 0, 0, 0, 0.0F);
             s.sound("entity.evoker.prepare_summon", 1.0F, 0.6F);
             s.sound("block.chain.place", 1.0F, 0.5F);
         });
@@ -83,6 +88,10 @@ public final class ChainBind implements KillEffect {
                 s.particle(Particles.CRIT, 0, CHEST, 0, 10, 0.3D, 0.2D);
             });
         }
+        s.at(19, () -> {
+            s.pose(body[0], CorpsePose.HANGING);
+            s.place(body[0], 0, LIFT, 0, 0.0F);
+        });
         s.at(22, () -> {
             for (int ring = 0; ring < RING_HEIGHTS.length; ring++) {
                 for (int segment = 0; segment < RING_SEGMENTS; segment++) {
@@ -125,6 +134,8 @@ public final class ChainBind implements KillEffect {
             s.particle(Particles.EXPLOSION, 0, CHEST, 0, 2, 0.4D, 0.0D);
             s.particle(Particles.CRIT, 0, CHEST, 0, 40, 0.8D, 0.6D);
             s.particle(Particles.LARGE_SMOKE, 0, CHEST, 0, 20, 0.6D, 0.05D);
+            s.pose(body[0], CorpsePose.SLUMPED);
+            s.place(body[0], 0, CorpsePose.SLUMPED.floorOffset(), 0, 0.0F);
             s.sound("block.chain.break", 1.0F, 0.6F);
             s.sound("block.chain.break", 1.0F, 0.9F);
             s.sound("block.chain.break", 1.0F, 1.3F);

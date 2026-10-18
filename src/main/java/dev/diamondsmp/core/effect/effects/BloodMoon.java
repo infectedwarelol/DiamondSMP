@@ -1,6 +1,7 @@
 package dev.diamondsmp.core.effect.effects;
 
 import dev.diamondsmp.core.effect.EffectMath;
+import dev.diamondsmp.core.effect.CorpsePose;
 import dev.diamondsmp.core.effect.EffectSession;
 import dev.diamondsmp.core.effect.KillEffect;
 import dev.diamondsmp.core.effect.Particles;
@@ -45,6 +46,7 @@ public final class BloodMoon implements KillEffect {
         s.at(0, () -> {
             moon[0] = s.text(Component.text("●", TextColor.color(0xB3001B)),
                     EffectMath.item(0, MOON_Y, 0, 0.01D, EffectMath.spin(0, 0, 0)));
+            s.corpse(CorpsePose.SLUMPED, 0, 0, (float) s.random(0, 360));
             s.sound("ambient.cave", 1.0F, 0.5F);
             s.sound("entity.wither.ambient", 0.6F, 0.4F);
         });

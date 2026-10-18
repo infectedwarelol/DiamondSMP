@@ -36,6 +36,9 @@ public final class Particles {
     public static final Particle FLASH = find("FLASH");
     public static final Particle ELECTRIC_SPARK = find("ELECTRIC_SPARK");
     public static final Particle SQUID_INK = find("SQUID_INK");
+    public static final Particle SPLASH = find("SPLASH", "WATER_SPLASH");
+    public static final Particle BUBBLE = find("BUBBLE", "WATER_BUBBLE");
+    public static final Particle FALLING_WATER = find("FALLING_WATER");
     public static final Particle SONIC_BOOM = find("SONIC_BOOM");
     public static final Particle SNOWFLAKE = find("SNOWFLAKE");
     public static final Particle WHITE_ASH = find("WHITE_ASH");
@@ -45,6 +48,7 @@ public final class Particles {
     public static final Particle DRAGON_BREATH = find("DRAGON_BREATH");
     public static final Particle CRIMSON_SPORE = find("CRIMSON_SPORE");
     public static final Particle DAMAGE = find("DAMAGE_INDICATOR");
+    public static final Particle SWEEP = find("SWEEP_ATTACK");
 
     private Particles() {
     }

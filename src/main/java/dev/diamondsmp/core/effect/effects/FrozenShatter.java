@@ -1,11 +1,13 @@
 package dev.diamondsmp.core.effect.effects;
 
 import dev.diamondsmp.core.effect.EffectMath;
+import dev.diamondsmp.core.effect.CorpsePose;
 import dev.diamondsmp.core.effect.EffectSession;
 import dev.diamondsmp.core.effect.KillEffect;
 import dev.diamondsmp.core.effect.Particles;
 import org.bukkit.Color;
 import org.bukkit.Material;
+import org.bukkit.entity.ArmorStand;
 import org.bukkit.entity.BlockDisplay;
 import org.bukkit.util.Transformation;
 import org.joml.Vector3f;
@@ -42,7 +44,9 @@ public final class FrozenShatter implements KillEffect {
     public void play(EffectSession s) {
         BlockDisplay[] spikes = new BlockDisplay[SPIKES];
         BlockDisplay[] coffin = new BlockDisplay[1];
+        ArmorStand[] body = new ArmorStand[1];
         s.at(0, () -> {
+            body[0] = s.corpse(CorpsePose.STANDING, 0, 0, (float) s.random(0, 360));
             for (int dx = -3; dx <= 3; dx++) {
                 for (int dz = -3; dz <= 3; dz++) {
                     int distance = dx * dx + dz * dz;
@@ -85,6 +89,7 @@ public final class FrozenShatter implements KillEffect {
                         0.1D, 0.3D, 0.1D, EffectMath.spin(s.random(-4, 4), s.random(-4, 4), 0)), 10);
             }
             s.move(coffin[0], EffectMath.box(0, 1.0D, 0, 0.01D, 0.01D, 0.01D, EffectMath.spin(2, 2, 0)), 4);
+            s.remove(body[0]);
             int total = s.count(60);
             for (int index = 0; index < total; index++) {
                 Vector3f direction = EffectMath.sphere(index, total);

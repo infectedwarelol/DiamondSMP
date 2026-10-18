@@ -1,6 +1,7 @@
 package dev.diamondsmp.core.effect.effects;
 
 import dev.diamondsmp.core.effect.EffectMath;
+import dev.diamondsmp.core.effect.CorpsePose;
 import dev.diamondsmp.core.effect.EffectSession;
 import dev.diamondsmp.core.effect.KillEffect;
 import dev.diamondsmp.core.effect.Particles;
@@ -46,6 +47,7 @@ public final class SoulHarvest implements KillEffect {
                     }
                 }
             }
+            s.corpse(CorpsePose.KNEELING, 0, 0, (float) s.random(0, 360));
             s.sound("block.soul_sand.break", 1.0F, 0.6F);
             s.sound("particle.soul_escape", 1.0F, 0.5F);
         });

@@ -1,11 +1,13 @@
 package dev.diamondsmp.core.effect.effects;
 
 import dev.diamondsmp.core.effect.EffectMath;
+import dev.diamondsmp.core.effect.CorpsePose;
 import dev.diamondsmp.core.effect.EffectSession;
 import dev.diamondsmp.core.effect.KillEffect;
 import dev.diamondsmp.core.effect.Particles;
 import org.bukkit.Color;
 import org.bukkit.Material;
+import org.bukkit.entity.ArmorStand;
 import org.bukkit.entity.BlockDisplay;
 import org.bukkit.util.Transformation;
 import org.joml.Vector3f;
@@ -68,6 +70,9 @@ public final class InfernoTornado implements KillEffect {
             }
         });
         BlockDisplay[] debris = new BlockDisplay[DEBRIS];
+        ArmorStand[] body = new ArmorStand[1];
+        s.at(4, () -> body[0] = s.corpse(CorpsePose.FLOATING, 0, 0, 0, 0.0F));
+        s.every(5, 3, 17, step -> s.place(body[0], 0, (step + 1) * 0.16D, 0, (step + 1) * 40.0F));
         s.at(6, () -> {
             for (int index = 0; index < DEBRIS; index++) {
                 debris[index] = s.block(index % 2 == 0 ? Material.MAGMA_BLOCK : Material.NETHERRACK,
@@ -84,6 +89,7 @@ public final class InfernoTornado implements KillEffect {
             s.sound("entity.blaze.shoot", 0.5F, 0.5F + step * 0.1F);
         });
         s.at(56, () -> {
+            s.remove(body[0]);
             for (int index = 0; index < DEBRIS; index++) {
                 double angle = EffectMath.TAU * index / DEBRIS;
                 s.move(debris[index], EffectMath.cube(Math.cos(angle) * 6.0D, 1.0D, Math.sin(angle) * 6.0D, 0.05D,

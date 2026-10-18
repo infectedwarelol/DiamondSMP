@@ -1,6 +1,7 @@
 package dev.diamondsmp.core.effect.effects;
 
 import dev.diamondsmp.core.effect.EffectMath;
+import dev.diamondsmp.core.effect.CorpsePose;
 import dev.diamondsmp.core.effect.EffectSession;
 import dev.diamondsmp.core.effect.KillEffect;
 import dev.diamondsmp.core.effect.Particles;
@@ -65,6 +66,7 @@ public final class MeteorStrike implements KillEffect {
         BlockDisplay[] debris = new BlockDisplay[10];
         s.at(FALL + 3, () -> {
             s.remove(meteor[0]);
+            s.corpse(CorpsePose.SLUMPED, 0.2D, 0.1D, (float) s.random(0, 360));
             s.particle(Particles.EXPLOSION_EMITTER, 0, 0.5D, 0);
             s.particle(Particles.FLAME, 0, 0.5D, 0, 60, 1.2D, 0.2D);
             s.particle(Particles.LAVA, 0, 0.5D, 0, 20, 1.0D, 0.0D);

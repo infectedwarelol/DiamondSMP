@@ -14,6 +14,11 @@ import dev.diamondsmp.core.effect.effects.SoulHarvest;
 import dev.diamondsmp.core.effect.effects.Supernova;
 import dev.diamondsmp.core.effect.effects.ThunderGod;
 import dev.diamondsmp.core.effect.effects.VoidRift;
+import dev.diamondsmp.core.effect.effects.Kraken;
+import dev.diamondsmp.core.effect.effects.OrbitalStrike;
+import dev.diamondsmp.core.effect.effects.BladeStorm;
+import dev.diamondsmp.core.effect.effects.Tombstone;
+import dev.diamondsmp.core.effect.effects.Guillotine;
 
 import java.util.List;
 
@@ -33,7 +38,12 @@ public final class KillEffectRegistry {
             new VoidRift(),
             new Supernova(),
             new FrozenShatter(),
-            new InfernoTornado());
+            new InfernoTornado(),
+            new Guillotine(),
+            new Tombstone(),
+            new BladeStorm(),
+            new OrbitalStrike(),
+            new Kraken());
 
     public List<KillEffect> all() {
         return effects;

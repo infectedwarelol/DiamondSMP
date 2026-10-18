@@ -1,11 +1,13 @@
 package dev.diamondsmp.core.effect.effects;
 
 import dev.diamondsmp.core.effect.EffectMath;
+import dev.diamondsmp.core.effect.CorpsePose;
 import dev.diamondsmp.core.effect.EffectSession;
 import dev.diamondsmp.core.effect.KillEffect;
 import dev.diamondsmp.core.effect.Particles;
 import org.bukkit.Color;
 import org.bukkit.Material;
+import org.bukkit.entity.ArmorStand;
 import org.bukkit.entity.BlockDisplay;
 
 import java.util.List;
@@ -40,6 +42,12 @@ public final class VoidRift implements KillEffect {
     @Override
     public void play(EffectSession s) {
         BlockDisplay[] rift = new BlockDisplay[2];
+        ArmorStand[] body = new ArmorStand[1];
+        s.at(0, () -> body[0] = s.corpse(CorpsePose.STANDING, 0, 0, 1.8D, 180.0F));
+        s.at(12, () -> s.pose(body[0], CorpsePose.FLOATING));
+        s.every(13, 3, 9, step -> s.place(body[0], 0, 0.15D + step * 0.08D, 1.8D - (step + 1) * 0.2D,
+                180.0F + (step + 1) * 25.0F));
+        s.at(41, () -> s.remove(body[0]));
         s.every(0, 1, 10, step -> {
             double reach = (step + 1) / 10.0D * HEIGHT / 2.0D;
             s.line(Particles.ELECTRIC_SPARK, 0, CENTER_Y - reach, 0, 0, CENTER_Y + reach, 0, 0.2D, null, 1.0F);

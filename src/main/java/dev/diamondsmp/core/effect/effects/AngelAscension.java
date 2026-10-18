@@ -1,11 +1,13 @@
 package dev.diamondsmp.core.effect.effects;
 
 import dev.diamondsmp.core.effect.EffectMath;
+import dev.diamondsmp.core.effect.CorpsePose;
 import dev.diamondsmp.core.effect.EffectSession;
 import dev.diamondsmp.core.effect.KillEffect;
 import dev.diamondsmp.core.effect.Particles;
 import org.bukkit.Color;
 import org.bukkit.Material;
+import org.bukkit.entity.ArmorStand;
 import org.bukkit.entity.ItemDisplay;
 import org.joml.Vector3f;
 
@@ -47,6 +49,11 @@ public final class AngelAscension implements KillEffect {
             s.ring(Particles.DUST, Math.max(0.0D, bottom), 0.6D, 10, step * 0.4D, GOLD, 1.2F);
         });
         s.at(0, () -> s.sound("block.beacon.power_select", 1.0F, 1.4F));
+        ArmorStand[] body = new ArmorStand[1];
+        s.at(0, () -> body[0] = s.corpse(CorpsePose.STANDING, 0, 0, 0.0F));
+        s.at(14, () -> s.pose(body[0], CorpsePose.FLOATING));
+        s.every(15, 3, 14, step -> s.place(body[0], 0, EffectMath.easeInOut((step + 1) * 3 / 44.0D) * RISE, 0,
+                (step + 1) * 8.0F));
         s.at(14, () -> {
             s.sound("block.beacon.activate", 1.0F, 1.6F);
             s.particle(Particles.FLASH, 0, 1, 0, 1, 0, 0, 0, 0, GOLD, 1.0F);
@@ -86,6 +93,7 @@ public final class AngelAscension implements KillEffect {
         });
         s.at(58, () -> {
             double top = 1.2D + RISE;
+            s.remove(body[0]);
             s.particle(Particles.FLASH, 0, top, 0, 1, 0, 0, 0, 0, HOLY, 1.0F);
             s.particle(Particles.TOTEM, 0, top, 0, 60, 0.6D, 0.5D);
             int total = s.count(40);
