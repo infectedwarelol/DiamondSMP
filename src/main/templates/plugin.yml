@@ -40,6 +40,9 @@ commands:
   speed:
     description: Set the walk or fly speed.
     usage: /<command> <1-10> [player]
+  flyspeed:
+    description: Set the fly speed.
+    usage: /<command> <1-10> [player]
   clear:
     description: Clear an inventory.
     usage: /<command> [player]
@@ -270,6 +273,8 @@ permissions:
       diamondsmp.god.others: true
       diamondsmp.speed: true
       diamondsmp.speed.others: true
+      diamondsmp.flyspeed: true
+      diamondsmp.flyspeed.others: true
       diamondsmp.clear: true
       diamondsmp.clear.others: true
       diamondsmp.repair: true
@@ -319,6 +324,12 @@ permissions:
     default: op
   diamondsmp.speed.others:
     description: Change another player's speed.
+    default: op
+  diamondsmp.flyspeed:
+    description: Change your fly speed.
+    default: op
+  diamondsmp.flyspeed.others:
+    description: Change another player's fly speed.
     default: op
   diamondsmp.clear:
     description: Clear your inventory.

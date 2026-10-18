@@ -15,6 +15,7 @@ import dev.diamondsmp.core.command.player.ClearCommand;
 import dev.diamondsmp.core.command.player.EnderChestCommand;
 import dev.diamondsmp.core.command.player.FeedCommand;
 import dev.diamondsmp.core.command.player.FlyCommand;
+import dev.diamondsmp.core.command.player.FlySpeedCommand;
 import dev.diamondsmp.core.command.player.GamemodeCommand;
 import dev.diamondsmp.core.command.player.GodCommand;
 import dev.diamondsmp.core.command.player.HealCommand;
@@ -261,6 +262,7 @@ public final class DiamondSMP extends JavaPlugin {
         commands.add(new FlyCommand(this));
         commands.add(new GodCommand(this));
         commands.add(new SpeedCommand(this));
+        commands.add(new FlySpeedCommand(this));
         commands.add(new ClearCommand(this));
         commands.add(new RepairCommand(this));
         commands.add(new VanishCommand(this));
