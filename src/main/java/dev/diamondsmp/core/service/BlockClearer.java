@@ -39,6 +39,7 @@ public final class BlockClearer implements Service {
     private final AtomicInteger size = new AtomicInteger();
     private final AtomicInteger countdown = new AtomicInteger();
     private Task ticker = Task.NONE;
+    private Task saver = Task.NONE;
 
     private volatile boolean enabled = true;
     private volatile int intervalSeconds = 300;
@@ -86,6 +87,9 @@ public final class BlockClearer implements Service {
         countdown.set(intervalSeconds);
         ticker.cancel();
         ticker = enabled ? plugin.scheduler().globalTimer(this::tick, 20L, 20L) : Task.NONE;
+        long saveSeconds = Math.max(30L, Format.parseSeconds(config.getString("storage.autosave"), 300L));
+        saver.cancel();
+        saver = plugin.scheduler().asyncTimer(this::saveAsync, saveSeconds * 20L, saveSeconds * 20L);
     }
 
     public boolean tracks(Material material) {
@@ -221,9 +225,12 @@ public final class BlockClearer implements Service {
         return new ChunkKey(block.getWorld().getName(), block.getX() >> 4, block.getZ() >> 4);
     }
 
-    @Override
-    public void shutdown() {
-        ticker.cancel();
+    private void saveAsync() {
+        List<PlacedBlock> snapshot = snapshot();
+        plugin.database().run("save the tracked blocks", storage -> storage.replacePlacedBlocks(snapshot));
+    }
+
+    private List<PlacedBlock> snapshot() {
         List<PlacedBlock> snapshot = new ArrayList<>(Math.max(16, size.get()));
         for (Map.Entry<ChunkKey, Map<BlockPosition, Material>> chunk : tracked.entrySet()) {
             String world = chunk.getKey().world();
@@ -233,6 +240,14 @@ public final class BlockClearer implements Service {
                         entry.getValue().name()));
             }
         }
+        return snapshot;
+    }
+
+    @Override
+    public void shutdown() {
+        ticker.cancel();
+        saver.cancel();
+        List<PlacedBlock> snapshot = snapshot();
         try {
             plugin.database().await(plugin.database().run("save the tracked blocks",
                     storage -> storage.replacePlacedBlocks(snapshot)), 60L);
