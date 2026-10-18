@@ -1,0 +1,365 @@
+# DiamondSMP messages.
+#
+# Colors use & codes and &#RRGGBB hex colors. MiniMessage tags such as
+# <gradient:#1fd1f9:#c7effc>text</gradient> or <bold> work as well.
+# %prefix%, %primary% and %accent% are replaced everywhere.
+# %nl% starts a new line. Leave a message empty ("") to hide it.
+
+config-version: 5
+
+prefix: "&#1FD1F9&lD&#3BD6F9&lI&#57DBFA&lA&#73E0FA&lM&#8FE5FB&lO&#ABEAFB&lN&#C7EFFC&lD &8»&r"
+
+theme:
+  primary: "&#1fd1f9"
+  accent: "&#c7effc"
+
+general:
+  no-permission: "%prefix% &cYou do not have permission."
+  unknown-command: "&cUnknown Command"
+  player-only: "%prefix% &cThis command is for players only."
+  player-not-found: "%prefix% &cNo online player named %accent%%player%&c."
+  world-not-found: "%prefix% &cNo world named %accent%%world%&c."
+  invalid-number: "%prefix% &c%accent%%input% &cis not a valid number."
+  number-range: "%prefix% &cPick a number from %accent%%min% &cto %accent%%max%&c."
+  usage: "%prefix% &cUsage: %accent%%usage%"
+  error: "%prefix% &cSomething went wrong. The error was logged."
+  data-loading: "%prefix% &cYour data is still loading, try again in a moment."
+  load-failed: "&cYour DiamondSMP data could not be loaded.%nl%&7Please try to join again."
+  enabled: "&aenabled"
+  disabled: "&cdisabled"
+
+admin:
+  reloaded: "%prefix% &#ddededReloaded the configuration in %accent%%time%ms&#ddeded."
+  version: "%prefix% &#ddededDiamondSMP %accent%%version% &#ddededon %accent%%server%&#ddeded."
+
+join:
+  message: "&8[&a+&8] &#ddeded%player%"
+  first: "%prefix% &#ddededWelcome %accent%%player% &#ddededto the server for the first time!"
+
+quit:
+  message: "&8[&c-&8] &#ddeded%player%"
+
+gamemode:
+  unknown: "%prefix% &cUnknown game mode %accent%%mode%&c."
+  self: "%prefix% &#ddededYour game mode is now %accent%%mode%&#ddeded."
+  other: "%prefix% &#ddededSet %accent%%player%&#ddeded's game mode to %accent%%mode%&#ddeded."
+  notify: "%prefix% &#ddededYour game mode was set to %accent%%mode% &#ddededby %accent%%player%&#ddeded."
+
+heal:
+  self: "%prefix% &#ddededYou have been healed."
+  other: "%prefix% &#ddededHealed %accent%%player%&#ddeded."
+  notify: "%prefix% &#ddededYou were healed by %accent%%player%&#ddeded."
+
+feed:
+  self: "%prefix% &#ddededYour hunger is filled."
+  other: "%prefix% &#ddededFed %accent%%player%&#ddeded."
+  notify: "%prefix% &#ddededYou were fed by %accent%%player%&#ddeded."
+
+fly:
+  self: "%prefix% &#ddededFlight %state%&#ddeded."
+  other: "%prefix% &#ddededFlight %state% &#ddededfor %accent%%player%&#ddeded."
+  notify: "%prefix% &#ddededYour flight was %state% &#ddededby %accent%%player%&#ddeded."
+
+god:
+  self: "%prefix% &#ddededGod mode %state%&#ddeded."
+  other: "%prefix% &#ddededGod mode %state% &#ddededfor %accent%%player%&#ddeded."
+  notify: "%prefix% &#ddededYour god mode was %state% &#ddededby %accent%%player%&#ddeded."
+
+speed:
+  type-walk: "walk"
+  type-fly: "fly"
+  self: "%prefix% &#ddededYour %state% &#ddededspeed is now %accent%%speed%&#ddeded."
+  other: "%prefix% &#ddededSet %accent%%player%&#ddeded's %state% &#ddededspeed to %accent%%speed%&#ddeded."
+  notify: "%prefix% &#ddededYour %state% &#ddededspeed was set to %accent%%speed% &#ddededby %accent%%player%&#ddeded."
+
+clear:
+  self: "%prefix% &#ddededYour inventory was cleared."
+  other: "%prefix% &#ddededCleared %accent%%player%&#ddeded's inventory."
+  notify: "%prefix% &#ddededYour inventory was cleared by %accent%%player%&#ddeded."
+
+repair:
+  self: "%prefix% &#ddededRepaired %accent%%state% &#ddededitem(s)."
+  other: "%prefix% &#ddededRepaired %accent%%state% &#ddededitem(s) of %accent%%player%&#ddeded."
+  notify: "%prefix% &#ddeded%accent%%player% &#ddededrepaired %accent%%state% &#ddededof your items."
+
+vanish:
+  self: "%prefix% &#ddededVanish %state%&#ddeded."
+  other: "%prefix% &#ddededVanish %state% &#ddededfor %accent%%player%&#ddeded."
+  notify: "%prefix% &#ddededYour vanish was %state% &#ddededby %accent%%player%&#ddeded."
+
+trash:
+  opened: ""
+  opened-other: "%prefix% &#ddededOpened the disposal for %accent%%player%&#ddeded."
+  disposed: "%prefix% &#ddededDisposed of %accent%%amount% &#ddededitem(s)."
+
+ping:
+  self: "%prefix% &#ddededYour ping is %accent%%ping%ms&#ddeded."
+  other: "%prefix% &#ddeded%accent%%player%&#ddeded's ping is %accent%%ping%ms&#ddeded."
+
+near:
+  none: "%prefix% &#ddededNo players within %accent%%radius% &#ddededblocks."
+  list: "%prefix% &#ddeded%accent%%count% &#ddededplayer(s) within %accent%%radius% &#ddededblocks: %accent%%players%"
+
+seen:
+  online: "%prefix% %accent%%player% &#ddededis online right now."
+  offline: "%prefix% %accent%%player% &#ddededwas last seen %accent%%time% &#ddededago."
+  never: "%prefix% &c%accent%%player% &chas never joined."
+
+playtime:
+  self: "%prefix% &#ddededYou have played for %accent%%time%&#ddeded."
+  other: "%prefix% %accent%%player% &#ddededhas played for %accent%%time%&#ddeded."
+  not-found: "%prefix% &c%accent%%player% &chas never joined."
+
+# %store% and %discord% come from links in config.yml.
+links:
+  store: "%prefix% &#ddededStore: <click:open_url:'https://%store%'><hover:show_text:'Open the store'>%accent%&n%store%</hover></click>"
+  discord: "%prefix% &#ddededDiscord: <click:open_url:'https://%discord%'><hover:show_text:'Join the Discord'>%accent%&n%discord%</hover></click>"
+
+list:
+  header: "%prefix% &#ddededThere are %accent%%count%&#ddeded/%accent%%max% &#ddededplayers online."
+  players: "&8» %accent%%players%"
+
+teleport:
+  self: "%prefix% &cYou cannot teleport to yourself."
+  to-player: "%prefix% &#ddededTeleported to %accent%%player%&#ddeded."
+  player-to-player: "%prefix% &#ddededTeleported %accent%%player% &#ddededto %accent%%target%&#ddeded."
+  to-coordinates: "%prefix% &#ddededTeleported to %accent%%position% &#ddededin %accent%%world%&#ddeded."
+  here: "%prefix% &#ddededTeleported %accent%%player% &#ddededto you."
+  all: "%prefix% &#ddededTeleporting %accent%%count% &#ddededplayer(s) to you."
+  failed: "%prefix% &cThe teleport failed."
+  invalid-destination: "%prefix% &cThat destination is not available right now."
+  warmup: "%prefix% &#ddededTeleporting in %accent%%time%s&#ddeded..."
+  warmup-bar: "&#ddededTeleporting in %accent%%time%s"
+  cooldown: "%prefix% &cYou can teleport again in %accent%%time%&c."
+  cancelled-move: "%prefix% &cTeleport cancelled because you moved."
+  cancelled-damage: "%prefix% &cTeleport cancelled because you took damage."
+
+back:
+  none: "%prefix% &cThere is no location to return to."
+  teleported: "%prefix% &#ddededReturned to your previous location."
+
+top:
+  already: "%prefix% &cYou are already at the top."
+  teleported: "%prefix% &#ddededTeleported to the top."
+
+spawn:
+  set: "%prefix% &#ddededSpawn set at %accent%%position% &#ddededin %accent%%world%&#ddeded."
+  deleted: "%prefix% &#ddededThe spawn was deleted."
+  not-set: "%prefix% &cThe spawn has not been set."
+  teleported: "%prefix% &#ddededTeleported to spawn."
+  sent: "%prefix% &#ddededSent %accent%%player% &#ddededto spawn."
+  protected: "%prefix% &cYou cannot build at spawn."
+
+warp:
+  set: "%prefix% &#ddededWarp %accent%%warp% &#ddededset."
+  invalid-name: "%prefix% &c%accent%%warp% &cis not a valid warp name."
+  not-found: "%prefix% &cNo warp named %accent%%warp%&c."
+  deleted: "%prefix% &#ddededWarp %accent%%warp% &#ddededdeleted."
+  teleported: "%prefix% &#ddededWarped to %accent%%warp%&#ddeded."
+  none: "%prefix% &cThere are no warps."
+  list: "%prefix% &#ddededWarps (%accent%%count%&#ddeded): %accent%%warps%"
+
+# %killer%, %victim%, %streak%, %weapon% and %health% (the killer's hearts).
+kill:
+  message: "%prefix% %accent%%victim% &#ddededwas killed by %accent%%killer% &8(&c%health%❤&8) &#ddededusing %accent%%weapon% &8[&7%streak% streak&8]"
+  no-weapon: "their fists"
+  ranged-weapon: "a ranged attack"
+
+# %victim% and %vanilla% (the original death message).
+death:
+  message: "%prefix% &7%vanilla%"
+
+# %player%/%killer%/%victim% and %streak% where they apply.
+killstreak:
+  self: "%prefix% &#ddededCurrent streak: %accent%%current% &8| &#ddededBest: %accent%%highest%"
+  other: "%prefix% %accent%%player%&#ddeded's streak: %accent%%current% &8| &#ddededBest: %accent%%highest%"
+  unknown-player: "%prefix% &c%accent%%player% &chas never joined."
+  reloaded: "%prefix% &#ddededConfiguration reloaded."
+  modify-set: "%prefix% &#ddededSet %accent%%player%&#ddeded's streak to %accent%%current%&#ddeded."
+  modify-add: "%prefix% &#ddededAdded %accent%%amount% &#ddededto %accent%%player%&#ddeded's streak (now %accent%%current%&#ddeded)."
+  modify-clear: "%prefix% &#ddededCleared %accent%%player%&#ddeded's current streak."
+  action-bar: "&c✦ &7Streak: %accent%&l%streak%"
+  milestone: "%prefix% %accent%%killer% &#ddededis on a %accent%%streak% &#ddededkill streak!"
+  title:
+    title: "&c&l%streak%"
+    subtitle: "&7Kill Streak!"
+  ended: "%prefix% %accent%%killer% &#ddededended %accent%%victim%&#ddeded's %accent%%streak% &#ddededkill streak!"
+  ended-self: "%prefix% %accent%%victim%&#ddeded's %accent%%streak% &#ddededkill streak ended."
+
+stats:
+  not-found: "%prefix% &cNo statistics for %accent%%player%&c."
+  header: "%prefix% &#ddededStatistics of %accent%%player%"
+  kills: "&8» &#ddededKills: %accent%%kills%"
+  deaths: "&8» &#ddededDeaths: %accent%%deaths%"
+  ratio: "&8» &#ddededKDR: %accent%%ratio%"
+  streak: "&8» &#ddededStreak: %accent%%streak% &8(&7best %best%&8)"
+
+leaderboard:
+  types:
+    kills: "Kills"
+    current: "Current Streak"
+    streak: "Best Streak"
+    kdr: "KDR"
+  header: "%prefix% &#ddededTop players by %accent%%type%"
+  entry: "&8#%rank% %accent%%player% &8» &#ddeded%value%"
+  empty: "&8» &7Nobody is ranked yet."
+
+killeffect:
+  locked: "%prefix% &cYou do not own this kill effect."
+  selected: "%prefix% &#ddededKill effect set to %effect%&#ddeded."
+  set: "%prefix% &#ddededSet %accent%%player%&#ddeded's kill effect to %effect%&#ddeded."
+  unknown: "%prefix% &cUnknown kill effect %accent%%effect%&c."
+  reloaded: "%prefix% &#ddededReloaded %accent%%count% &#ddededkill effects."
+
+msg:
+  to: "&8[&7me &8» %accent%%player%&8] &f%message%"
+  from: "&8[%accent%%player% &8» &7me&8] &f%message%"
+  spy: "&8[&cSpy&8] &7%sender% &8» &7%target%&8: &f%message%"
+  self: "%prefix% &cYou cannot message yourself."
+  ignored: "%prefix% &c%accent%%player% &cis ignoring you."
+  blocked: "%prefix% &cYou cannot message %accent%%player% &cright now."
+  blocked-by-you: "%prefix% &cYou have blocked %accent%%player%&c. Use %accent%/block %player% &cto unblock."
+  no-reply: "%prefix% &cThere is nobody to reply to."
+
+ignore:
+  self: "%prefix% &cYou cannot ignore yourself."
+  exempt: "%prefix% &cYou cannot ignore %accent%%player%&c."
+  added: "%prefix% &#ddededYou now ignore %accent%%player%&#ddeded."
+  removed: "%prefix% &#ddededYou no longer ignore %accent%%player%&#ddeded."
+
+# /block is the stronger /ignore: a blocked player cannot message you, you
+# cannot message them, and any /reply link between you is dropped.
+block:
+  self: "%prefix% &cYou cannot block yourself."
+  exempt: "%prefix% &cYou cannot block %accent%%player%&c."
+  added: "%prefix% &#ddededYou have blocked %accent%%player%&#ddeded."
+  removed: "%prefix% &#ddededYou have unblocked %accent%%player%&#ddeded."
+
+socialspy:
+  toggled: "%prefix% &#ddededSocial spy %state%&#ddeded."
+
+broadcast:
+  format: "&8[&#1fd1f9&lBROADCAST&8] &f%message%"
+
+chat:
+  muted: "%prefix% &cThe chat is muted."
+  muted-broadcast: "%prefix% &#ddededThe chat was muted by %accent%%player%&#ddeded."
+  unmuted-broadcast: "%prefix% &#ddededThe chat was unmuted by %accent%%player%&#ddeded."
+  cleared: "%prefix% &#ddededThe chat was cleared by %accent%%player%&#ddeded."
+
+time:
+  set: "%prefix% &#ddededTime in %accent%%world% &#ddededis now %accent%%time%&#ddeded."
+
+weather:
+  set: "%prefix% &#ddededWeather in %accent%%world% &#ddededset to %accent%%weather%&#ddeded."
+
+clearer:
+  warning: "%prefix% &#ddededEvery placed block will be cleared in %accent%%time%s&#ddeded!"
+  cleared: "%prefix% &#ddededEvery placed block has been cleared!"
+
+# ScreenShare. %player%, %player_uuid%, %staff%, %staff_uuid%, %freeze_point%,
+# %time% (time frozen), %remaining% (voice channel time left) and %discord%.
+screenshare:
+  command-blocked: "%prefix% &cYou cannot use commands during a screenshare."
+  freeze:
+    success:
+      - "%prefix% &#ddededYou are now screensharing %accent%%player%&#ddeded."
+      - "%prefix% &7Freeze point: &f#%freeze_point%"
+      - "%prefix% &7Discord: %accent%%discord%"
+      - "%prefix% &7Voice channel timer: &f%remaining%"
+      - "%prefix% &7Commands: &f/screenshare info %player% &8| &f/unfreeze %player%"
+    target:
+      - ""
+      - "%prefix% &#ddededYou have been frozen for a %accent%screenshare&#ddeded."
+      - "%prefix% &#ddededJoin %accent%%discord% &#ddededand wait in the voice channel."
+      - "%prefix% &#ddededYou have %accent%%remaining% &#ddededto join."
+      - "%prefix% &cLeaving the server during a screenshare will result in a ban."
+      - ""
+    already-frozen: "%prefix% &cThat player is already frozen."
+    self: "%prefix% &cYou cannot freeze yourself."
+    bypass: "%prefix% &cThat player cannot be frozen."
+    teleport-failed: "%prefix% &cCould not teleport &f%player% &cto freeze point &f#%freeze_point%&c. The screenshare was cancelled."
+    notify: "%prefix% &f%staff% &7froze &f%player% &7at freeze point &f#%freeze_point%&7."
+  unfreeze:
+    success: "%prefix% &#ddededYou have unfrozen %accent%%player% &7(%duration%)&#ddeded."
+    target: "%prefix% &#ddededYou have been unfrozen. Thank you for your cooperation."
+    not-frozen: "%prefix% &cThat player is not frozen."
+    not-owner: "%prefix% &cThat screenshare belongs to &f%staff%&c."
+    notify: "%prefix% &f%staff% &7unfroze &f%player% &7after &f%duration%&7."
+  leave:
+    punished: "%prefix% &c%player% left during a screenshare and was punished."
+    kicked: "%prefix% &c%player% was kicked during the screenshare. The screenshare has ended."
+    notify: "%prefix% &c%player% left during a screenshare with &f%staff% &cand was punished."
+  staff-leave:
+    unfrozen: "%prefix% &#ddededThe staff member screensharing you has left. You have been unfrozen."
+    waiting: "%prefix% &#ddededThe staff member screensharing you has disconnected. &cYou are still frozen, please wait."
+  voice:
+    expired-staff: "%prefix% &f%player% &7has used the voice channel time. Decide whether to continue or punish."
+    expired-target: "%prefix% &cYour time to join &f%discord% &chas run out. Join now."
+  title:
+    title: "%accent%&lSCREENSHARE"
+    subtitle: "&fJoin %accent%%discord% &fwithin %accent%%remaining%"
+  action-bar:
+    waiting: "%accent%&lSCREENSHARE &8| &fJoin %accent%%discord% &8| &fTime left: %accent%%remaining%"
+    active: "%accent%&lSCREENSHARE &8| &fElapsed: %accent%%time% &8| &cDo not log out"
+  freeze-point:
+    created: "%prefix% &#ddededCreated freeze point %accent%#%freeze_point%&#ddeded."
+    not-on-ground: "%prefix% &eYou are not standing on the ground. Frozen players may float at this point."
+    deleted: "%prefix% &#ddededDeleted freeze point %accent%#%freeze_point%&#ddeded."
+    invalid: "%prefix% &cThat freeze point does not exist."
+    none: "%prefix% &cThere are no freeze points. Create one with &f/setfreezepoint&c."
+    unavailable: "%prefix% &cFreeze point &f#%freeze_point% &cis unavailable because the world &f%world% &cis not loaded."
+    list-header:
+      - "%prefix% &#ddededFreeze Points &7(%amount%)"
+    list-entry:
+      - "%accent%#%freeze_point% &8| &7World: &f%world%"
+      - "  &7X: &f%x% &7Y: &f%y% &7Z: &f%z% &7Yaw: &f%yaw% &7Pitch: &f%pitch%"
+    list-empty: "%prefix% &7There are no freeze points."
+  help:
+    - "%prefix% &#ddededScreenShare &7v%version%"
+    - "&7/freeze <player> [point] &8| &fStart a screenshare"
+    - "&7/unfreeze <player> &8| &fEnd a screenshare"
+    - "&7/setfreezepoint &8| &fCreate a freeze point"
+    - "&7/delfreezepoint <id> &8| &fDelete a freeze point"
+    - "&7/freezepoints &8| &fList freeze points"
+    - "&7/screenshare info <player> &8| &fScreenshare details"
+    - "&7/screenshare list &8| &fActive screenshares"
+    - "&7/screenshare reload &8| &fReload the configuration"
+  info:
+    - "%prefix% &#ddededScreenshare of %accent%%player%"
+    - "&7Status: %accent%Frozen"
+    - "&7UUID: &f%player_uuid%"
+    - "&7Staff: &f%staff%"
+    - "&7Freeze point: &f#%freeze_point%"
+    - "&7Time frozen: &f%time%"
+    - "&7Voice channel time left: &f%remaining%"
+    - "&7Discord: &f%discord%"
+  list-header:
+    - "%prefix% &#ddededActive Screenshares &7(%amount%)"
+  list-entry: "%accent%%player% &8| &7Staff: &f%staff% &8| &7Point: &f#%freeze_point% &8| &7Time: &f%time%"
+  list-empty: "%prefix% &7There are no active screenshares."
+  reloaded: "%prefix% &#ddededConfiguration reloaded. &7(%points% freeze points)"
+
+menus:
+  trash:
+    title: "&8Disposal"
+  killeffect:
+    title: "&8Kill Effects"
+    previous: "%accent%« Previous Page"
+    next: "%accent%Next Page »"
+    close: "&cClose"
+    close-lore:
+      - "&7Page %accent%%page%&7/%accent%%pages%"
+    none-name: "&7No Effect"
+    none-lore:
+      - "&7Play no effect on kills."
+    locked-name: "&c&l🔒 &r%effect%"
+    locked-lore:
+      - ""
+      - "&cLocked"
+    select-lore:
+      - ""
+      - "&eClick to select"
+    selected-lore:
+      - ""
+      - "&aSelected"
