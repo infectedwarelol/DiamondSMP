@@ -1,6 +1,7 @@
 package dev.diamondsmp.core.listener;
 
 import dev.diamondsmp.core.DiamondSMP;
+import dev.diamondsmp.core.message.Text;
 import dev.diamondsmp.core.service.ChatService;
 import io.papermc.paper.event.player.AsyncChatEvent;
 import org.bukkit.event.EventHandler;
@@ -20,6 +21,10 @@ public final class ChatListener implements Listener {
         if (plugin.chat().isMuted() && !event.getPlayer().hasPermission(ChatService.MUTE_BYPASS)) {
             event.setCancelled(true);
             plugin.messages().error(event.getPlayer(), "chat.muted");
+            return;
+        }
+        if (plugin.chatFilter().blocks(event.getPlayer(), Text.plain(event.message()))) {
+            event.setCancelled(true);
         }
     }
 }

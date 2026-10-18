@@ -25,6 +25,9 @@ public final class MsgCommand extends BaseCommand {
         if (message.isEmpty()) {
             throw context.usage();
         }
+        if (context.sender() instanceof Player player && plugin.chatFilter().blocks(player, message)) {
+            return;
+        }
         ChatService.Delivery delivery = plugin.chat().sendPrivate(context.sender(), target, message);
         switch (delivery) {
             case SELF -> context.error("msg.self");

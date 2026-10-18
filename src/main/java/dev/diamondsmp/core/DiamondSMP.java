@@ -65,6 +65,7 @@ import dev.diamondsmp.core.listener.SpawnListener;
 import dev.diamondsmp.core.message.Messages;
 import dev.diamondsmp.core.scheduler.Scheduler;
 import dev.diamondsmp.core.service.BlockClearer;
+import dev.diamondsmp.core.service.ChatFilter;
 import dev.diamondsmp.core.service.ChatService;
 import dev.diamondsmp.core.service.CommandHider;
 import dev.diamondsmp.core.service.FfaRules;
@@ -129,6 +130,7 @@ public final class DiamondSMP extends JavaPlugin {
     private PlaceholderHook placeholders;
     private BlockClearer clearer;
     private ChatService chat;
+    private ChatFilter chatFilter;
     private GodService god;
     private FfaRules ffaRules;
     private FreezePointService freezePoints;
@@ -201,6 +203,7 @@ public final class DiamondSMP extends JavaPlugin {
         killStreaks = register(new KillStreakService(this));
         clearer = register(new BlockClearer(this));
         chat = register(new ChatService(this));
+        chatFilter = register(new ChatFilter(this));
         god = register(new GodService());
         ffaRules = register(new FfaRules(this));
         freezePoints = register(new FreezePointService(this));
@@ -446,6 +449,10 @@ public final class DiamondSMP extends JavaPlugin {
 
     public ChatService chat() {
         return chat;
+    }
+
+    public ChatFilter chatFilter() {
+        return chatFilter;
     }
 
     public GodService god() {

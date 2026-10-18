@@ -548,6 +548,25 @@ trash:
   # Rows of the disposal menu, 1 to 6.
   rows: 4
 
+# Chat filter. A chat or private message containing one of these words is
+# blocked and the commands below run from the console. Matching ignores case,
+# repeated letters, spaces and common swaps such as 1 for i or @ for a.
+# Short words (under 5 letters) only match as a whole word, so "kys" never
+# hits "skyscraper". diamondsmp.chatfilter.bypass is never filtered.
+chat-filter:
+  enabled: true
+  words:
+    - "Nigga"
+    - "Nigger"
+    - "Niggas"
+    - "Niggers"
+    - "Faggot"
+    - "Faggots"
+    - "kys"
+  # Run from the console, in order. %player% and %uuid% work here.
+  commands:
+    - "mute %player% 1h Automatic mute: inappropriate language"
+
 chat:
   # Empty lines sent by /clearchat.
   clear-lines: 100

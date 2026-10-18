@@ -674,6 +674,7 @@ permissions:
       diamondsmp.clearchat.bypass: true
       diamondsmp.mutechat: true
       diamondsmp.mutechat.bypass: true
+      diamondsmp.chatfilter.notify: true
   diamondsmp.msg:
     description: Send private messages.
     default: true
@@ -706,6 +707,12 @@ permissions:
     default: op
   diamondsmp.mutechat.bypass:
     description: Talk while the chat is muted.
+    default: op
+  diamondsmp.chatfilter.bypass:
+    description: Never be caught by the chat filter. Must be granted explicitly.
+    default: false
+  diamondsmp.chatfilter.notify:
+    description: See when the chat filter mutes someone.
     default: op
 
   diamondsmp.world.*:

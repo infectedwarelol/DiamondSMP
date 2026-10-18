@@ -253,6 +253,10 @@ broadcast:
     title: "%head% %accent%&l%player%"
     subtitle: "&f%message%"
 
+chat-filter:
+  blocked: "%prefix% &cYour message was blocked for inappropriate language."
+  notify: "%prefix% &c%player% &7was automatically muted for saying &c%word%&7."
+
 chat:
   muted: "%prefix% &cThe chat is muted."
   muted-broadcast: "%prefix% &#ddededThe chat was muted by %accent%%player%&#ddeded."
