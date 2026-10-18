@@ -25,7 +25,12 @@ public final class Messages {
     private volatile SoundSpec errorSound = SoundSpec.NONE;
 
     public Messages(Plugin plugin) {
-        this.file = new ConfigFile(plugin, "messages.yml", Set.of());
+        this.file = new ConfigFile(plugin, "messages.yml", Set.of(), Map.of(
+                "kill.message", Set.of("%prefix% %accent%%victim% &#ddededwas killed by %accent%%killer% &8(&c%health%❤&8) "
+                        + "&#ddededusing %accent%%weapon% &8[&7%streak% streak&8]"),
+                "clearer.warning", Set.of("%prefix% &#ddededEvery placed block will be cleared in %accent%%time%s&#ddeded!"),
+                "clearer.cleared", Set.of("%prefix% &#ddededEvery placed block has been cleared!"),
+                "teleport.warmup", Set.of("%prefix% &#ddededTeleporting in %accent%%time%s&#ddeded. Do not move.")));
     }
 
     public void reload() {

@@ -15,6 +15,7 @@ import java.nio.file.Path;
 import java.nio.file.StandardCopyOption;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.Map;
 import java.util.Set;
 import java.util.logging.Level;
 
@@ -27,13 +28,16 @@ public final class ConfigFile {
     private final String resource;
     private final File file;
     private final Set<String> freeSections;
+    private final Map<String, Set<String>> retiredDefaults;
     private volatile YamlConfiguration configuration = new YamlConfiguration();
 
-    public ConfigFile(Plugin plugin, String resource, Set<String> freeSections) {
+    public ConfigFile(Plugin plugin, String resource, Set<String> freeSections,
+                      Map<String, Set<String>> retiredDefaults) {
         this.plugin = plugin;
         this.resource = resource;
         this.file = new File(plugin.getDataFolder(), resource);
         this.freeSections = Set.copyOf(freeSections);
+        this.retiredDefaults = Map.copyOf(retiredDefaults);
     }
 
     public YamlConfiguration get() {
@@ -52,8 +56,9 @@ public final class ConfigFile {
             return;
         }
         int missing = countMissing(loaded, defaults);
+        int refreshed = refreshRetired(loaded, defaults);
         boolean outdated = loaded.getInt(VERSION_KEY, 0) < defaults.getInt(VERSION_KEY, 0);
-        if (missing > 0 || outdated) {
+        if (missing > 0 || refreshed > 0 || outdated) {
             YamlConfiguration rebuilt = parse(bundledText);
             if (rebuilt != null) {
                 overlay(rebuilt, loaded);
@@ -63,12 +68,25 @@ public final class ConfigFile {
                 keepPrevious();
                 write(rebuilt);
                 loaded = rebuilt;
-                plugin.getLogger().info("Updated " + resource + " with " + missing
-                        + " new option(s); existing values were kept.");
+                plugin.getLogger().info("Updated " + resource + " with " + missing + " new option(s) and "
+                        + refreshed + " refreshed default(s); your own values were kept.");
             }
         }
         loaded.setDefaults(defaults);
         configuration = loaded;
+    }
+
+    private int refreshRetired(YamlConfiguration loaded, YamlConfiguration defaults) {
+        int refreshed = 0;
+        for (Map.Entry<String, Set<String>> entry : retiredDefaults.entrySet()) {
+            String key = entry.getKey();
+            String current = loaded.getString(key);
+            if (current != null && entry.getValue().contains(current) && defaults.contains(key)) {
+                loaded.set(key, defaults.get(key));
+                refreshed++;
+            }
+        }
+        return refreshed;
     }
 
     private YamlConfiguration read() {

@@ -5,7 +5,7 @@
 # %prefix%, %primary% and %accent% are replaced everywhere.
 # %nl% starts a new line. Leave a message empty ("") to hide it.
 
-config-version: 6
+config-version: 7
 
 prefix: "&#1FD1F9&lD&#3BD6F9&lI&#57DBFA&lA&#73E0FA&lM&#8FE5FB&lO&#ABEAFB&lN&#C7EFFC&lD &8»&r"
 

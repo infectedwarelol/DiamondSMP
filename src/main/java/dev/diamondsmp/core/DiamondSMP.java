@@ -154,7 +154,10 @@ public final class DiamondSMP extends JavaPlugin {
         serverVersion = ServerVersion.detect();
         version = readVersion();
         scheduler = new Scheduler(this, serverVersion.folia());
-        configFile = new ConfigFile(this, "config.yml", Set.of("reactive-distance.thresholds"));
+        configFile = new ConfigFile(this, "config.yml", Set.of("reactive-distance.thresholds"), Map.of(
+                "teleport.warmup.spawn", Set.of("3s"),
+                "teleport.warmup.warp", Set.of("3s"),
+                "teleport.warmup.back", Set.of("3s")));
         configFile.load();
         messages = new Messages(this);
         messages.reload();
