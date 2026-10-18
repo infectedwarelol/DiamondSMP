@@ -59,7 +59,24 @@ public final class Text {
             Map.entry('o', "italic"),
             Map.entry('r', "reset"));
 
+    private static final boolean HEADS = detectHeads();
+
     private Text() {
+    }
+
+    public static Component head(String playerName) {
+        if (!HEADS || playerName == null || playerName.isBlank()) {
+            return Component.empty();
+        }
+        return MINI.deserialize("<head:'" + playerName.replace("'", "") + "'>");
+    }
+
+    private static boolean detectHeads() {
+        try {
+            return !plain(MINI.deserialize("<head:'Notch'>")).contains("head");
+        } catch (RuntimeException ex) {
+            return false;
+        }
     }
 
     public static Component parse(String input) {

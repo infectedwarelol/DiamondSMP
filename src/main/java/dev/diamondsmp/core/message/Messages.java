@@ -119,12 +119,20 @@ public final class Messages {
         errorSound.play(target);
     }
 
-    public void title(Player target, String key, Title.Times times, Object... placeholders) {
+    public Title title(String key, Title.Times times, Object... placeholders) {
         Component title = get(key + ".title", placeholders);
         Component subtitle = get(key + ".subtitle", placeholders);
-        if (target != null && (title != null || subtitle != null)) {
-            target.showTitle(Title.title(title == null ? Component.empty() : title,
-                    subtitle == null ? Component.empty() : subtitle, times));
+        if (title == null && subtitle == null) {
+            return null;
+        }
+        return Title.title(title == null ? Component.empty() : title,
+                subtitle == null ? Component.empty() : subtitle, times);
+    }
+
+    public void title(Player target, String key, Title.Times times, Object... placeholders) {
+        Title title = title(key, times, placeholders);
+        if (target != null && title != null) {
+            target.showTitle(title);
         }
     }
 

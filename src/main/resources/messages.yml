@@ -246,8 +246,12 @@ block:
 socialspy:
   toggled: "%prefix% &#ddededSocial spy %state%&#ddeded."
 
+# %player% is who sent it, %head% their head (1.21.9+), %message% the text.
 broadcast:
   format: "&8[&#1fd1f9&lBROADCAST&8] &f%message%"
+  title:
+    title: "%head% %accent%&l%player%"
+    subtitle: "&f%message%"
 
 chat:
   muted: "%prefix% &cThe chat is muted."

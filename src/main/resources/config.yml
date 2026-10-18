@@ -521,6 +521,22 @@ screenshare:
       volume: 0.6
       pitch: 1.0
 
+# /broadcast, /announce and /announcement. The chat line and the title are in
+# messages.yml under broadcast. On 1.21.9 and newer %head% shows the sender's
+# head; older servers leave it out.
+broadcast:
+  console-name: "Console"
+  title:
+    enabled: true
+    fade-in-ticks: 10
+    stay-ticks: 100
+    fade-out-ticks: 20
+  sound:
+    enabled: true
+    sound: minecraft:entity.experience_orb.pickup
+    volume: 1.0
+    pitch: 1.0
+
 heal:
   clear-effects: true
   extinguish: true
