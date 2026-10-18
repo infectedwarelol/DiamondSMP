@@ -4,9 +4,6 @@ import dev.diamondsmp.core.effect.EffectMath;
 import dev.diamondsmp.core.effect.EffectSession;
 import dev.diamondsmp.core.effect.KillEffect;
 import dev.diamondsmp.core.effect.Particles;
-import net.kyori.adventure.text.Component;
-import net.kyori.adventure.text.format.TextColor;
-import net.kyori.adventure.text.format.TextDecoration;
 import org.bukkit.Color;
 import org.bukkit.Material;
 import org.bukkit.entity.ItemDisplay;
@@ -92,8 +89,6 @@ public final class SoulHarvest implements KillEffect {
             s.sound("block.respawn_anchor.deplete", 0.8F, 1.4F);
             s.sound("block.amethyst_block.chime", 1.0F, 1.8F);
             s.shake();
-            s.flair(Component.text("SOUL HARVESTED", TextColor.color(0x6FF2FF)).decorate(TextDecoration.BOLD),
-                    Component.text(s.victimName() + "'s soul is yours", TextColor.color(0x8E8E8E)));
         });
         s.at(42, () -> s.remove(soul[0]));
         s.every(42, 1, 20, step -> {

@@ -4,9 +4,6 @@ import dev.diamondsmp.core.effect.EffectMath;
 import dev.diamondsmp.core.effect.EffectSession;
 import dev.diamondsmp.core.effect.KillEffect;
 import dev.diamondsmp.core.effect.Particles;
-import net.kyori.adventure.text.Component;
-import net.kyori.adventure.text.format.TextColor;
-import net.kyori.adventure.text.format.TextDecoration;
 import org.bukkit.Color;
 import org.bukkit.Material;
 import org.bukkit.entity.BlockDisplay;
@@ -88,8 +85,6 @@ public final class MeteorStrike implements KillEffect {
             s.sound("block.anvil.land", 1.0F, 0.5F);
             s.sound("entity.lightning_bolt.impact", 1.0F, 0.6F);
             s.shake();
-            s.flair(Component.text("☄ METEOR STRIKE ☄", TextColor.color(0xFF7B1F)).decorate(TextDecoration.BOLD),
-                    Component.text(s.victimName() + " was wiped off the map", TextColor.color(0x8E8E8E)));
         });
         s.at(FALL + 4, () -> {
             for (int index = 0; index < debris.length; index++) {

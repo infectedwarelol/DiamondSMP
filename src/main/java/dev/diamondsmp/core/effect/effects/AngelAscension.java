@@ -4,9 +4,6 @@ import dev.diamondsmp.core.effect.EffectMath;
 import dev.diamondsmp.core.effect.EffectSession;
 import dev.diamondsmp.core.effect.KillEffect;
 import dev.diamondsmp.core.effect.Particles;
-import net.kyori.adventure.text.Component;
-import net.kyori.adventure.text.format.TextColor;
-import net.kyori.adventure.text.format.TextDecoration;
 import org.bukkit.Color;
 import org.bukkit.Material;
 import org.bukkit.entity.ItemDisplay;
@@ -98,8 +95,6 @@ public final class AngelAscension implements KillEffect {
             }
             s.sound("ui.toast.challenge_complete", 0.8F, 1.2F);
             s.sound("block.beacon.power_select", 1.0F, 2.0F);
-            s.flair(Component.text("✟ ASCENDED ✟", TextColor.color(0xFFD86B)).decorate(TextDecoration.BOLD),
-                    Component.text(s.victimName() + " has been sent above", TextColor.color(0xFFFBEA)));
         });
     }
 

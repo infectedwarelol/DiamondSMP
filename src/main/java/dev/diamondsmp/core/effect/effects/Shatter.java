@@ -4,9 +4,6 @@ import dev.diamondsmp.core.effect.EffectMath;
 import dev.diamondsmp.core.effect.EffectSession;
 import dev.diamondsmp.core.effect.KillEffect;
 import dev.diamondsmp.core.effect.Particles;
-import net.kyori.adventure.text.Component;
-import net.kyori.adventure.text.format.TextColor;
-import net.kyori.adventure.text.format.TextDecoration;
 import org.bukkit.Material;
 import org.bukkit.entity.BlockDisplay;
 import org.bukkit.util.Transformation;
@@ -87,8 +84,6 @@ public final class Shatter implements KillEffect {
             s.sound("block.glass.break", 1.0F, 1.4F);
             s.sound("entity.generic.explode", 0.4F, 1.8F);
             s.shake();
-            s.flair(Component.text("SHATTERED", TextColor.color(0xBFEFFF)).decorate(TextDecoration.BOLD),
-                    Component.text(s.victimName() + " broke into pieces", TextColor.color(0x8E8E8E)));
         });
         s.at(26, () -> {
             for (BlockDisplay shard : shards) {

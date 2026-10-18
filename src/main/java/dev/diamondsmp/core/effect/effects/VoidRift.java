@@ -4,9 +4,6 @@ import dev.diamondsmp.core.effect.EffectMath;
 import dev.diamondsmp.core.effect.EffectSession;
 import dev.diamondsmp.core.effect.KillEffect;
 import dev.diamondsmp.core.effect.Particles;
-import net.kyori.adventure.text.Component;
-import net.kyori.adventure.text.format.TextColor;
-import net.kyori.adventure.text.format.TextDecoration;
 import org.bukkit.Color;
 import org.bukkit.Material;
 import org.bukkit.entity.BlockDisplay;
@@ -98,8 +95,6 @@ public final class VoidRift implements KillEffect {
             s.sound("entity.warden.sonic_boom", 1.0F, 0.8F);
             s.sound("block.end_portal.spawn", 0.5F, 1.2F);
             s.shake();
-            s.flair(Component.text("VOID RIFT", TextColor.color(0xE040FB)).decorate(TextDecoration.BOLD),
-                    Component.text(s.victimName() + " fell between worlds", TextColor.color(0x8E8E8E)));
         });
         s.every(46, 2, 8, step -> {
             s.particle(Particles.SQUID_INK, s.random(-1, 1), CENTER_Y + s.random(-1, 1), s.random(-1, 1), 3, 0.2D, 0.01D);

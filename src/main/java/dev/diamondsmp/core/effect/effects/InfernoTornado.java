@@ -4,9 +4,6 @@ import dev.diamondsmp.core.effect.EffectMath;
 import dev.diamondsmp.core.effect.EffectSession;
 import dev.diamondsmp.core.effect.KillEffect;
 import dev.diamondsmp.core.effect.Particles;
-import net.kyori.adventure.text.Component;
-import net.kyori.adventure.text.format.TextColor;
-import net.kyori.adventure.text.format.TextDecoration;
 import org.bukkit.Color;
 import org.bukkit.Material;
 import org.bukkit.entity.BlockDisplay;
@@ -101,8 +98,6 @@ public final class InfernoTornado implements KillEffect {
             s.sound("entity.generic.explode", 1.0F, 0.8F);
             s.sound("entity.blaze.death", 1.0F, 0.6F);
             s.shake();
-            s.flair(Component.text("✸ INFERNO ✸", TextColor.color(0xFF5A1F)).decorate(TextDecoration.BOLD),
-                    Component.text(s.victimName() + " was swept into the flames", TextColor.color(0x8E8E8E)));
         });
         s.every(58, 1, 14, step -> s.particle(Particles.ASH, s.random(-3, 3), s.random(0.5, 5), s.random(-3, 3), 6, 0.3D, 0.0D));
     }

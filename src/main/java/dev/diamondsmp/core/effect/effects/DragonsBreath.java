@@ -4,9 +4,6 @@ import dev.diamondsmp.core.effect.EffectMath;
 import dev.diamondsmp.core.effect.EffectSession;
 import dev.diamondsmp.core.effect.KillEffect;
 import dev.diamondsmp.core.effect.Particles;
-import net.kyori.adventure.text.Component;
-import net.kyori.adventure.text.format.TextColor;
-import net.kyori.adventure.text.format.TextDecoration;
 import org.bukkit.Color;
 import org.bukkit.Material;
 import org.bukkit.entity.ItemDisplay;
@@ -98,8 +95,6 @@ public final class DragonsBreath implements KillEffect {
             s.sound("entity.dragon_fireball.explode", 1.0F, 0.8F);
             s.sound("entity.ender_dragon.growl", 0.8F, 0.6F);
             s.shake();
-            s.flair(Component.text("DRAGON'S BREATH", TextColor.color(0xB24BF3)).decorate(TextDecoration.BOLD),
-                    Component.text(s.victimName() + " was reduced to ash", TextColor.color(0x8E8E8E)));
             s.move(head[0], EffectMath.item(-6.0D, 11.0D, -3.0D, 0.01D, EffectMath.spin(-Math.PI / 2.0D, -0.6D, 0)), 14);
         });
         s.every(41, 2, 10, step -> {

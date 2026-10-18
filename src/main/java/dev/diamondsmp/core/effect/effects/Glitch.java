@@ -106,9 +106,6 @@ public final class Glitch implements KillEffect {
             s.sound("block.beacon.deactivate", 1.0F, 0.5F);
             s.sound("entity.zombie_villager.cure", 0.5F, 2.0F);
             s.shake();
-            s.flair(Component.text("SYSTEM.KILL()", TextColor.color(0x00FF41)).decorate(TextDecoration.BOLD),
-                    Component.text("user " + s.victimName() + " deleted", TextColor.color(0x8E8E8E))
-                            .decorate(TextDecoration.ITALIC));
         });
         s.every(42, 2, 6, step -> {
             if (deleted[0] != null && deleted[0].isValid()) {

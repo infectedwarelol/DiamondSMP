@@ -5,9 +5,6 @@ import dev.diamondsmp.core.effect.EffectSession;
 import dev.diamondsmp.core.effect.KillEffect;
 import dev.diamondsmp.core.effect.Particles;
 import dev.diamondsmp.core.util.Lookup;
-import net.kyori.adventure.text.Component;
-import net.kyori.adventure.text.format.TextColor;
-import net.kyori.adventure.text.format.TextDecoration;
 import org.bukkit.Color;
 import org.bukkit.Material;
 import org.bukkit.entity.BlockDisplay;
@@ -134,8 +131,6 @@ public final class ChainBind implements KillEffect {
             s.sound("block.anvil.land", 1.0F, 0.5F);
             s.sound("entity.generic.explode", 0.6F, 1.2F);
             s.shake();
-            s.flair(Component.text("⛓ JUDGEMENT ⛓", TextColor.color(0xB0B0B0)).decorate(TextDecoration.BOLD),
-                    Component.text(s.victimName() + " has been condemned", TextColor.color(0x7A1FA2)));
         });
         s.at(55, () -> {
             for (BlockDisplay[] ring : rings) {

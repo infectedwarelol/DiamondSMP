@@ -6,7 +6,6 @@ import dev.diamondsmp.core.effect.KillEffect;
 import dev.diamondsmp.core.effect.Particles;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.TextColor;
-import net.kyori.adventure.text.format.TextDecoration;
 import org.bukkit.Color;
 import org.bukkit.Material;
 import org.bukkit.entity.TextDisplay;
@@ -94,8 +93,6 @@ public final class BloodMoon implements KillEffect {
             s.sound("entity.wither.death", 0.8F, 0.8F);
             s.sound("entity.generic.explode", 0.7F, 0.5F);
             s.shake();
-            s.flair(Component.text("BLOOD MOON", TextColor.color(0xD7263D)).decorate(TextDecoration.BOLD),
-                    Component.text(s.victimName() + " bled out under the moon", TextColor.color(0x8E8E8E)));
         });
         s.at(54, () -> s.move(moon[0], EffectMath.item(0, MOON_Y + 4, 0, 0.01D, EffectMath.spin(0, 0, 0)), 12));
         s.every(52, 1, 18, step -> s.particle(Particles.CRIMSON_SPORE, s.random(-3, 3), s.random(0.2, 3), s.random(-3, 3),

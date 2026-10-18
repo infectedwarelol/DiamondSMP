@@ -3,7 +3,6 @@ package dev.diamondsmp.core.effect;
 import dev.diamondsmp.core.scheduler.Scheduler;
 import dev.diamondsmp.core.scheduler.Task;
 import net.kyori.adventure.text.Component;
-import net.kyori.adventure.title.Title;
 import org.bukkit.Bukkit;
 import org.bukkit.Color;
 import org.bukkit.Location;
@@ -22,7 +21,6 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.util.Transformation;
 
-import java.time.Duration;
 import java.util.ArrayList;
 import java.util.LinkedHashSet;
 import java.util.List;
@@ -45,7 +43,6 @@ public final class EffectSession {
     private final Location origin;
     private final World world;
     private final Player killer;
-    private final String victimName;
     private final List<Player> viewers;
     private final List<Player> hidden;
     private final Settings settings;
@@ -60,14 +57,13 @@ public final class EffectSession {
     private int lastTick;
     private int particlesThisTick;
 
-    public EffectSession(Plugin plugin, Scheduler scheduler, Location origin, Player killer, String victimName,
-                         List<Player> viewers, List<Player> hidden, Settings settings, Runnable onFinish) {
+    public EffectSession(Plugin plugin, Scheduler scheduler, Location origin, Player killer, List<Player> viewers,
+                         List<Player> hidden, Settings settings, Runnable onFinish) {
         this.plugin = plugin;
         this.scheduler = scheduler;
         this.origin = new Location(origin.getWorld(), origin.getX(), origin.getY(), origin.getZ(), 0.0F, 0.0F);
         this.world = origin.getWorld();
         this.killer = killer;
-        this.victimName = victimName;
         this.viewers = List.copyOf(viewers);
         this.hidden = List.copyOf(hidden);
         this.settings = settings;
@@ -76,10 +72,6 @@ public final class EffectSession {
 
     public World world() {
         return world;
-    }
-
-    public String victimName() {
-        return victimName;
     }
 
     public int time(int baseTicks) {
@@ -372,14 +364,6 @@ public final class EffectSession {
         Player target = killer;
         if (target != null && target.isOnline()) {
             scheduler.entity(target, () -> target.sendHurtAnimation(0.0F));
-        }
-    }
-
-    public void flair(Component title, Component subtitle) {
-        Player target = killer;
-        if (target != null && target.isOnline()) {
-            target.showTitle(Title.title(title, subtitle, Title.Times.times(Duration.ZERO,
-                    Duration.ofMillis(1200), Duration.ofMillis(400))));
         }
     }
 }

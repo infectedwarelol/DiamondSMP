@@ -4,9 +4,6 @@ import dev.diamondsmp.core.effect.EffectMath;
 import dev.diamondsmp.core.effect.EffectSession;
 import dev.diamondsmp.core.effect.KillEffect;
 import dev.diamondsmp.core.effect.Particles;
-import net.kyori.adventure.text.Component;
-import net.kyori.adventure.text.format.TextColor;
-import net.kyori.adventure.text.format.TextDecoration;
 import org.bukkit.Color;
 import org.bukkit.Material;
 import org.bukkit.entity.ItemDisplay;
@@ -83,8 +80,6 @@ public final class ThunderGod implements KillEffect {
             s.sound("entity.lightning_bolt.thunder", 1.0F, 0.8F);
             s.sound("block.anvil.land", 0.8F, 0.5F);
             s.shake();
-            s.flair(Component.text("⚡ THUNDER GOD ⚡", TextColor.color(0xFFE066)).decorate(TextDecoration.BOLD),
-                    Component.text(s.victimName() + " was struck down", TextColor.color(0x9AE6FF)));
         });
         s.every(41, 1, 14, step -> {
             double radius = 0.8D + EffectMath.easeOut(step / 14.0D) * 7.0D;

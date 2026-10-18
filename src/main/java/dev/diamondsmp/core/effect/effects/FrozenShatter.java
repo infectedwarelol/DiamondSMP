@@ -4,9 +4,6 @@ import dev.diamondsmp.core.effect.EffectMath;
 import dev.diamondsmp.core.effect.EffectSession;
 import dev.diamondsmp.core.effect.KillEffect;
 import dev.diamondsmp.core.effect.Particles;
-import net.kyori.adventure.text.Component;
-import net.kyori.adventure.text.format.TextColor;
-import net.kyori.adventure.text.format.TextDecoration;
 import org.bukkit.Color;
 import org.bukkit.Material;
 import org.bukkit.entity.BlockDisplay;
@@ -100,8 +97,6 @@ public final class FrozenShatter implements KillEffect {
             s.sound("block.glass.break", 1.0F, 1.3F);
             s.sound("entity.player.hurt_freeze", 1.0F, 0.5F);
             s.shake();
-            s.flair(Component.text("❄ FROZEN SOLID ❄", TextColor.color(0x9FE7FF)).decorate(TextDecoration.BOLD),
-                    Component.text(s.victimName() + " shattered into frost", TextColor.color(0x8E8E8E)));
         });
         s.every(35, 1, 25, step -> {
             int flakes = s.count(5);

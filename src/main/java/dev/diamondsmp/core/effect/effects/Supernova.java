@@ -4,9 +4,6 @@ import dev.diamondsmp.core.effect.EffectMath;
 import dev.diamondsmp.core.effect.EffectSession;
 import dev.diamondsmp.core.effect.KillEffect;
 import dev.diamondsmp.core.effect.Particles;
-import net.kyori.adventure.text.Component;
-import net.kyori.adventure.text.format.TextColor;
-import net.kyori.adventure.text.format.TextDecoration;
 import org.bukkit.Color;
 import org.bukkit.Material;
 import org.bukkit.entity.BlockDisplay;
@@ -97,8 +94,6 @@ public final class Supernova implements KillEffect {
             s.sound("entity.lightning_bolt.thunder", 0.6F, 0.6F);
             s.sound("block.beacon.deactivate", 1.0F, 1.6F);
             s.shake();
-            s.flair(Component.text("✹ SUPERNOVA ✹", TextColor.color(0xFFB300)).decorate(TextDecoration.BOLD),
-                    Component.text(s.victimName() + " burned out", TextColor.color(0x8E8E8E)));
         });
         s.every(40, 1, 12, step -> {
             double radius = 0.8D + EffectMath.easeOut(step / 12.0D) * 7.0D;
