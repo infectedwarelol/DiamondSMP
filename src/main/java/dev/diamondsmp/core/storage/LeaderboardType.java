@@ -8,8 +8,7 @@ public enum LeaderboardType {
     DEATHS("deaths DESC"),
     PLAYTIME("playtime DESC"),
     CURRENT("streak DESC"),
-    STREAK("best_streak DESC"),
-    KDR("CAST(kills AS REAL) / CASE WHEN deaths = 0 THEN 1 ELSE deaths END DESC");
+    STREAK("best_streak DESC");
 
     private final String ordering;
 
@@ -23,17 +22,5 @@ public enum LeaderboardType {
 
     public String id() {
         return name().toLowerCase(Locale.ROOT);
-    }
-
-    public static LeaderboardType parse(String input) {
-        if (input == null) {
-            return null;
-        }
-        for (LeaderboardType type : values()) {
-            if (type.id().equalsIgnoreCase(input)) {
-                return type;
-            }
-        }
-        return null;
     }
 }
