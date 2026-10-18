@@ -716,6 +716,9 @@ permissions:
   diamondsmp.mutechat.bypass:
     description: Talk while the chat is muted.
     default: op
+  diamondsmp.totem.bypass:
+    description: Carry any number of totems. Must be granted explicitly.
+    default: false
   diamondsmp.chatfilter.bypass:
     description: Never be caught by the chat filter. Must be granted explicitly.
     default: false

@@ -64,6 +64,7 @@ import dev.diamondsmp.core.listener.FreezeListener;
 import dev.diamondsmp.core.listener.MovementListener;
 import dev.diamondsmp.core.listener.ProfileListener;
 import dev.diamondsmp.core.listener.SpawnListener;
+import dev.diamondsmp.core.listener.TotemListener;
 import dev.diamondsmp.core.message.Messages;
 import dev.diamondsmp.core.scheduler.Scheduler;
 import dev.diamondsmp.core.service.BlockClearer;
@@ -83,6 +84,7 @@ import dev.diamondsmp.core.service.Service;
 import dev.diamondsmp.core.service.SpawnService;
 import dev.diamondsmp.core.service.StatsService;
 import dev.diamondsmp.core.service.TeleportService;
+import dev.diamondsmp.core.service.TotemLimit;
 import dev.diamondsmp.core.service.VisibilityService;
 import dev.diamondsmp.core.service.WarpService;
 import dev.diamondsmp.core.storage.Database;
@@ -141,6 +143,7 @@ public final class DiamondSMP extends JavaPlugin {
     private ScreenShareService screenShare;
     private CommandHider commandHider;
     private PlayerHeads heads;
+    private TotemLimit totems;
     private boolean ready;
 
     @Override
@@ -216,6 +219,7 @@ public final class DiamondSMP extends JavaPlugin {
         screenShare = register(new ScreenShareService(this));
         commandHider = register(new CommandHider(this));
         heads = register(new PlayerHeads(this));
+        totems = register(new TotemLimit(this));
     }
 
     private <T extends Service> T register(T service) {
@@ -235,6 +239,7 @@ public final class DiamondSMP extends JavaPlugin {
                 new MovementListener(this),
                 new FreezeListener(this),
                 new CommandHiderListener(this),
+                new TotemListener(this),
                 new MenuListener()
         };
         for (Listener listener : listeners) {
@@ -489,5 +494,9 @@ public final class DiamondSMP extends JavaPlugin {
 
     public PlayerHeads heads() {
         return heads;
+    }
+
+    public TotemLimit totems() {
+        return totems;
     }
 }

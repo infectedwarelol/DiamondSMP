@@ -259,6 +259,11 @@ broadcast:
     title: "%head% %accent%&l%player%"
     subtitle: "&f%message%"
 
+# %limit% %removed% %stored% %dropped%
+totems:
+  stored: "%prefix% &cYou can only carry %accent%%limit% &ctotems. %accent%%removed% &cwere moved to your ender chest."
+  dropped: "%prefix% &cYou can only carry %accent%%limit% &ctotems. %accent%%stored% &cwent to your ender chest and %accent%%dropped% &cdropped on the ground."
+
 chat-filter:
   blocked: "%prefix% &cYour message was blocked for inappropriate language."
   notify: "%prefix% &c%player% &7was automatically muted for saying &c%word%&7."

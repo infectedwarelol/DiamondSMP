@@ -583,6 +583,13 @@ broadcast:
     volume: 1.0
     pitch: 1.0
 
+# Totem limit. A player carrying more totems than this (inventory and
+# offhand together) has the extra ones moved into their ender chest; when it
+# is full they drop at their feet. -1 disables the limit.
+# diamondsmp.totem.bypass ignores it.
+totems:
+  limit: 3
+
 heal:
   clear-effects: true
   extinguish: true
