@@ -41,7 +41,7 @@ public final class TeleportCommand extends BaseCommand {
         }
         CommandSender sender = context.sender();
         plugin.teleports().teleport(player, target.getLocation()).thenAccept(success -> plugin.messages()
-                .send(sender, success ? "teleport.to-player" : "teleport.failed", "player", target.getName()));
+                .outcome(sender, success, "teleport.to-player", "teleport.failed", "player", target.getName()));
     }
 
     private void playerToPlayer(CommandContext context) {
@@ -56,7 +56,7 @@ public final class TeleportCommand extends BaseCommand {
         CommandSender sender = context.sender();
         plugin.teleports().teleport(moving, target.getLocation()).thenAccept(success -> {
             if (!success) {
-                plugin.messages().send(sender, "teleport.failed");
+                plugin.messages().error(sender, "teleport.failed");
                 return;
             }
             plugin.messages().send(sender, "teleport.player-to-player", "player", moving.getName(),
@@ -78,7 +78,7 @@ public final class TeleportCommand extends BaseCommand {
         Location destination = new Location(world, x, y, z, current.getYaw(), current.getPitch());
         String position = Format.coordinates(x, y, z);
         plugin.teleports().teleport(player, destination).thenAccept(success -> plugin.messages()
-                .send(player, success ? "teleport.to-coordinates" : "teleport.failed",
+                .outcome(player, success, "teleport.to-coordinates", "teleport.failed",
                         "position", position, "world", world.getName()));
     }
 

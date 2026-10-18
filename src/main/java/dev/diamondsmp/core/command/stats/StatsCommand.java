@@ -36,7 +36,7 @@ public final class StatsCommand extends BaseCommand {
         String name = context.arg(0);
         plugin.profiles().lookup(name).thenAccept(found -> {
             if (found.isEmpty()) {
-                plugin.messages().send(sender, "stats.not-found", "player", name);
+                plugin.messages().error(sender, "stats.not-found", "player", name);
                 return;
             }
             show(sender, found.get());

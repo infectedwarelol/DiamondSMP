@@ -24,7 +24,7 @@ public final class TpHereCommand extends BaseCommand {
         Location destination = player.getLocation();
         plugin.teleports().teleport(target, destination).thenAccept(success -> {
             if (!success) {
-                plugin.messages().send(player, "teleport.failed");
+                plugin.messages().error(player, "teleport.failed");
                 return;
             }
             plugin.messages().send(player, "teleport.here", "player", target.getName());

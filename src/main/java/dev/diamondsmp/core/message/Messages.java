@@ -1,6 +1,7 @@
 package dev.diamondsmp.core.message;
 
 import dev.diamondsmp.core.config.ConfigFile;
+import dev.diamondsmp.core.util.SoundSpec;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.title.Title;
 import org.bukkit.Bukkit;
@@ -21,6 +22,7 @@ public final class Messages {
     private volatile String primary = "";
     private volatile String accent = "";
     private volatile Map<String, String> tokens = Map.of();
+    private volatile SoundSpec errorSound = SoundSpec.NONE;
 
     public Messages(Plugin plugin) {
         this.file = new ConfigFile(plugin, "messages.yml", Set.of());
@@ -31,6 +33,7 @@ public final class Messages {
         prefix = file.get().getString("prefix", "");
         primary = file.get().getString("theme.primary", "&b");
         accent = file.get().getString("theme.accent", "&f");
+        errorSound = SoundSpec.from(file.get().getConfigurationSection("error-sound"));
     }
 
     public void tokens(Map<String, String> values) {
@@ -96,6 +99,24 @@ public final class Messages {
         for (Component line : lines(key, placeholders)) {
             target.sendMessage(line);
         }
+    }
+
+    public void error(CommandSender target, String key, Object... placeholders) {
+        send(target, key, placeholders);
+        errorSound.play(target);
+    }
+
+    public void outcome(CommandSender target, boolean success, String successKey, String failureKey,
+                        Object... placeholders) {
+        if (success) {
+            send(target, successKey, placeholders);
+        } else {
+            error(target, failureKey, placeholders);
+        }
+    }
+
+    public void errorSound(CommandSender target) {
+        errorSound.play(target);
     }
 
     public void title(Player target, String key, Title.Times times, Object... placeholders) {

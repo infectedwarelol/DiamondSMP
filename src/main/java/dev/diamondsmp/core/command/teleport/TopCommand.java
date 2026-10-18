@@ -21,7 +21,7 @@ public final class TopCommand extends BaseCommand {
             Location current = player.getLocation();
             Block highest = player.getWorld().getHighestBlockAt(current.getBlockX(), current.getBlockZ());
             if (highest.getY() + 1 <= current.getBlockY()) {
-                plugin.messages().send(player, "top.already");
+                plugin.messages().error(player, "top.already");
                 return;
             }
             Location destination = new Location(player.getWorld(), current.getBlockX() + 0.5D,

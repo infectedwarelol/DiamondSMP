@@ -66,7 +66,7 @@ public final class KillStreakCommand extends BaseCommand {
         CompletableFuture<Optional<ProfileSnapshot>> lookup = plugin.profiles().lookup(name);
         lookup.thenAccept(found -> {
             if (found.isEmpty()) {
-                plugin.messages().send(sender, "killstreak.unknown-player", "player", name);
+                plugin.messages().error(sender, "killstreak.unknown-player", "player", name);
                 return;
             }
             ProfileSnapshot snapshot = found.get();
@@ -85,7 +85,7 @@ public final class KillStreakCommand extends BaseCommand {
         CommandSender sender = context.sender();
         plugin.killStreaks().change(name, change, amount).thenAccept(result -> {
             if (result.isEmpty()) {
-                plugin.messages().send(sender, "killstreak.unknown-player", "player", name);
+                plugin.messages().error(sender, "killstreak.unknown-player", "player", name);
                 return;
             }
             KillStreakService.Known streak = result.get();

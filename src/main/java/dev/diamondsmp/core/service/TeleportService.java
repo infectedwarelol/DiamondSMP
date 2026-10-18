@@ -58,7 +58,7 @@ public final class TeleportService implements Service {
         }
         long remaining = cooldownRemaining(player.getUniqueId(), kind);
         if (remaining > 0) {
-            plugin.messages().send(player, "teleport.cooldown", "time", Format.duration(remaining));
+            plugin.messages().error(player, "teleport.cooldown", "time", Format.duration(remaining));
             return false;
         }
         return true;
@@ -116,14 +116,14 @@ public final class TeleportService implements Service {
                         String arrivedKey, Object[] placeholders) {
         Location target = destination.get();
         if (target == null || target.getWorld() == null) {
-            plugin.messages().send(player, "teleport.invalid-destination");
+            plugin.messages().error(player, "teleport.invalid-destination");
             return;
         }
         if (!player.hasPermission(BYPASS_PERMISSION)) {
             startCooldown(player.getUniqueId(), kind);
         }
         teleport(player, target).thenAccept(success -> plugin.messages()
-                .send(player, success ? arrivedKey : "teleport.failed", placeholders));
+                .outcome(player, success, arrivedKey, "teleport.failed", placeholders));
     }
 
     public CompletableFuture<Boolean> teleport(Player player, Location destination) {
@@ -173,7 +173,7 @@ public final class TeleportService implements Service {
         }
         warmup.task().cancel();
         if (reasonKey != null) {
-            plugin.messages().send(player, reasonKey);
+            plugin.messages().error(player, reasonKey);
         }
     }
 

@@ -141,6 +141,10 @@ public final class CommandContext {
         return new CommandFailure(key, placeholders);
     }
 
+    public void error(String key, Object... placeholders) {
+        plugin.messages().error(sender, key, placeholders);
+    }
+
     public void reply(String key, Object... placeholders) {
         plugin.messages().send(sender, key, placeholders);
     }

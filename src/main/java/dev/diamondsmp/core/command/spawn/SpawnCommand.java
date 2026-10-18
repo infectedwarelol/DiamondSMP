@@ -33,7 +33,7 @@ public final class SpawnCommand extends BaseCommand {
         CommandSender sender = context.sender();
         plugin.teleports().teleport(target, spawn).thenAccept(success -> {
             if (!success) {
-                plugin.messages().send(sender, "teleport.failed");
+                plugin.messages().error(sender, "teleport.failed");
                 return;
             }
             plugin.messages().send(sender, "spawn.sent", "player", target.getName());

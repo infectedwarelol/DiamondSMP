@@ -40,7 +40,7 @@ public final class PlaytimeCommand extends BaseCommand {
         }
         plugin.profiles().lookup(name).thenAccept(found -> {
             if (found.isEmpty()) {
-                plugin.messages().send(sender, "playtime.not-found", "player", name);
+                plugin.messages().error(sender, "playtime.not-found", "player", name);
                 return;
             }
             plugin.messages().send(sender, "playtime.other", "player", found.get().name(),

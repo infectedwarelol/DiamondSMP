@@ -38,7 +38,7 @@ public final class SpawnListener implements Listener {
     public void onPlace(BlockPlaceEvent event) {
         if (plugin.spawn().blocksBuild(event.getPlayer(), event.getBlock().getLocation())) {
             event.setCancelled(true);
-            plugin.messages().send(event.getPlayer(), "spawn.protected");
+            plugin.messages().error(event.getPlayer(), "spawn.protected");
         }
     }
 
@@ -46,7 +46,7 @@ public final class SpawnListener implements Listener {
     public void onBreak(BlockBreakEvent event) {
         if (plugin.spawn().blocksBuild(event.getPlayer(), event.getBlock().getLocation())) {
             event.setCancelled(true);
-            plugin.messages().send(event.getPlayer(), "spawn.protected");
+            plugin.messages().error(event.getPlayer(), "spawn.protected");
         }
     }
 
@@ -54,7 +54,7 @@ public final class SpawnListener implements Listener {
     public void onBucket(PlayerBucketEmptyEvent event) {
         if (plugin.spawn().blocksBuild(event.getPlayer(), event.getBlock().getLocation())) {
             event.setCancelled(true);
-            plugin.messages().send(event.getPlayer(), "spawn.protected");
+            plugin.messages().error(event.getPlayer(), "spawn.protected");
         }
     }
 

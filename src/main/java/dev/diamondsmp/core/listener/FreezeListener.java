@@ -112,7 +112,7 @@ public final class FreezeListener implements Listener {
         label = label.substring(label.indexOf(':') + 1);
         if (!sessions().allowsCommand(label)) {
             event.setCancelled(true);
-            plugin.messages().send(player, "screenshare.command-blocked");
+            plugin.messages().error(player, "screenshare.command-blocked");
         }
     }
 

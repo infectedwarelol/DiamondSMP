@@ -74,20 +74,20 @@ public abstract class BaseCommand implements TabExecutor {
     public final boolean onCommand(@NotNull CommandSender sender, @NotNull Command command,
                                    @NotNull String label, @NotNull String[] args) {
         if (permission != null && !sender.hasPermission(permission)) {
-            plugin.messages().send(sender, "general.no-permission");
+            plugin.messages().error(sender, "general.no-permission");
             return true;
         }
         if (playerOnly && !(sender instanceof Player)) {
-            plugin.messages().send(sender, "general.player-only");
+            plugin.messages().error(sender, "general.player-only");
             return true;
         }
         try {
             execute(new CommandContext(plugin, sender, label, args, command.getUsage()));
         } catch (CommandFailure failure) {
-            plugin.messages().send(sender, failure.key(), failure.placeholders());
+            plugin.messages().error(sender, failure.key(), failure.placeholders());
         } catch (RuntimeException ex) {
             plugin.getLogger().log(Level.SEVERE, "The command /" + label + " failed for " + sender.getName(), ex);
-            plugin.messages().send(sender, "general.error");
+            plugin.messages().error(sender, "general.error");
         }
         return true;
     }
@@ -123,7 +123,7 @@ public abstract class BaseCommand implements TabExecutor {
             if (notifyKey != null) {
                 plugin.messages().send(target, notifyKey, append(base, "player", sender.getName()));
             }
-        }, () -> plugin.messages().send(sender, "general.player-not-found", "player", target.getName()));
+        }, () -> plugin.messages().error(sender, "general.player-not-found", "player", target.getName()));
     }
 
     protected final List<String> players(CommandContext context, int index) {

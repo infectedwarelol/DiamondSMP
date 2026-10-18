@@ -190,7 +190,7 @@ public final class ScreenShareService implements Service {
             ScreenShareSession session = new ScreenShareSession(target.getUniqueId(), target.getName(), staffId,
                     staff.getName(), point.id(), anchor, target.getLocation(), staffOrigin, now, now + voiceMillis);
             if (sessions.putIfAbsent(target.getUniqueId(), session) != null) {
-                plugin.messages().send(staff, "screenshare.freeze.already-frozen");
+                plugin.messages().error(staff, "screenshare.freeze.already-frozen");
                 return;
             }
             updateTicker();
@@ -210,7 +210,7 @@ public final class ScreenShareService implements Service {
             target.eject();
             target.setGliding(false);
             plugin.teleports().teleport(target, anchor, false).thenAccept(success -> arrive(session, success));
-        }, () -> plugin.messages().send(staff, "general.player-not-found", "player", target.getName()));
+        }, () -> plugin.messages().error(staff, "general.player-not-found", "player", target.getName()));
     }
 
     public boolean canControl(CommandSender sender, ScreenShareSession session) {
@@ -278,7 +278,7 @@ public final class ScreenShareService implements Service {
         }
         if (!success || target == null) {
             end(session, false);
-            plugin.messages().send(staff(session), "screenshare.freeze.teleport-failed", placeholders(session));
+            plugin.messages().error(staff(session), "screenshare.freeze.teleport-failed", placeholders(session));
             return;
         }
         session.markArrived();

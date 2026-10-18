@@ -27,7 +27,7 @@ public final class SeenCommand extends BaseCommand {
         }
         plugin.profiles().lookup(name).thenAccept(found -> {
             if (found.isEmpty()) {
-                plugin.messages().send(sender, "seen.never", "player", name);
+                plugin.messages().error(sender, "seen.never", "player", name);
                 return;
             }
             long seconds = (System.currentTimeMillis() - found.get().lastSeen()) / 1000L;

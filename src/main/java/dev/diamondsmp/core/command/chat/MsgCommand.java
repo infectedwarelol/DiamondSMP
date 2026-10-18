@@ -27,10 +27,10 @@ public final class MsgCommand extends BaseCommand {
         }
         ChatService.Delivery delivery = plugin.chat().sendPrivate(context.sender(), target, message);
         switch (delivery) {
-            case SELF -> context.reply("msg.self");
-            case IGNORED -> context.reply("msg.ignored", "player", target.getName());
-            case BLOCKED -> context.reply("msg.blocked", "player", target.getName());
-            case BLOCKED_BY_YOU -> context.reply("msg.blocked-by-you", "player", target.getName());
+            case SELF -> context.error("msg.self");
+            case IGNORED -> context.error("msg.ignored", "player", target.getName());
+            case BLOCKED -> context.error("msg.blocked", "player", target.getName());
+            case BLOCKED_BY_YOU -> context.error("msg.blocked-by-you", "player", target.getName());
             case SENT -> {
             }
         }

@@ -21,7 +21,10 @@ public final class WarpCommand extends BaseCommand {
         Player player = context.player();
         if (!context.has(0)) {
             List<String> warps = plugin.warps().names(player);
-            context.reply(warps.isEmpty() ? "warp.none" : "warp.list", "warps", String.join(", ", warps),
+            if (warps.isEmpty()) {
+                throw context.fail("warp.none");
+            }
+            context.reply("warp.list", "warps", String.join(", ", warps),
                     "count", warps.size());
             return;
         }

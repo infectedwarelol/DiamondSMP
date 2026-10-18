@@ -19,7 +19,7 @@ public final class ChatListener implements Listener {
     public void onChat(AsyncChatEvent event) {
         if (plugin.chat().isMuted() && !event.getPlayer().hasPermission(ChatService.MUTE_BYPASS)) {
             event.setCancelled(true);
-            plugin.messages().send(event.getPlayer(), "chat.muted");
+            plugin.messages().error(event.getPlayer(), "chat.muted");
         }
     }
 }

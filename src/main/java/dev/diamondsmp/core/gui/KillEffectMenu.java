@@ -123,7 +123,7 @@ public final class KillEffectMenu extends Menu {
         String id = entries.get(index);
         KillEffectService effects = plugin.killEffects();
         if (effects.isLocked(player, id)) {
-            plugin.messages().send(player, "killeffect.locked");
+            plugin.messages().error(player, "killeffect.locked");
             Lookup.sound(player, plugin.settings().getString("kill-effects.sounds.locked"), 1.0F, 0.8F);
             return;
         }
@@ -138,7 +138,7 @@ public final class KillEffectMenu extends Menu {
             Lookup.sound(player, plugin.settings().getString("kill-effects.sounds.select"), 1.0F, 1.2F);
             render();
         } else {
-            plugin.messages().send(player, "general.data-loading");
+            plugin.messages().error(player, "general.data-loading");
         }
     }
 }
