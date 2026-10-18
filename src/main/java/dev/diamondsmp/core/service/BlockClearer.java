@@ -12,12 +12,15 @@ import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.configuration.file.FileConfiguration;
+import org.bukkit.entity.Item;
+import org.bukkit.inventory.ItemStack;
 
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.logging.Level;
@@ -32,6 +35,7 @@ public final class BlockClearer implements Service {
 
     private final DiamondSMP plugin;
     private final Map<ChunkKey, Map<BlockPosition, Material>> tracked = new ConcurrentHashMap<>();
+    private final Map<UUID, Item> droppedItems = new ConcurrentHashMap<>();
     private final AtomicInteger size = new AtomicInteger();
     private final AtomicInteger countdown = new AtomicInteger();
     private Task ticker = Task.NONE;
@@ -43,6 +47,8 @@ public final class BlockClearer implements Service {
     private volatile Set<String> worlds = Set.of();
     private volatile int maxTracked = 500_000;
     private volatile boolean warnedFull;
+    private volatile boolean clearItems = true;
+    private volatile Set<Material> protectedItems = Set.of();
 
     public BlockClearer(DiamondSMP plugin) {
         this.plugin = plugin;
@@ -74,6 +80,8 @@ public final class BlockClearer implements Service {
         materials = Set.copyOf(Lookup.materials(config.getStringList("clearer.blocks")));
         worlds = Set.copyOf(config.getStringList("clearer.worlds"));
         maxTracked = Math.max(1_000, config.getInt("clearer.max-tracked", 500_000));
+        clearItems = config.getBoolean("clearer.items.enabled", true);
+        protectedItems = Set.copyOf(Lookup.materials(config.getStringList("clearer.items.protected")));
         warnedFull = false;
         countdown.set(intervalSeconds);
         ticker.cancel();
@@ -100,6 +108,31 @@ public final class BlockClearer implements Service {
         if (material != null) {
             put(to.getWorld().getName(), to.getX(), to.getY(), to.getZ(), material);
         }
+    }
+
+    public void trackItem(Item item) {
+        if (enabled && clearItems && worldAllowed(item.getWorld())) {
+            droppedItems.put(item.getUniqueId(), item);
+        }
+    }
+
+    public void forgetItem(Item item) {
+        droppedItems.remove(item.getUniqueId());
+    }
+
+    private void clearItems() {
+        for (Item item : new ArrayList<>(droppedItems.values())) {
+            plugin.scheduler().entity(item, () -> {
+                droppedItems.remove(item.getUniqueId());
+                if (item.isValid() && !isProtected(item.getItemStack())) {
+                    item.remove();
+                }
+            }, () -> droppedItems.remove(item.getUniqueId()));
+        }
+    }
+
+    private boolean isProtected(ItemStack stack) {
+        return protectedItems.contains(stack.getType()) || plugin.killTokens().isToken(stack);
     }
 
     public void forget(Block block) {
@@ -153,6 +186,9 @@ public final class BlockClearer implements Service {
             }
             plugin.scheduler().region(world, key.x(), key.z(), () -> clearChunk(world, key));
         }
+        if (clearItems) {
+            clearItems();
+        }
         warnedFull = false;
         plugin.messages().broadcast("clearer.cleared");
     }
@@ -204,6 +240,7 @@ public final class BlockClearer implements Service {
             plugin.getLogger().log(Level.SEVERE, "The clearer could not save its tracked blocks", ex);
         }
         tracked.clear();
+        droppedItems.clear();
         size.set(0);
     }
 }

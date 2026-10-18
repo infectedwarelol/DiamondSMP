@@ -401,6 +401,15 @@ clearer:
   worlds: []
   # Positions tracked at most. Past this, new placements wait for the next clear.
   max-tracked: 500000
+  # Dropped items lying on the ground are cleared at the same time.
+  items:
+    enabled: true
+    # Never removed from the ground. Supports * wildcards. Kill tokens are
+    # always kept.
+    protected:
+      - "NETHERITE_*"
+      - ENCHANTED_GOLDEN_APPLE
+      - ENDER_PEARL
 
 # Reactive distance. The more players are online, the less each client is
 # sent, so a full server does not flood every connection with chunk and

@@ -281,8 +281,8 @@ weather:
   set: "%prefix% &#ddededWeather in %accent%%world% &#ddededset to %accent%%weather%&#ddeded."
 
 clearer:
-  warning: "%prefix% &#ddededEvery placed block will be cleared in %accent%%time%s&#ddeded!"
-  cleared: "%prefix% &#ddededEvery placed block has been cleared!"
+  warning: "%prefix% &#ddededEvery placed block and dropped item will be cleared in %accent%%time%s&#ddeded!"
+  cleared: "%prefix% &#ddededEvery placed block and dropped item has been cleared!"
 
 # ScreenShare. %player%, %player_uuid%, %staff%, %staff_uuid%, %freeze_point%,
 # %time% (time frozen), %remaining% (voice channel time left) and %discord%.
