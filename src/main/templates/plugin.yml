@@ -157,7 +157,7 @@ commands:
     usage: /<command> [player]
   leaderboard:
     description: Show the top players.
-    usage: /<command> [kills|current|streak|kdr]
+    usage: /<command> [kills|deaths|playtime|killstreaks]
     aliases: [lb, leaderboards]
   killstreak:
     description: View or manage kill streaks.

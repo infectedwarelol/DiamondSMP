@@ -169,6 +169,12 @@ public final class PlayerProfile {
         dirty.set(true);
     }
 
+    public void recordPlaytime(long currentPlaytime) {
+        if (playtime.getAndAccumulate(currentPlaytime, Math::max) < currentPlaytime) {
+            dirty.set(true);
+        }
+    }
+
     public void touch(String currentName, long currentPlaytime) {
         this.name = currentName;
         this.lastSeen = System.currentTimeMillis();

@@ -53,6 +53,7 @@ import dev.diamondsmp.core.config.ConfigFile;
 import dev.diamondsmp.core.gui.Menu;
 import dev.diamondsmp.core.hook.PlaceholderHook;
 import dev.diamondsmp.core.gui.MenuListener;
+import dev.diamondsmp.core.gui.PlayerHeads;
 import dev.diamondsmp.core.listener.ChatListener;
 import dev.diamondsmp.core.listener.ClearerListener;
 import dev.diamondsmp.core.listener.CommandHiderListener;
@@ -139,6 +140,7 @@ public final class DiamondSMP extends JavaPlugin {
     private FreezePointService freezePoints;
     private ScreenShareService screenShare;
     private CommandHider commandHider;
+    private PlayerHeads heads;
     private boolean ready;
 
     @Override
@@ -213,6 +215,7 @@ public final class DiamondSMP extends JavaPlugin {
         freezePoints = register(new FreezePointService(this));
         screenShare = register(new ScreenShareService(this));
         commandHider = register(new CommandHider(this));
+        heads = register(new PlayerHeads(this));
     }
 
     private <T extends Service> T register(T service) {
@@ -482,5 +485,9 @@ public final class DiamondSMP extends JavaPlugin {
 
     public CommandHider commandHider() {
         return commandHider;
+    }
+
+    public PlayerHeads heads() {
+        return heads;
     }
 }

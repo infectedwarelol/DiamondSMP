@@ -165,10 +165,12 @@ public final class SqliteStorage implements Storage {
     }
 
     @Override
-    public List<ProfileSnapshot> top(LeaderboardType type, int limit) {
-        String sql = "SELECT " + PROFILE_COLUMNS + " FROM players ORDER BY " + type.ordering() + ", name ASC LIMIT ?";
+    public List<ProfileSnapshot> top(LeaderboardType type, int offset, int limit) {
+        String sql = "SELECT " + PROFILE_COLUMNS + " FROM players ORDER BY " + type.ordering()
+                + ", name ASC LIMIT ? OFFSET ?";
         try (PreparedStatement statement = connection.prepareStatement(sql)) {
             statement.setInt(1, Math.max(1, limit));
+            statement.setInt(2, Math.max(0, offset));
             try (ResultSet result = statement.executeQuery()) {
                 List<ProfileSnapshot> entries = new ArrayList<>();
                 while (result.next()) {
@@ -178,6 +180,16 @@ public final class SqliteStorage implements Storage {
             }
         } catch (SQLException ex) {
             throw new StorageException("Could not read the " + type.id() + " leaderboard", ex);
+        }
+    }
+
+    @Override
+    public int countProfiles() {
+        try (Statement statement = connection.createStatement();
+             ResultSet result = statement.executeQuery("SELECT COUNT(*) FROM players")) {
+            return result.next() ? result.getInt(1) : 0;
+        } catch (SQLException ex) {
+            throw new StorageException("Could not count the players", ex);
         }
     }
 

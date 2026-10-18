@@ -18,7 +18,9 @@ public interface Storage {
 
     void saveProfile(ProfileSnapshot profile);
 
-    List<ProfileSnapshot> top(LeaderboardType type, int limit);
+    List<ProfileSnapshot> top(LeaderboardType type, int offset, int limit);
+
+    int countProfiles();
 
     Map<String, StoredLocation> loadPoints(String kind);
 

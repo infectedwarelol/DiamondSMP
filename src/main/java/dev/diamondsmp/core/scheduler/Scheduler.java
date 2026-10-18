@@ -120,6 +120,10 @@ public final class Scheduler {
                 .runAtFixedRate(plugin, task -> action.run(), null, ticks(delayTicks), ticks(periodTicks)));
     }
 
+    public void async(Runnable action) {
+        once(consumer -> Bukkit.getAsyncScheduler().runNow(plugin, consumer), action);
+    }
+
     public void asyncLater(Runnable action, long delayTicks) {
         once(consumer -> Bukkit.getAsyncScheduler().runDelayed(plugin, consumer,
                 ticks(delayTicks) * MILLIS_PER_TICK, TimeUnit.MILLISECONDS), action);

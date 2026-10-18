@@ -137,6 +137,25 @@ ajleaderboards:
   # ajLeaderboards database, so keep it reasonable on a busy server.
   push-interval: 5s
 
+# /leaderboard opens a menu with four boards. Every player who ever joined is
+# ranked, 45 per page, with their own head. Skins of offline players are
+# fetched once in the background and kept in memory.
+leaderboard:
+  filler: GRAY_STAINED_GLASS_PANE
+  sections:
+    kills:
+      slot: 10
+      icon: DIAMOND_SWORD
+    deaths:
+      slot: 12
+      icon: SKELETON_SKULL
+    playtime:
+      slot: 14
+      icon: CLOCK
+    killstreaks:
+      slot: 16
+      icon: BLAZE_POWDER
+
 # Kill tokens. The killer receives tokens straight into their inventory; when
 # it is full the rest drops at their feet. /killtoken [token|compressed]
 # [amount] [player] gives them to anyone (diamondsmp.killtoken.give, op).

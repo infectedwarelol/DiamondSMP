@@ -2,6 +2,7 @@ package dev.diamondsmp.core.service;
 
 import dev.diamondsmp.core.DiamondSMP;
 import dev.diamondsmp.core.scheduler.Task;
+import dev.diamondsmp.core.storage.LeaderboardPage;
 import dev.diamondsmp.core.storage.LeaderboardType;
 import dev.diamondsmp.core.storage.PlayerProfile;
 import dev.diamondsmp.core.storage.ProfileSnapshot;
@@ -105,10 +106,23 @@ public final class ProfileService implements Service {
 
     public CompletableFuture<List<ProfileSnapshot>> top(LeaderboardType type, int limit) {
         saveDirty();
-        return plugin.database().supply("read the " + type.id() + " leaderboard", storage -> storage.top(type, limit));
+        return plugin.database().supply("read the " + type.id() + " leaderboard",
+                storage -> storage.top(type, 0, limit));
+    }
+
+    public CompletableFuture<LeaderboardPage> page(LeaderboardType type, int offset, int limit) {
+        saveDirty();
+        return plugin.database().supply("read a page of the " + type.id() + " leaderboard",
+                storage -> new LeaderboardPage(storage.countProfiles(), storage.top(type, offset, limit)));
     }
 
     public void saveDirty() {
+        for (Player online : Bukkit.getOnlinePlayers()) {
+            PlayerProfile profile = profiles.get(online.getUniqueId());
+            if (profile != null) {
+                profile.recordPlaytime(playtime(online));
+            }
+        }
         for (PlayerProfile profile : profiles.values()) {
             if (profile.consumeDirty()) {
                 save(profile);

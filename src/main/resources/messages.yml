@@ -203,11 +203,6 @@ stats:
   streak: "&8» &#ddededStreak: %accent%%streak% &8(&7best %best%&8)"
 
 leaderboard:
-  types:
-    kills: "Kills"
-    current: "Current Streak"
-    streak: "Best Streak"
-    kdr: "KDR"
   header: "%prefix% &#ddededTop players by %accent%%type%"
   entry: "&8#%rank% %accent%%player% &8» &#ddeded%value%"
   empty: "&8» &7Nobody is ranked yet."
@@ -368,6 +363,58 @@ screenshare:
   reloaded: "%prefix% &#ddededConfiguration reloaded. &7(%points% freeze points)"
 
 menus:
+  leaderboard:
+    title: "&8Leaderboards"
+    # %section%, %page% and %pages%.
+    board-title: "&8Leaderboard &7» %section% &8(%page%/%pages%)"
+    sections:
+      kills:
+        title: "Kills"
+        name: "%accent%&lKills"
+        lore:
+          - "&7The players with the most kills."
+          - ""
+          - "&eClick to open"
+      deaths:
+        title: "Deaths"
+        name: "%accent%&lDeaths"
+        lore:
+          - "&7The players who died the most."
+          - ""
+          - "&eClick to open"
+      playtime:
+        title: "Playtime"
+        name: "%accent%&lPlaytime"
+        lore:
+          - "&7The players who played the longest."
+          - ""
+          - "&eClick to open"
+      killstreaks:
+        title: "Killstreaks"
+        name: "%accent%&lKillstreaks"
+        lore:
+          - "&7The highest killstreaks ever reached."
+          - ""
+          - "&eClick to open"
+    # %rank% %player% %section% %value% %kills% %deaths% %kdr% %killstreak%
+    # %streak% %playtime% %status%
+    entry:
+      name: "&8#%rank% %accent%%player%"
+      lore:
+        - "&7%section%: &f%value%"
+        - ""
+        - "&7Kills: &f%kills%"
+        - "&7Deaths: &f%deaths%"
+        - "&7KDR: &f%kdr%"
+        - "&7Best Killstreak: &f%killstreak%"
+        - "&7Playtime: &f%playtime%"
+        - "&7Status: %status%"
+    online: "&aOnline"
+    offline: "&7Offline"
+    empty: "&cNobody is ranked yet."
+    previous: "%accent%« Previous Page"
+    next: "%accent%Next Page »"
+    back: "&cBack"
   trash:
     title: "&8Disposal"
   killeffect:

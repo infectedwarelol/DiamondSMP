@@ -5,6 +5,8 @@ import java.util.Locale;
 public enum LeaderboardType {
 
     KILLS("kills DESC"),
+    DEATHS("deaths DESC"),
+    PLAYTIME("playtime DESC"),
     CURRENT("streak DESC"),
     STREAK("best_streak DESC"),
     KDR("CAST(kills AS REAL) / CASE WHEN deaths = 0 THEN 1 ELSE deaths END DESC");
