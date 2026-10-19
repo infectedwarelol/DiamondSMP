@@ -111,6 +111,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.CompletableFuture;
 import java.util.logging.Level;
 
 public final class DiamondSMP extends JavaPlugin {
@@ -153,7 +154,7 @@ public final class DiamondSMP extends JavaPlugin {
         serverVersion = ServerVersion.detect();
         version = readVersion();
         scheduler = new Scheduler(this, serverVersion.folia());
-        configFile = new ConfigFile(this, "config.yml", Set.of("reactive-distance.thresholds"), Map.of(
+        configFile = new ConfigFile(this, "config.yml", Set.of("reactive-distance.thresholds", "command-hider.groups"), Map.of(
                 "teleport.warmup.spawn", Set.of("3s"),
                 "teleport.warmup.warp", Set.of("3s"),
                 "teleport.warmup.back", Set.of("3s")));
@@ -175,16 +176,14 @@ public final class DiamondSMP extends JavaPlugin {
         }
 
         createServices();
-        try {
-            spawn.load();
-            warps.load();
-            clearer.load();
-            freezePoints.load();
-        } catch (StorageException ex) {
-            getLogger().log(Level.SEVERE, "Saved data could not be loaded; DiamondSMP is disabled to protect it.", ex);
-            getServer().getPluginManager().disablePlugin(this);
-            return;
-        }
+        CompletableFuture.allOf(spawn.load(), warps.load(), clearer.load(), freezePoints.load())
+                .whenComplete((ignored, error) -> {
+                    if (error != null) {
+                        getLogger().log(Level.SEVERE, "Saved data could not be loaded; DiamondSMP is disabled to protect it.",
+                                error);
+                        scheduler.global(() -> getServer().getPluginManager().disablePlugin(this));
+                    }
+                });
         for (Service service : services) {
             service.reload();
         }

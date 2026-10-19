@@ -6,6 +6,7 @@ import dev.diamondsmp.core.util.Format;
 import org.bukkit.Location;
 import org.bukkit.World;
 
+import java.util.concurrent.CompletableFuture;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -48,20 +49,19 @@ public final class FreezePointService implements Service {
         this.plugin = plugin;
     }
 
-    public void load() {
-        Map<String, StoredLocation> stored = plugin.database().await(
-                plugin.database().supply("load the freeze points", storage -> storage.loadPoints(KIND)), 30L);
-        points.clear();
-        for (Map.Entry<String, StoredLocation> entry : stored.entrySet()) {
-            try {
-                int id = Integer.parseInt(entry.getKey());
-                if (id > 0) {
-                    points.put(id, new FreezePoint(id, entry.getValue()));
+    public CompletableFuture<Void> load() {
+        return plugin.database().supply("load the freeze points", storage -> storage.loadPoints(KIND)).thenAccept(stored -> {
+            for (Map.Entry<String, StoredLocation> entry : stored.entrySet()) {
+                try {
+                    int id = Integer.parseInt(entry.getKey());
+                    if (id > 0) {
+                        points.putIfAbsent(id, new FreezePoint(id, entry.getValue()));
+                    }
+                } catch (NumberFormatException ex) {
+                    plugin.getLogger().warning("Skipped the freeze point '" + entry.getKey() + "': its id is not a number.");
                 }
-            } catch (NumberFormatException ex) {
-                plugin.getLogger().warning("Skipped the freeze point '" + entry.getKey() + "': its id is not a number.");
             }
-        }
+        });
     }
 
     public synchronized FreezePoint create(Location location) {

@@ -227,6 +227,7 @@ permissions:
       diamondsmp.chat.*: true
       diamondsmp.world.*: true
       diamondsmp.screenshare.admin: true
+      diamondsmp.commandhider.group.staff: true
       diamondsmp.commandhider.bypass: true
       diamondsmp.admin: true
 
@@ -726,8 +727,11 @@ permissions:
     description: Use /weather.
     default: op
 
+  diamondsmp.commandhider.group.staff:
+    description: See the staff commands of the command-hider staff group.
+    default: op
   diamondsmp.commandhider.bypass:
-    description: See and use the commands in command-hider.hidden-commands and namespaced labels.
+    description: Ignore the command hider lists and see every command you have the permission for.
     default: op
 
   diamondsmp.admin:

@@ -7,7 +7,7 @@ import org.bukkit.World;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 
-import java.util.Map;
+import java.util.concurrent.CompletableFuture;
 
 public final class SpawnService implements Service {
 
@@ -30,10 +30,12 @@ public final class SpawnService implements Service {
         this.plugin = plugin;
     }
 
-    public void load() {
-        Map<String, StoredLocation> points = plugin.database().await(
-                plugin.database().supply("load the spawn", storage -> storage.loadPoints(KIND)), 30L);
-        spawn = points.get(NAME);
+    public CompletableFuture<Void> load() {
+        return plugin.database().supply("load the spawn", storage -> storage.loadPoints(KIND)).thenAccept(points -> {
+            if (spawn == null) {
+                spawn = points.get(NAME);
+            }
+        });
     }
 
     @Override

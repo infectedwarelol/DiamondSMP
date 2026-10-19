@@ -15,6 +15,7 @@ import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Item;
 import org.bukkit.inventory.ItemStack;
 
+import java.util.concurrent.CompletableFuture;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -48,6 +49,7 @@ public final class BlockClearer implements Service {
     private volatile Set<String> worlds = Set.of();
     private volatile int maxTracked = 500_000;
     private volatile boolean warnedFull;
+    private volatile boolean loaded;
     private volatile boolean clearItems = true;
     private volatile Set<Material> protectedItems = Set.of();
 
@@ -55,15 +57,16 @@ public final class BlockClearer implements Service {
         this.plugin = plugin;
     }
 
-    public void load() {
-        List<PlacedBlock> stored = plugin.database().await(
-                plugin.database().supply("load the tracked blocks", Storage::loadPlacedBlocks), 60L);
-        for (PlacedBlock block : stored) {
-            Material material = Lookup.material(block.material(), null);
-            if (material != null) {
-                put(block.world(), block.x(), block.y(), block.z(), material);
+    public CompletableFuture<Void> load() {
+        return plugin.database().supply("load the tracked blocks", Storage::loadPlacedBlocks).thenAccept(stored -> {
+            for (PlacedBlock block : stored) {
+                Material material = Lookup.material(block.material(), null);
+                if (material != null) {
+                    put(block.world(), block.x(), block.y(), block.z(), material);
+                }
             }
-        }
+            loaded = true;
+        });
     }
 
     @Override
@@ -226,6 +229,9 @@ public final class BlockClearer implements Service {
     }
 
     private void saveAsync() {
+        if (!loaded) {
+            return;
+        }
         List<PlacedBlock> snapshot = snapshot();
         plugin.database().run("save the tracked blocks", storage -> storage.replacePlacedBlocks(snapshot));
     }
@@ -247,6 +253,12 @@ public final class BlockClearer implements Service {
     public void shutdown() {
         ticker.cancel();
         saver.cancel();
+        if (!loaded) {
+            tracked.clear();
+            droppedItems.clear();
+            size.set(0);
+            return;
+        }
         List<PlacedBlock> snapshot = snapshot();
         try {
             plugin.database().await(plugin.database().run("save the tracked blocks",

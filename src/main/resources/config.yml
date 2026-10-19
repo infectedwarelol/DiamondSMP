@@ -5,7 +5,7 @@
 # Your values are kept and the previous file is saved next to it as config.yml.old.
 # Durations accept 90s, 2m, 1m30s, 1h or a plain number of seconds.
 
-config-version: 8
+config-version: 9
 
 # Shown by /store and /discord, and usable in every message of messages.yml
 # as %store% and %discord%. Add more keys here to get more %key% tokens.
@@ -494,14 +494,63 @@ reactive-distance:
       view-distance: 4
       player-distance: 32
 
-# Command hider. Players only see the commands they have the permission for,
-# both in the command list and in tab completion. Running a command without
-# its permission, or one that does not exist, shows general.unknown-command
-# from messages.yml and plays the sound below, so hidden commands cannot be
-# told apart from missing ones. diamondsmp.commandhider.bypass ignores
-# hidden-commands and hide-namespaced, but never the permission check.
+# Command hider. Hides commands from every plugin, not just DiamondSMP.
+# A hidden command disappears from the command list and tab completion, and
+# running it shows general.unknown-command from messages.yml with the sound
+# below, exactly like a command that does not exist.
+#
+#   mode: whitelist   players only see the commands listed in visible-commands
+#                     and in the groups they have
+#                     (diamondsmp.commandhider.group.<group>). Every other
+#                     command from every plugin is hidden.
+#   mode: permission  players see every command they have the permission for.
+#
+# In both modes a command is still hidden when the player lacks its
+# permission. List a command by its main name or any alias; its other aliases
+# follow automatically. diamondsmp.commandhider.bypass (ops) sees every
+# command it has the permission for and ignores the lists.
 command-hider:
   enabled: true
+  mode: whitelist
+  # Visible to every player in whitelist mode.
+  visible-commands:
+    - spawn
+    - warp
+    - warps
+    - msg
+    - reply
+    - ignore
+    - block
+    - killeffect
+    - killstreak
+    - stats
+    - leaderboard
+    - playtime
+    - store
+    - discord
+    - ping
+    - list
+    - seen
+    - trash
+    - enderchest
+  # Extra commands for players with diamondsmp.commandhider.group.<group>.
+  groups:
+    staff:
+      - vanish
+      - freeze
+      - unfreeze
+      - screenshare
+      - setfreezepoint
+      - delfreezepoint
+      - freezepoints
+      - teleport
+      - tphere
+      - gamemode
+      - invsee
+      - socialspy
+      - mutechat
+      - clearchat
+      - broadcast
   # Hide plugin:command and minecraft:command labels.
   hide-namespaced: true
   # Always hidden and blocked, even when the player has the permission.

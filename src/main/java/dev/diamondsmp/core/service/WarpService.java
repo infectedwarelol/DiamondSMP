@@ -5,6 +5,7 @@ import dev.diamondsmp.core.storage.StoredLocation;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 
+import java.util.concurrent.CompletableFuture;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -26,11 +27,9 @@ public final class WarpService implements Service {
         this.plugin = plugin;
     }
 
-    public void load() {
-        Map<String, StoredLocation> loaded = plugin.database().await(
-                plugin.database().supply("load the warps", storage -> storage.loadPoints(KIND)), 30L);
-        warps.clear();
-        warps.putAll(loaded);
+    public CompletableFuture<Void> load() {
+        return plugin.database().supply("load the warps", storage -> storage.loadPoints(KIND))
+                .thenAccept(loaded -> loaded.forEach(warps::putIfAbsent));
     }
 
     @Override
