@@ -27,7 +27,7 @@ public final class CommandHider implements Service {
     private volatile boolean enabled = true;
     private volatile boolean hideNamespaced = true;
     private volatile Set<String> hidden = Set.of();
-    private volatile boolean whitelist = true;
+    private volatile boolean whitelist;
     private volatile Set<String> visible = Set.of();
     private volatile Map<String, Set<String>> groups = Map.of();
     private volatile SoundSpec sound = SoundSpec.NONE;
@@ -46,7 +46,7 @@ public final class CommandHider implements Service {
             labels.add(normalize(label));
         }
         hidden = Set.copyOf(labels);
-        whitelist = "whitelist".equalsIgnoreCase(config.getString("command-hider.mode", "whitelist"));
+        whitelist = "whitelist".equalsIgnoreCase(config.getString("command-hider.mode", "permission"));
         visible = labels(config.getStringList("command-hider.visible-commands"));
         Map<String, Set<String>> parsedGroups = new HashMap<>();
         ConfigurationSection groupSection = config.getConfigurationSection("command-hider.groups");

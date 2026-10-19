@@ -5,7 +5,7 @@
 # Your values are kept and the previous file is saved next to it as config.yml.old.
 # Durations accept 90s, 2m, 1m30s, 1h or a plain number of seconds.
 
-config-version: 9
+config-version: 10
 
 # Shown by /store and /discord, and usable in every message of messages.yml
 # as %store% and %discord%. Add more keys here to get more %key% tokens.
@@ -511,7 +511,7 @@ reactive-distance:
 # command it has the permission for and ignores the lists.
 command-hider:
   enabled: true
-  mode: whitelist
+  mode: permission
   # Visible to every player in whitelist mode.
   visible-commands:
     - spawn
