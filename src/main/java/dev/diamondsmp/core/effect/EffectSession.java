@@ -397,6 +397,10 @@ public final class EffectSession {
     }
 
     public void floor(int dx, int dz, Material material) {
+        floor(dx, dz, material.createBlockData());
+    }
+
+    public void floor(int dx, int dz, BlockData data) {
         Location column = origin.clone().add(dx, 0.0D, dz);
         if (!Bukkit.isOwnedByCurrentRegion(column)) {
             return;
@@ -406,7 +410,7 @@ public final class EffectSession {
             Block ground = feet.getRelative(0, -1 - offset, 0);
             Block above = ground.getRelative(0, 1, 0);
             if (ground.getType().isSolid() && above.isPassable()) {
-                illusion(ground.getLocation(), material);
+                illusion(ground.getLocation(), data);
                 return;
             }
         }
@@ -415,15 +419,14 @@ public final class EffectSession {
     public void air(int dx, int dy, int dz, Material material) {
         Location location = origin.clone().add(dx, dy, dz);
         if (Bukkit.isOwnedByCurrentRegion(location) && location.getBlock().isEmpty()) {
-            illusion(location.getBlock().getLocation(), material);
+            illusion(location.getBlock().getLocation(), material.createBlockData());
         }
     }
 
-    private void illusion(Location location, Material material) {
+    private void illusion(Location location, BlockData data) {
         if (finished.get()) {
             return;
         }
-        BlockData data = material.createBlockData();
         illusions.add(location);
         for (Player viewer : viewers) {
             if (viewer.isOnline() && viewer.getWorld().equals(world)) {

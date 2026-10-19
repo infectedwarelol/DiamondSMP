@@ -6,6 +6,8 @@ import dev.diamondsmp.core.effect.EffectSession;
 import dev.diamondsmp.core.effect.KillEffect;
 import dev.diamondsmp.core.effect.Particles;
 import org.bukkit.Material;
+import org.bukkit.block.data.BlockData;
+import org.bukkit.block.data.Waterlogged;
 import org.bukkit.entity.ArmorStand;
 import org.bukkit.entity.BlockDisplay;
 import org.joml.Vector3f;
@@ -18,6 +20,7 @@ public final class Kraken implements KillEffect {
     private static final int SEGMENTS = 7;
     private static final double BASE_RADIUS = 1.9D;
     private static final Material[] FLESH = {Material.PRISMARINE, Material.DARK_PRISMARINE};
+    private static final BlockData SEA = walkableWater();
 
     @Override
     public String id() {
@@ -48,7 +51,7 @@ public final class Kraken implements KillEffect {
             for (int dx = -3; dx <= 3; dx++) {
                 for (int dz = -3; dz <= 3; dz++) {
                     if (dx * dx + dz * dz <= 10) {
-                        s.floor(dx, dz, Material.WATER);
+                        s.floor(dx, dz, SEA);
                     }
                 }
             }
@@ -104,6 +107,15 @@ public final class Kraken implements KillEffect {
             s.particle(Particles.SPLASH, 0, 0.3D, 0, 80, 1.2D, 0.3D);
             s.sound("entity.player.splash.high_speed", 1.0F, 0.5F);
         });
+    }
+
+    private static BlockData walkableWater() {
+        BlockData data = Material.BARRIER.createBlockData();
+        if (data instanceof Waterlogged waterlogged) {
+            waterlogged.setWaterlogged(true);
+            return waterlogged;
+        }
+        return Material.LIGHT_BLUE_STAINED_GLASS.createBlockData();
     }
 
     private static float width(int segment) {
