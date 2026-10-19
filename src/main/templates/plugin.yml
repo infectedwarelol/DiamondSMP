@@ -149,7 +149,7 @@ commands:
     usage: /<command>
   killeffect:
     description: Choose a kill effect.
-    usage: /<command> [toggle|set <player> <effect>|reload]
+    usage: /<command> [toggle|private|give <player> <effect|all>|take <player> <effect|all>|set <player> <effect>|reload]
     aliases: [ke, killeffects]
   killtoken:
     description: Give kill tokens or compressed kill tokens.
@@ -555,10 +555,10 @@ permissions:
       diamondsmp.killeffect.orbital_strike: true
       diamondsmp.killeffect.kraken: true
   diamondsmp.killeffect:
-    description: Open the kill effect menu and use /killeffect toggle.
+    description: Open the kill effect menu and use /killeffect toggle and /killeffect private.
     default: true
   diamondsmp.killeffect.admin:
-    description: Use /killeffect set and /killeffect reload.
+    description: Use /killeffect give, take, set and reload.
     default: op
   diamondsmp.killeffect.random:
     description: Pick the random kill effect, which plays a random owned effect.

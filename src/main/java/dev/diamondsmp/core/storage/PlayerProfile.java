@@ -24,6 +24,8 @@ public final class PlayerProfile {
     private volatile String killEffect;
     private volatile boolean socialSpy;
     private volatile boolean hidesEffects;
+    private volatile boolean privateEffects;
+    private final Set<String> ownedEffects = ConcurrentHashMap.newKeySet();
     private volatile long lastSeen;
     private final AtomicLong playtime = new AtomicLong();
 
@@ -57,6 +59,8 @@ public final class PlayerProfile {
         profile.blocked.addAll(snapshot.blocked());
         profile.playtime.set(snapshot.playtime());
         profile.hidesEffects = snapshot.hidesEffects();
+        profile.privateEffects = snapshot.privateEffects();
+        profile.ownedEffects.addAll(snapshot.ownedEffects());
         if (!currentName.equals(snapshot.name())) {
             profile.dirty.set(true);
         }
@@ -65,7 +69,8 @@ public final class PlayerProfile {
 
     public ProfileSnapshot snapshot() {
         return new ProfileSnapshot(uuid, name, kills.get(), deaths.get(), streak.get(), bestStreak.get(),
-                killEffect, socialSpy, ignored, blocked, firstJoinTime, lastSeen, playtime.get(), hidesEffects);
+                killEffect, socialSpy, ignored, blocked, firstJoinTime, lastSeen, playtime.get(), hidesEffects,
+                privateEffects, ownedEffects);
     }
 
     public String name() {
@@ -127,6 +132,35 @@ public final class PlayerProfile {
     public void hidesEffects(boolean hidden) {
         this.hidesEffects = hidden;
         dirty.set(true);
+    }
+
+    public boolean privateEffects() {
+        return privateEffects;
+    }
+
+    public void privateEffects(boolean onlyMe) {
+        this.privateEffects = onlyMe;
+        dirty.set(true);
+    }
+
+    public boolean ownsEffect(String id) {
+        return ownedEffects.contains(id);
+    }
+
+    public boolean grantEffect(String id) {
+        boolean added = ownedEffects.add(id);
+        if (added) {
+            dirty.set(true);
+        }
+        return added;
+    }
+
+    public boolean revokeEffect(String id) {
+        boolean removed = ownedEffects.remove(id);
+        if (removed) {
+            dirty.set(true);
+        }
+        return removed;
     }
 
     public boolean socialSpy() {

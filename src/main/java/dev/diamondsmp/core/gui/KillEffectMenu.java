@@ -25,6 +25,7 @@ public final class KillEffectMenu extends Menu {
     private static final int CLOSE_SLOT = PAGE_SIZE + 4;
     private static final int NEXT_SLOT = PAGE_SIZE + 5;
     private static final int VIEW_SLOT = PAGE_SIZE + 8;
+    private static final int PRIVATE_SLOT = PAGE_SIZE;
 
     private final DiamondSMP plugin;
     private final Player viewer;
@@ -67,6 +68,11 @@ public final class KillEffectMenu extends Menu {
             inventory.setItem(NEXT_SLOT, Items.create(Material.ARROW,
                     messages.display("menus.killeffect.next", "page", page + 2, "pages", pages), null, false));
         }
+        PlayerProfile profile = plugin.profiles().profile(viewer);
+        boolean onlyMe = profile != null && profile.privateEffects();
+        inventory.setItem(PRIVATE_SLOT, Items.create(onlyMe ? Material.SPYGLASS : Material.BELL,
+                messages.display(onlyMe ? "menus.killeffect.private-on" : "menus.killeffect.private-off"),
+                messages.lore("menus.killeffect.private-lore"), onlyMe));
         boolean hidden = effects.hidesEffects(viewer);
         inventory.setItem(VIEW_SLOT, Items.create(hidden ? Material.ENDER_PEARL : Material.ENDER_EYE,
                 messages.display(hidden ? "menus.killeffect.view-off" : "menus.killeffect.view-on"),
@@ -132,14 +138,19 @@ public final class KillEffectMenu extends Menu {
             player.closeInventory();
             return;
         }
-        if (slot == VIEW_SLOT) {
+        if (slot == VIEW_SLOT || slot == PRIVATE_SLOT) {
             PlayerProfile profile = plugin.profiles().profile(player);
             if (profile == null) {
                 plugin.messages().error(player, "general.data-loading");
                 return;
             }
-            profile.hidesEffects(!profile.hidesEffects());
-            plugin.messages().send(player, profile.hidesEffects() ? "killeffect.view-off" : "killeffect.view-on");
+            if (slot == VIEW_SLOT) {
+                profile.hidesEffects(!profile.hidesEffects());
+                plugin.messages().send(player, profile.hidesEffects() ? "killeffect.view-off" : "killeffect.view-on");
+            } else {
+                profile.privateEffects(!profile.privateEffects());
+                plugin.messages().send(player, profile.privateEffects() ? "killeffect.private-on" : "killeffect.private-off");
+            }
             Lookup.sound(player, plugin.settings().getString("kill-effects.sounds.select"), 1.0F, 1.0F);
             render();
             return;

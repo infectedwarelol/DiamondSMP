@@ -188,8 +188,12 @@ kill-effects:
   # Every effect is a short show of 2 to 4 seconds: particles, display entities,
   # layered sounds and fake blocks that only the viewers see and that are put
   # back afterward. Many of them show the victim's corpse, wearing their own
-  # skin, armor and weapon. Players pick one in /killeffect, or "Random" for a
-  # surprise each kill. /killeffect toggle hides other players' effects.
+  # skin, armor and weapon.
+  # /killeffect toggle hides other players' effects for you (your own always
+  # show). /killeffect private shows the effects of your kills only to you;
+  # by default everyone nearby sees them. /killeffect give <player>
+  # <effect|all> unlocks effects without a permission, take removes them.
+  # Players pick one in /killeffect, or "Random" for a surprise each kill.
   locked-icon: GRAY_DYE
   none-icon: BARRIER
   random-icon: ENDER_CHEST

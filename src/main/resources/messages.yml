@@ -5,7 +5,7 @@
 # %prefix%, %primary% and %accent% are replaced everywhere.
 # %nl% starts a new line. Leave a message empty ("") to hide it.
 
-config-version: 8
+config-version: 9
 
 prefix: "&#1FD1F9&lD&#3BD6F9&lI&#57DBFA&lA&#73E0FA&lM&#8FE5FB&lO&#ABEAFB&lN&#C7EFFC&lD &8»&r"
 
@@ -224,8 +224,16 @@ killeffect:
   set: "%prefix% &#ddededSet %accent%%player%&#ddeded's kill effect to %effect%&#ddeded."
   unknown: "%prefix% &cUnknown kill effect %accent%%effect%&c."
   reloaded: "%prefix% &#ddededReloaded %accent%%count% &#ddededkill effects."
-  view-on: "%prefix% &#ddededYou now &asee &#ddededkill effects."
-  view-off: "%prefix% &#ddededYou now &chide &#ddededkill effects."
+  view-on: "%prefix% &#ddededYou now &asee &#ddededother players' kill effects."
+  view-off: "%prefix% &#ddededYou now &chide &#ddededother players' kill effects. Yours still show for you."
+  private-on: "%prefix% &#ddededYour kill effects are now &conly visible to you&#ddeded."
+  private-off: "%prefix% &#ddededYour kill effects are now &avisible to everyone&#ddeded."
+  all: "every kill effect"
+  given: "%prefix% &#ddededGave %effect% &#ddededto %accent%%player%&#ddeded."
+  taken: "%prefix% &#ddededTook %effect% &#ddededfrom %accent%%player%&#ddeded."
+  received: "%prefix% &#ddededYou unlocked %effect%&#ddeded! Pick it in %accent%/killeffect&#ddeded."
+  already-owned: "%prefix% &c%accent%%player% &calready owns %effect%&c."
+  not-owned: "%prefix% &c%accent%%player% &cdoes not own %effect%&c."
 
 msg:
   to: "&8[&7me &8» %accent%%player%&8] &f%message%"
@@ -438,11 +446,18 @@ menus:
     random-lore:
       - "&7A different effect you own"
       - "&7every kill. Surprise!"
-    view-on: "&a&lShowing kill effects"
-    view-off: "&c&lHiding kill effects"
+    view-on: "&a&lShowing others' kill effects"
+    view-off: "&c&lHiding others' kill effects"
     view-lore:
-      - "&7Click to show or hide every"
-      - "&7player's kill effects for you."
+      - "&7Click to show or hide other"
+      - "&7players' kill effects for you."
+      - "&7Your own always show for you."
+    private-off: "&a&lYour effects: everyone"
+    private-on: "&e&lYour effects: only you"
+    private-lore:
+      - "&7Click to choose who sees the"
+      - "&7kill effects of your kills:"
+      - "&7everyone, or only yourself."
     locked-name: "&c&l🔒 &r%effect%"
     locked-lore:
       - ""

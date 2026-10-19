@@ -8,9 +8,11 @@ import dev.diamondsmp.core.effect.KillEffectRegistry;
 import dev.diamondsmp.core.gui.KillEffectMenu;
 import dev.diamondsmp.core.message.Text;
 import dev.diamondsmp.core.storage.PlayerProfile;
+import dev.diamondsmp.core.storage.ProfileSnapshot;
 import dev.diamondsmp.core.util.Format;
 import dev.diamondsmp.core.util.Lookup;
 import net.kyori.adventure.text.Component;
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World;
@@ -19,11 +21,14 @@ import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Set;
+import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.logging.Level;
@@ -32,7 +37,15 @@ public final class KillEffectService implements Service {
 
     public static final String NONE = "none";
     public static final String RANDOM = "random";
+    public static final String ALL = "all";
     public static final String PERMISSION_PREFIX = "diamondsmp.killeffect.";
+
+    public enum Grant {
+        GRANTED,
+        REVOKED,
+        UNCHANGED,
+        UNKNOWN_PLAYER
+    }
 
     public record Configured(KillEffect effect, String name, Material icon, List<String> description,
                              double intensity, double duration, float volume) {
@@ -133,7 +146,47 @@ public final class KillEffectService implements Service {
     }
 
     public boolean isLocked(Player player, String id) {
-        return !NONE.equals(id) && !player.hasPermission(PERMISSION_PREFIX + id);
+        if (NONE.equals(id) || player.hasPermission(PERMISSION_PREFIX + id)) {
+            return false;
+        }
+        PlayerProfile profile = plugin.profiles().profile(player);
+        return profile == null || !profile.ownsEffect(id);
+    }
+
+    public List<String> effectIds() {
+        return new ArrayList<>(enabled.keySet());
+    }
+
+    public CompletableFuture<Grant> grant(String playerName, String id, boolean give) {
+        List<String> targets = ALL.equals(id) ? effectIds() : List.of(id);
+        Player online = Bukkit.getPlayerExact(playerName);
+        PlayerProfile profile = online == null ? null : plugin.profiles().profile(online);
+        if (profile != null) {
+            boolean changed = false;
+            for (String target : targets) {
+                changed |= give ? profile.grantEffect(target) : profile.revokeEffect(target);
+            }
+            return CompletableFuture.completedFuture(outcome(changed, give));
+        }
+        return plugin.database().supply("change the kill effects of " + playerName, storage -> {
+            Optional<ProfileSnapshot> found = storage.findProfile(playerName);
+            if (found.isEmpty()) {
+                return Grant.UNKNOWN_PLAYER;
+            }
+            Set<String> owned = new HashSet<>(found.get().ownedEffects());
+            boolean changed = give ? owned.addAll(targets) : owned.removeAll(new HashSet<>(targets));
+            if (changed) {
+                storage.saveProfile(found.get().withOwnedEffects(owned));
+            }
+            return outcome(changed, give);
+        });
+    }
+
+    private static Grant outcome(boolean changed, boolean give) {
+        if (!changed) {
+            return Grant.UNCHANGED;
+        }
+        return give ? Grant.GRANTED : Grant.REVOKED;
     }
 
     public String selected(Player player) {
@@ -199,11 +252,15 @@ public final class KillEffectService implements Service {
         }
         List<Player> viewers = new ArrayList<>();
         List<Player> hidden = new ArrayList<>();
+        PlayerProfile killerProfile = plugin.profiles().profile(killer);
+        boolean onlyKiller = killerProfile != null && killerProfile.privateEffects();
         for (Player player : world.getPlayers()) {
             if (player.getLocation().distanceSquared(origin) > viewDistanceSquared) {
                 continue;
             }
-            if (hidesEffects(player)) {
+            if (player.equals(killer)) {
+                viewers.add(player);
+            } else if (onlyKiller || hidesEffects(player)) {
                 hidden.add(player);
             } else {
                 viewers.add(player);

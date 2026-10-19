@@ -20,9 +20,9 @@ import java.util.UUID;
 
 public final class SqliteStorage implements Storage {
 
-    private static final int SCHEMA_VERSION = 4;
+    private static final int SCHEMA_VERSION = 5;
     private static final String PROFILE_COLUMNS =
-            "uuid, name, kills, deaths, streak, best_streak, kill_effect, social_spy, ignored, blocked, first_join, last_seen, playtime, hide_effects";
+            "uuid, name, kills, deaths, streak, best_streak, kill_effect, social_spy, ignored, blocked, first_join, last_seen, playtime, hide_effects, private_effects, owned_effects";
 
     private final File file;
     private Connection connection;
@@ -52,7 +52,8 @@ public final class SqliteStorage implements Storage {
                         + "kill_effect TEXT, social_spy INTEGER NOT NULL DEFAULT 0, "
                         + "ignored TEXT NOT NULL DEFAULT '', blocked TEXT NOT NULL DEFAULT '', "
                         + "first_join INTEGER NOT NULL, last_seen INTEGER NOT NULL, "
-                        + "playtime INTEGER NOT NULL DEFAULT 0, hide_effects INTEGER NOT NULL DEFAULT 0)");
+                        + "playtime INTEGER NOT NULL DEFAULT 0, hide_effects INTEGER NOT NULL DEFAULT 0, "
+                        + "private_effects INTEGER NOT NULL DEFAULT 0, owned_effects TEXT NOT NULL DEFAULT '')");
                 statement.execute("CREATE INDEX IF NOT EXISTS players_name ON players (name_lower)");
                 statement.execute("CREATE TABLE IF NOT EXISTS points ("
                         + "kind TEXT NOT NULL, name TEXT NOT NULL, world TEXT NOT NULL, "
@@ -88,6 +89,12 @@ public final class SqliteStorage implements Storage {
             }
             if (playersLack("hide_effects")) {
                 statement.execute("ALTER TABLE players ADD COLUMN hide_effects INTEGER NOT NULL DEFAULT 0");
+            }
+            if (playersLack("private_effects")) {
+                statement.execute("ALTER TABLE players ADD COLUMN private_effects INTEGER NOT NULL DEFAULT 0");
+            }
+            if (playersLack("owned_effects")) {
+                statement.execute("ALTER TABLE players ADD COLUMN owned_effects TEXT NOT NULL DEFAULT ''");
             }
             statement.execute("DELETE FROM schema_info");
             statement.execute("INSERT INTO schema_info (version) VALUES (" + SCHEMA_VERSION + ")");
@@ -145,7 +152,7 @@ public final class SqliteStorage implements Storage {
     @Override
     public void saveProfile(ProfileSnapshot profile) {
         String sql = "INSERT OR REPLACE INTO players (" + PROFILE_COLUMNS + ", name_lower) "
-                + "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+                + "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
         try (PreparedStatement statement = connection.prepareStatement(sql)) {
             statement.setString(1, profile.uuid().toString());
             statement.setString(2, profile.name());
@@ -161,7 +168,9 @@ public final class SqliteStorage implements Storage {
             statement.setLong(12, profile.lastSeen());
             statement.setLong(13, profile.playtime());
             statement.setInt(14, profile.hidesEffects() ? 1 : 0);
-            statement.setString(15, profile.name().toLowerCase(Locale.ROOT));
+            statement.setInt(15, profile.privateEffects() ? 1 : 0);
+            statement.setString(16, String.join(",", profile.ownedEffects()));
+            statement.setString(17, profile.name().toLowerCase(Locale.ROOT));
             statement.executeUpdate();
         } catch (SQLException ex) {
             throw new StorageException("Could not save the profile of " + profile.name(), ex);
@@ -306,7 +315,9 @@ public final class SqliteStorage implements Storage {
                 result.getLong(11),
                 result.getLong(12),
                 result.getLong(13),
-                result.getInt(14) == 1);
+                result.getInt(14) == 1,
+                result.getInt(15) == 1,
+                splitWords(result.getString(16)));
     }
 
     private static String joinIds(Set<UUID> ids) {
@@ -318,6 +329,19 @@ public final class SqliteStorage implements Storage {
             builder.append(id);
         }
         return builder.toString();
+    }
+
+    private static Set<String> splitWords(String raw) {
+        Set<String> words = new HashSet<>();
+        if (raw == null || raw.isBlank()) {
+            return words;
+        }
+        for (String part : raw.split(",")) {
+            if (!part.isBlank()) {
+                words.add(part.trim());
+            }
+        }
+        return words;
     }
 
     private static Set<UUID> splitIds(String raw) {
