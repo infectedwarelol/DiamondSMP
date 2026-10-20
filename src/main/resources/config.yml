@@ -5,7 +5,7 @@
 # Your values are kept and the previous file is saved next to it as config.yml.old.
 # Durations accept 90s, 2m, 1m30s, 1h or a plain number of seconds.
 
-config-version: 10
+config-version: 11
 
 # Shown by /store and /discord, and usable in every message of messages.yml
 # as %store% and %discord%. Add more keys here to get more %key% tokens.
@@ -156,6 +156,28 @@ leaderboard:
     killstreaks:
       slot: 16
       icon: BLAZE_POWDER
+
+# Teams. /team create <name>, invite, accept, deny, leave, kick, rename,
+# color, pvp on/off, disband and info. Teammates cannot hurt each other until
+# the owner runs /team pvp on.
+#
+# PlaceholderAPI placeholders for TAB or any scoreboard plugin. They are empty
+# for players without a team:
+#   %diamondsmp_team%         team name
+#   %diamondsmp_team_upper%   team name in capitals
+#   %diamondsmp_team_color%   team color as a & code, for example &c
+#   %diamondsmp_team_tag%     placeholder-tag below, ready to put under a name
+#   %diamondsmp_team_owner%   owner name
+#   %diamondsmp_team_size%    member count
+#   %diamondsmp_team_pvp%     on or off
+# Example TAB belowname: "&c%health% ❤%diamondsmp_team_tag%"
+teams:
+  max-name-length: 10
+  max-members: 8
+  invite-expire: 60s
+  default-color: aqua
+  # Used by %diamondsmp_team_tag%. %color%, %name% and %name_upper% work here.
+  placeholder-tag: " &8| %color%⚑ %name_upper%"
 
 # Kill tokens. The killer receives tokens straight into their inventory; when
 # it is full the rest drops at their feet. /killtoken [token|compressed]

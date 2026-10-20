@@ -155,6 +155,10 @@ commands:
     description: Give kill tokens or compressed kill tokens.
     usage: /<command> [token|compressed] [amount] [player]
     aliases: [kt, givekilltoken]
+  team:
+    description: Create and manage your team.
+    usage: /<command> <create|disband|invite|accept|deny|leave|kick|rename|color|pvp|info>
+    aliases: [teams]
   stats:
     description: Show kill statistics.
     usage: /<command> [player]
@@ -630,6 +634,7 @@ permissions:
       diamondsmp.stats.others: true
       diamondsmp.leaderboard: true
       diamondsmp.killtoken.give: true
+      diamondsmp.team: true
       diamondsmp.killstreak: true
       diamondsmp.killstreak.reload: true
       diamondsmp.killstreak.modify: true
@@ -645,6 +650,9 @@ permissions:
   diamondsmp.killtoken.give:
     description: Give kill tokens and compressed kill tokens with /killtoken.
     default: op
+  diamondsmp.team:
+    description: Create, join and manage teams with /team.
+    default: true
   diamondsmp.killstreak:
     description: View your own and other players' kill streaks.
     default: true

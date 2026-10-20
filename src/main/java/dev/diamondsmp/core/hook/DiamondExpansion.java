@@ -2,9 +2,11 @@ package dev.diamondsmp.core.hook;
 
 import dev.diamondsmp.core.DiamondSMP;
 import dev.diamondsmp.core.service.KillStreakService;
+import dev.diamondsmp.core.service.TeamService;
 import dev.diamondsmp.core.storage.PlayerProfile;
 import dev.diamondsmp.core.util.Format;
 import me.clip.placeholderapi.expansion.PlaceholderExpansion;
+import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 import org.jetbrains.annotations.NotNull;
 
@@ -54,6 +56,9 @@ final class DiamondExpansion extends PlaceholderExpansion {
         if (player == null) {
             return "";
         }
+        if (request.startsWith("team")) {
+            return team(plugin.teams().teamOf(player.getUniqueId()), request);
+        }
         KillStreakService.Known streak = plugin.killStreaks().lookup(player.getUniqueId());
         PlayerProfile profile = plugin.profiles().profile(player.getUniqueId());
         return switch (request) {
@@ -62,6 +67,28 @@ final class DiamondExpansion extends PlaceholderExpansion {
             case "kills" -> profile == null ? "0" : String.valueOf(profile.kills());
             case "deaths" -> profile == null ? "0" : String.valueOf(profile.deaths());
             case "kdr" -> profile == null ? "0.00" : Format.decimal(profile.ratio());
+            default -> null;
+        };
+    }
+
+    private String team(TeamService.Team team, String request) {
+        if (team == null) {
+            return request.equals("team_size") || request.equals("team_members") ? "0" : "";
+        }
+        return switch (request) {
+            case "team", "team_name" -> team.name();
+            case "team_upper" -> team.name().toUpperCase(Locale.ROOT);
+            case "team_color" -> team.legacyColor();
+            case "team_tag" -> plugin.settings().getString("teams.placeholder-tag", " &8| %color%⚑ %name%")
+                    .replace("%color%", team.legacyColor())
+                    .replace("%name_upper%", team.name().toUpperCase(Locale.ROOT))
+                    .replace("%name%", team.name());
+            case "team_owner" -> {
+                String owner = Bukkit.getOfflinePlayer(team.owner()).getName();
+                yield owner == null ? "" : owner;
+            }
+            case "team_size", "team_members" -> String.valueOf(team.members().size());
+            case "team_pvp" -> team.pvp() ? "on" : "off";
             default -> null;
         };
     }

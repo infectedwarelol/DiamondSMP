@@ -33,6 +33,7 @@ import dev.diamondsmp.core.command.screenshare.FreezePointCommand;
 import dev.diamondsmp.core.command.screenshare.ScreenShareCommand;
 import dev.diamondsmp.core.command.screenshare.UnfreezeCommand;
 import dev.diamondsmp.core.command.spawn.DelSpawnCommand;
+import dev.diamondsmp.core.command.team.TeamCommand;
 import dev.diamondsmp.core.command.spawn.SetSpawnCommand;
 import dev.diamondsmp.core.command.spawn.SpawnCommand;
 import dev.diamondsmp.core.command.stats.KillStreakCommand;
@@ -65,6 +66,7 @@ import dev.diamondsmp.core.listener.FreezeListener;
 import dev.diamondsmp.core.listener.MovementListener;
 import dev.diamondsmp.core.listener.ProfileListener;
 import dev.diamondsmp.core.listener.SpawnListener;
+import dev.diamondsmp.core.listener.TeamListener;
 import dev.diamondsmp.core.listener.TotemListener;
 import dev.diamondsmp.core.message.Messages;
 import dev.diamondsmp.core.scheduler.Scheduler;
@@ -85,6 +87,7 @@ import dev.diamondsmp.core.service.ScreenShareService;
 import dev.diamondsmp.core.service.Service;
 import dev.diamondsmp.core.service.SpawnService;
 import dev.diamondsmp.core.service.StatsService;
+import dev.diamondsmp.core.service.TeamService;
 import dev.diamondsmp.core.service.TeleportService;
 import dev.diamondsmp.core.service.TotemLimit;
 import dev.diamondsmp.core.service.VisibilityService;
@@ -147,6 +150,7 @@ public final class DiamondSMP extends JavaPlugin {
     private CommandHider commandHider;
     private PlayerHeads heads;
     private TotemLimit totems;
+    private TeamService teams;
     private boolean ready;
 
     @Override
@@ -177,7 +181,7 @@ public final class DiamondSMP extends JavaPlugin {
         }
 
         createServices();
-        CompletableFuture.allOf(spawn.load(), warps.load(), clearer.load(), freezePoints.load())
+        CompletableFuture.allOf(spawn.load(), warps.load(), clearer.load(), freezePoints.load(), teams.load())
                 .whenComplete((ignored, error) -> {
                     if (error != null) {
                         getLogger().log(Level.SEVERE, "Saved data could not be loaded; DiamondSMP is disabled to protect it.",
@@ -225,6 +229,7 @@ public final class DiamondSMP extends JavaPlugin {
         commandHider = register(new CommandHider(this));
         heads = register(new PlayerHeads(this));
         totems = register(new TotemLimit(this));
+        teams = register(new TeamService(this));
         register(new Announcer(this));
     }
 
@@ -246,6 +251,7 @@ public final class DiamondSMP extends JavaPlugin {
                 new FreezeListener(this),
                 new CommandHiderListener(this),
                 new TotemListener(this),
+                new TeamListener(this),
                 new MenuListener()
         };
         for (Listener listener : listeners) {
@@ -292,6 +298,7 @@ public final class DiamondSMP extends JavaPlugin {
         commands.add(new LeaderboardCommand(this));
         commands.add(new KillStreakCommand(this));
         commands.add(new KillTokenCommand(this));
+        commands.add(new TeamCommand(this));
         commands.add(new MsgCommand(this));
         commands.add(new ReplyCommand(this));
         commands.add(new RelationCommand(this, "ignore", false));
@@ -505,5 +512,9 @@ public final class DiamondSMP extends JavaPlugin {
 
     public TotemLimit totems() {
         return totems;
+    }
+
+    public TeamService teams() {
+        return teams;
     }
 }

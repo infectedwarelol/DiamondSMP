@@ -5,7 +5,7 @@
 # %prefix%, %primary% and %accent% are replaced everywhere.
 # %nl% starts a new line. Leave a message empty ("") to hide it.
 
-config-version: 9
+config-version: 10
 
 prefix: "&#1FD1F9&lD&#3BD6F9&lI&#57DBFA&lA&#73E0FA&lM&#8FE5FB&lO&#ABEAFB&lN&#C7EFFC&lD &8»&r"
 
@@ -273,6 +273,43 @@ broadcast:
 totems:
   stored: "%prefix% &cYou can only carry %accent%%limit% &ctotems. %accent%%removed% &cwere moved to your ender chest."
   dropped: "%prefix% &cYou can only carry %accent%%limit% &ctotems. %accent%%stored% &cwent to your ender chest and %accent%%dropped% &cdropped on the ground."
+
+# %team% is the team name in its color.
+teams:
+  not-in-team: "%prefix% &cYou are not in a team. Create one with %accent%/team create <name>&c."
+  not-owner: "%prefix% &cOnly the team owner can do that."
+  already-in-team: "%prefix% &cYou are already in a team."
+  invalid-name: "%prefix% &c%accent%%name% &cis not a valid team name. Use letters, numbers or _, at most %max%."
+  taken: "%prefix% &cA team named %accent%%name% &calready exists."
+  unknown: "%prefix% &cNo team named %accent%%name%&c."
+  created: "%prefix% &#ddededCreated the team %team%&#ddeded. Invite players with %accent%/team invite <player>&#ddeded."
+  disbanded: "%prefix% &#ddededThe team %team% &#ddededwas disbanded."
+  invite-self: "%prefix% &cYou cannot invite yourself."
+  target-in-team: "%prefix% &c%accent%%player% &cis already in a team."
+  full: "%prefix% &cThe team is full (%accent%%max% &cmembers)."
+  invited: "%prefix% &#ddededInvited %accent%%player% &#ddededto %team%&#ddeded."
+  invite-received: "%prefix% %accent%%player% &#ddededinvited you to %team%&#ddeded. <click:run_command:/team accept><hover:show_text:'Join the team'>&a&l[ACCEPT]</hover></click> <click:run_command:/team deny><hover:show_text:'Decline'>&c&l[DENY]</hover></click>"
+  no-invite: "%prefix% &cYou have no team invite."
+  joined: "%prefix% %accent%%player% &#ddededjoined %team%&#ddeded!"
+  denied: "%prefix% &#ddededYou declined the invite to %team%&#ddeded."
+  denied-owner: "%prefix% %accent%%player% &#ddededdeclined your team invite."
+  owner-leave: "%prefix% &cThe owner cannot leave. Use %accent%/team disband &cinstead."
+  left: "%prefix% &#ddededYou left %team%&#ddeded."
+  member-left: "%prefix% %accent%%player% &#ddededleft the team."
+  not-member: "%prefix% &c%accent%%player% &cis not in your team."
+  kick-self: "%prefix% &cYou cannot kick yourself."
+  kicked: "%prefix% %accent%%player% &#ddededwas kicked from the team."
+  kicked-target: "%prefix% &cYou were kicked from %team%&c."
+  renamed: "%prefix% &#ddededThe team is now called %team%&#ddeded."
+  invalid-color: "%prefix% &c%accent%%color% &cis not a color. Try red, aqua, gold, light_purple..."
+  recolored: "%prefix% &#ddededThe team color is now %team%&#ddeded."
+  pvp-on: "%prefix% &#ddededTeam PvP is now &aon&#ddeded. Teammates can hurt each other."
+  pvp-off: "%prefix% &#ddededTeam PvP is now &coff&#ddeded. Teammates cannot hurt each other."
+  info:
+    - "%prefix% &#ddededTeam %team%"
+    - "&8» &#ddededOwner: %accent%%owner%"
+    - "&8» &#ddededMembers (%accent%%size%&#ddeded/%accent%%max%&#ddeded): %accent%%members%"
+    - "&8» &#ddededTeam PvP: %pvp%"
 
 chat-filter:
   blocked: "%prefix% &cYour message was blocked for inappropriate language."

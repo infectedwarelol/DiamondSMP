@@ -9,6 +9,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -59,6 +60,11 @@ public final class SqliteStorage implements Storage {
                         + "kind TEXT NOT NULL, name TEXT NOT NULL, world TEXT NOT NULL, "
                         + "x REAL NOT NULL, y REAL NOT NULL, z REAL NOT NULL, yaw REAL NOT NULL, pitch REAL NOT NULL, "
                         + "PRIMARY KEY (kind, name))");
+                statement.execute("CREATE TABLE IF NOT EXISTS teams ("
+                        + "name_lower TEXT PRIMARY KEY, name TEXT NOT NULL, owner TEXT NOT NULL, "
+                        + "color TEXT NOT NULL, pvp INTEGER NOT NULL DEFAULT 0)");
+                statement.execute("CREATE TABLE IF NOT EXISTS team_members ("
+                        + "team TEXT NOT NULL, member TEXT NOT NULL, PRIMARY KEY (team, member))");
                 statement.execute("CREATE TABLE IF NOT EXISTS placed_blocks ("
                         + "world TEXT NOT NULL, x INTEGER NOT NULL, y INTEGER NOT NULL, z INTEGER NOT NULL, "
                         + "material TEXT NOT NULL, PRIMARY KEY (world, x, y, z))");
@@ -268,6 +274,88 @@ public final class SqliteStorage implements Storage {
             return blocks;
         } catch (SQLException ex) {
             throw new StorageException("Could not load the tracked blocks", ex);
+        }
+    }
+
+    @Override
+    public List<TeamRecord> loadTeams() {
+        Map<String, Set<UUID>> members = new HashMap<>();
+        try (Statement statement = connection.createStatement()) {
+            try (ResultSet result = statement.executeQuery("SELECT team, member FROM team_members")) {
+                while (result.next()) {
+                    try {
+                        members.computeIfAbsent(result.getString(1), key -> new HashSet<>())
+                                .add(UUID.fromString(result.getString(2)));
+                    } catch (IllegalArgumentException ignored) {
+                    }
+                }
+            }
+            List<TeamRecord> teams = new ArrayList<>();
+            try (ResultSet result = statement.executeQuery("SELECT name_lower, name, owner, color, pvp FROM teams")) {
+                while (result.next()) {
+                    UUID owner;
+                    try {
+                        owner = UUID.fromString(result.getString(3));
+                    } catch (IllegalArgumentException ex) {
+                        continue;
+                    }
+                    teams.add(new TeamRecord(result.getString(2), owner, result.getString(4), result.getInt(5) == 1,
+                            members.getOrDefault(result.getString(1), Set.of())));
+                }
+            }
+            return teams;
+        } catch (SQLException ex) {
+            throw new StorageException("Could not load the teams", ex);
+        }
+    }
+
+    @Override
+    public void saveTeam(TeamRecord team) {
+        String key = team.name().toLowerCase(Locale.ROOT);
+        try {
+            connection.setAutoCommit(false);
+            try (PreparedStatement upsert = connection.prepareStatement(
+                    "INSERT OR REPLACE INTO teams (name_lower, name, owner, color, pvp) VALUES (?, ?, ?, ?, ?)");
+                 PreparedStatement clear = connection.prepareStatement("DELETE FROM team_members WHERE team = ?");
+                 PreparedStatement insert = connection.prepareStatement(
+                         "INSERT OR REPLACE INTO team_members (team, member) VALUES (?, ?)")) {
+                upsert.setString(1, key);
+                upsert.setString(2, team.name());
+                upsert.setString(3, team.owner().toString());
+                upsert.setString(4, team.color());
+                upsert.setInt(5, team.pvp() ? 1 : 0);
+                upsert.executeUpdate();
+                clear.setString(1, key);
+                clear.executeUpdate();
+                for (UUID member : team.members()) {
+                    insert.setString(1, key);
+                    insert.setString(2, member.toString());
+                    insert.addBatch();
+                }
+                insert.executeBatch();
+                connection.commit();
+            } catch (SQLException ex) {
+                connection.rollback();
+                throw ex;
+            } finally {
+                connection.setAutoCommit(true);
+            }
+        } catch (SQLException ex) {
+            throw new StorageException("Could not save the team " + team.name(), ex);
+        }
+    }
+
+    @Override
+    public void deleteTeam(String name) {
+        String key = name.toLowerCase(Locale.ROOT);
+        try (PreparedStatement team = connection.prepareStatement("DELETE FROM teams WHERE name_lower = ?");
+             PreparedStatement members = connection.prepareStatement("DELETE FROM team_members WHERE team = ?")) {
+            team.setString(1, key);
+            team.executeUpdate();
+            members.setString(1, key);
+            members.executeUpdate();
+        } catch (SQLException ex) {
+            throw new StorageException("Could not delete the team " + name, ex);
         }
     }
 

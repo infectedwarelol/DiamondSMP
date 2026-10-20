@@ -31,4 +31,10 @@ public interface Storage {
     List<PlacedBlock> loadPlacedBlocks();
 
     void replacePlacedBlocks(Collection<PlacedBlock> blocks);
+
+    List<TeamRecord> loadTeams();
+
+    void saveTeam(TeamRecord team);
+
+    void deleteTeam(String name);
 }
