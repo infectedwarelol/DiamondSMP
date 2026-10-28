@@ -3,7 +3,9 @@ package dev.diamondsmp.core.service;
 import dev.diamondsmp.core.DiamondSMP;
 import dev.diamondsmp.core.scheduler.Task;
 import org.bukkit.Bukkit;
+import org.bukkit.Difficulty;
 import org.bukkit.NamespacedKey;
+import org.bukkit.World;
 import org.bukkit.entity.Player;
 import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.potion.PotionEffect;
@@ -26,6 +28,7 @@ public final class EnvironmentService implements Service {
 
     @Override
     public synchronized void reload() {
+        plugin.scheduler().global(this::enforceDifficulty);
         sweep.cancel();
         sweep = plugin.scheduler().globalTimer(this::sweep, 1L, SWEEP_PERIOD_TICKS);
     }
@@ -63,7 +66,20 @@ public final class EnvironmentService implements Service {
         plugin.scheduler().entityLater(player, () -> refreshNightVision(player), 1L);
     }
 
+    public void enforceDifficulty(World world) {
+        if (world.getDifficulty() != Difficulty.HARD) {
+            world.setDifficulty(Difficulty.HARD);
+        }
+    }
+
+    private void enforceDifficulty() {
+        for (World world : Bukkit.getWorlds()) {
+            enforceDifficulty(world);
+        }
+    }
+
     private void sweep() {
+        enforceDifficulty();
         for (Player player : Bukkit.getOnlinePlayers()) {
             if (Bukkit.isOwnedByCurrentRegion(player)) {
                 refreshNightVision(player);
