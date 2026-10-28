@@ -58,7 +58,6 @@ import dev.diamondsmp.core.gui.MenuListener;
 import dev.diamondsmp.core.gui.PlayerHeads;
 import dev.diamondsmp.core.listener.ChatListener;
 import dev.diamondsmp.core.listener.ClearerListener;
-import dev.diamondsmp.core.listener.CommandHiderListener;
 import dev.diamondsmp.core.listener.ConnectionListener;
 import dev.diamondsmp.core.listener.DamageListener;
 import dev.diamondsmp.core.listener.DeathListener;
@@ -74,7 +73,6 @@ import dev.diamondsmp.core.service.Announcer;
 import dev.diamondsmp.core.service.BlockClearer;
 import dev.diamondsmp.core.service.ChatFilter;
 import dev.diamondsmp.core.service.ChatService;
-import dev.diamondsmp.core.service.CommandHider;
 import dev.diamondsmp.core.service.FfaRules;
 import dev.diamondsmp.core.service.FreezePointService;
 import dev.diamondsmp.core.service.GodService;
@@ -147,7 +145,6 @@ public final class DiamondSMP extends JavaPlugin {
     private FfaRules ffaRules;
     private FreezePointService freezePoints;
     private ScreenShareService screenShare;
-    private CommandHider commandHider;
     private PlayerHeads heads;
     private TotemLimit totems;
     private TeamService teams;
@@ -158,11 +155,10 @@ public final class DiamondSMP extends JavaPlugin {
         serverVersion = ServerVersion.detect();
         version = readVersion();
         scheduler = new Scheduler(this, serverVersion.folia());
-        configFile = new ConfigFile(this, "config.yml", Set.of("reactive-distance.thresholds", "command-hider.groups"), Map.of(
+        configFile = new ConfigFile(this, "config.yml", Set.of("reactive-distance.thresholds"), Map.of(
                 "teleport.warmup.spawn", Set.of("3s"),
                 "teleport.warmup.warp", Set.of("3s"),
-                "teleport.warmup.back", Set.of("3s"),
-                "command-hider.mode", Set.of("whitelist")));
+                "teleport.warmup.back", Set.of("3s")));
         configFile.load();
         messages = new Messages(this);
         messages.reload();
@@ -226,7 +222,6 @@ public final class DiamondSMP extends JavaPlugin {
         ffaRules = register(new FfaRules(this));
         freezePoints = register(new FreezePointService(this));
         screenShare = register(new ScreenShareService(this));
-        commandHider = register(new CommandHider(this));
         heads = register(new PlayerHeads(this));
         totems = register(new TotemLimit(this));
         teams = register(new TeamService(this));
@@ -249,7 +244,6 @@ public final class DiamondSMP extends JavaPlugin {
                 new ChatListener(this),
                 new MovementListener(this),
                 new FreezeListener(this),
-                new CommandHiderListener(this),
                 new TotemListener(this),
                 new TeamListener(this),
                 new MenuListener()
@@ -500,10 +494,6 @@ public final class DiamondSMP extends JavaPlugin {
 
     public ScreenShareService screenShare() {
         return screenShare;
-    }
-
-    public CommandHider commandHider() {
-        return commandHider;
     }
 
     public PlayerHeads heads() {
