@@ -22,7 +22,6 @@ theme:
 
 general:
   no-permission: "%prefix% &cYou do not have permission."
-  unknown-command: "&cUnknown Command"
   player-only: "%prefix% &cThis command is for players only."
   player-not-found: "%prefix% &cNo online player named %accent%%player%&c."
   world-not-found: "%prefix% &cNo world named %accent%%world%&c."
