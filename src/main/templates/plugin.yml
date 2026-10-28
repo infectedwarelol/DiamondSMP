@@ -37,6 +37,10 @@ commands:
     description: Toggle god mode.
     usage: /<command> [player]
     aliases: [godmode]
+  nightvision:
+    description: Toggle permanent night vision.
+    usage: /<command>
+    aliases: [nv]
   speed:
     description: Set the walk or fly speed.
     usage: /<command> <1-10> [player]
@@ -274,6 +278,7 @@ permissions:
       diamondsmp.fly.others: true
       diamondsmp.god: true
       diamondsmp.god.others: true
+      diamondsmp.nightvision: true
       diamondsmp.speed: true
       diamondsmp.speed.others: true
       diamondsmp.flyspeed: true
@@ -322,6 +327,9 @@ permissions:
   diamondsmp.god.others:
     description: Toggle another player's god mode.
     default: op
+  diamondsmp.nightvision:
+    description: Toggle your own permanent night vision.
+    default: true
   diamondsmp.speed:
     description: Change your speed.
     default: op
