@@ -71,6 +71,9 @@ god:
   other: "%prefix% &#ddededGod mode %state% &#ddededfor %accent%%player%&#ddeded."
   notify: "%prefix% &#ddededYour god mode was %state% &#ddededby %accent%%player%&#ddeded."
 
+nightvision:
+  self: "%prefix% &#ddededNight vision %state%&#ddeded."
+
 speed:
   type-walk: "walk"
   type-fly: "fly"
