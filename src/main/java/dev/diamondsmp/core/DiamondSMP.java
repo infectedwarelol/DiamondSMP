@@ -60,6 +60,7 @@ import dev.diamondsmp.core.listener.ChatListener;
 import dev.diamondsmp.core.listener.ClearerListener;
 import dev.diamondsmp.core.listener.ConnectionListener;
 import dev.diamondsmp.core.listener.DamageListener;
+import dev.diamondsmp.core.listener.EnvironmentListener;
 import dev.diamondsmp.core.listener.DeathListener;
 import dev.diamondsmp.core.listener.FreezeListener;
 import dev.diamondsmp.core.listener.MovementListener;
@@ -73,6 +74,7 @@ import dev.diamondsmp.core.service.Announcer;
 import dev.diamondsmp.core.service.BlockClearer;
 import dev.diamondsmp.core.service.ChatFilter;
 import dev.diamondsmp.core.service.ChatService;
+import dev.diamondsmp.core.service.EnvironmentService;
 import dev.diamondsmp.core.service.FfaRules;
 import dev.diamondsmp.core.service.FreezePointService;
 import dev.diamondsmp.core.service.GodService;
@@ -148,6 +150,7 @@ public final class DiamondSMP extends JavaPlugin {
     private PlayerHeads heads;
     private TotemLimit totems;
     private TeamService teams;
+    private EnvironmentService environment;
     private boolean ready;
 
     @Override
@@ -225,6 +228,7 @@ public final class DiamondSMP extends JavaPlugin {
         heads = register(new PlayerHeads(this));
         totems = register(new TotemLimit(this));
         teams = register(new TeamService(this));
+        environment = register(new EnvironmentService(this));
         register(new Announcer(this));
     }
 
@@ -246,6 +250,7 @@ public final class DiamondSMP extends JavaPlugin {
                 new FreezeListener(this),
                 new TotemListener(this),
                 new TeamListener(this),
+                new EnvironmentListener(this),
                 new MenuListener()
         };
         for (Listener listener : listeners) {
@@ -506,5 +511,9 @@ public final class DiamondSMP extends JavaPlugin {
 
     public TeamService teams() {
         return teams;
+    }
+
+    public EnvironmentService environment() {
+        return environment;
     }
 }
