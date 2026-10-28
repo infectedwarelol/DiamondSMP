@@ -21,6 +21,7 @@ import dev.diamondsmp.core.command.player.GodCommand;
 import dev.diamondsmp.core.command.player.HealCommand;
 import dev.diamondsmp.core.command.player.ListCommand;
 import dev.diamondsmp.core.command.player.NearCommand;
+import dev.diamondsmp.core.command.player.NightVisionCommand;
 import dev.diamondsmp.core.command.player.PingCommand;
 import dev.diamondsmp.core.command.player.PlaytimeCommand;
 import dev.diamondsmp.core.command.player.RepairCommand;
@@ -268,6 +269,7 @@ public final class DiamondSMP extends JavaPlugin {
         commands.add(new FeedCommand(this));
         commands.add(new FlyCommand(this));
         commands.add(new GodCommand(this));
+        commands.add(new NightVisionCommand(this));
         commands.add(new SpeedCommand(this));
         commands.add(new FlySpeedCommand(this));
         commands.add(new ClearCommand(this));
