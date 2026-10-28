@@ -9,6 +9,7 @@ import org.bukkit.event.entity.EntityPotionEffectEvent;
 import org.bukkit.event.player.PlayerChangedWorldEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerRespawnEvent;
+import org.bukkit.event.world.WorldLoadEvent;
 import org.bukkit.potion.PotionEffectType;
 
 public final class EnvironmentListener implements Listener {
@@ -32,6 +33,11 @@ public final class EnvironmentListener implements Listener {
     @EventHandler(priority = EventPriority.MONITOR)
     public void onWorldChange(PlayerChangedWorldEvent event) {
         plugin.environment().refreshNightVisionLater(event.getPlayer());
+    }
+
+    @EventHandler(priority = EventPriority.MONITOR)
+    public void onWorldLoad(WorldLoadEvent event) {
+        plugin.environment().enforceDifficulty(event.getWorld());
     }
 
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
