@@ -41,6 +41,17 @@ public final class EnvironmentService implements Service {
         return stored == null || stored != 0;
     }
 
+    public boolean toggleNightVision(Player player) {
+        boolean enabled = !nightVision(player);
+        player.getPersistentDataContainer().set(nightVisionKey, PersistentDataType.BYTE, enabled ? (byte) 1 : (byte) 0);
+        if (enabled) {
+            player.addPotionEffect(NIGHT_VISION);
+        } else {
+            player.removePotionEffect(PotionEffectType.NIGHT_VISION);
+        }
+        return enabled;
+    }
+
     public void refreshNightVision(Player player) {
         if (player.isOnline() && !player.isDead() && nightVision(player)
                 && !player.hasPotionEffect(PotionEffectType.NIGHT_VISION)) {
