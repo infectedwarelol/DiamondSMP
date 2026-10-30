@@ -1,0 +1,170 @@
+package dev.diamondsmp.core.listener;
+
+import dev.diamondsmp.core.DiamondSMP;
+import org.bukkit.Bukkit;
+import org.bukkit.GameMode;
+import org.bukkit.Location;
+import org.bukkit.Material;
+import org.bukkit.World;
+import org.bukkit.block.Block;
+import org.bukkit.entity.Player;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
+import org.bukkit.event.Listener;
+import org.bukkit.event.player.PlayerTeleportEvent;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.util.BoundingBox;
+import org.bukkit.util.VoxelShape;
+
+public final class PearlListener implements Listener {
+
+    private static final double STANDING_WIDTH = 0.6D;
+    private static final double STANDING_HEIGHT = 1.8D;
+    private static final double MAX_CORRECTION_SQUARED = 1.0D;
+    private static final double EPSILON = 1.0E-7D;
+
+    private final DiamondSMP plugin;
+
+    public PearlListener(DiamondSMP plugin) {
+        this.plugin = plugin;
+    }
+
+    @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
+    public void onTeleport(PlayerTeleportEvent event) {
+        if (event.getCause() != PlayerTeleportEvent.TeleportCause.ENDER_PEARL
+                || !plugin.settings().getBoolean("pearl-glitch.enabled", true)) {
+            return;
+        }
+        Location to = event.getTo();
+        World world = to.getWorld();
+        if (world == null || !ownsArea(world, to.getBlockX(), to.getBlockZ())) {
+            return;
+        }
+        Player player = event.getPlayer();
+        double width = STANDING_WIDTH;
+        double height = STANDING_HEIGHT;
+        if (player.isSneaking() || player.isSwimming()) {
+            BoundingBox current = player.getBoundingBox();
+            width = Math.max(current.getWidthX(), current.getWidthZ());
+            height = current.getHeight();
+        }
+        double halfWidth = width / 2.0D;
+        if (!collides(world, to.getX(), to.getY(), to.getZ(), halfWidth, height)) {
+            return;
+        }
+        Location safe = findSafe(world, to, halfWidth, height);
+        if (safe != null) {
+            event.setTo(safe);
+            return;
+        }
+        event.setCancelled(true);
+        if (plugin.settings().getBoolean("pearl-glitch.refund-on-cancel", true)
+                && player.getGameMode() != GameMode.CREATIVE) {
+            for (ItemStack leftover : player.getInventory().addItem(new ItemStack(Material.ENDER_PEARL)).values()) {
+                player.getWorld().dropItemNaturally(player.getLocation(), leftover);
+            }
+        }
+        plugin.messages().error(player, "pearl-glitch.cancelled");
+    }
+
+    private static boolean ownsArea(World world, int blockX, int blockZ) {
+        for (int x = blockX - 1; x <= blockX + 1; x += 2) {
+            for (int z = blockZ - 1; z <= blockZ + 1; z += 2) {
+                if (!Bukkit.isOwnedByCurrentRegion(world, x >> 4, z >> 4)) {
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+
+    private static Location findSafe(World world, Location to, double halfWidth, double height) {
+        double centerX = to.getBlockX() + 0.5D;
+        double centerZ = to.getBlockZ() + 0.5D;
+        double y = to.getY();
+        if (isSafe(world, to, centerX, y, centerZ, halfWidth, height)) {
+            return relocate(to, centerX, y, centerZ);
+        }
+        int feetRow = to.getBlockY();
+        double floor = Double.NaN;
+        for (int row = feetRow; row >= feetRow - 2; row--) {
+            VoxelShape shape = world.getBlockAt(to.getBlockX(), row, to.getBlockZ()).getCollisionShape();
+            double top = row + shapeTop(shape);
+            if (!shape.getBoundingBoxes().isEmpty() && top <= y + EPSILON) {
+                if (Double.isNaN(floor) || top > floor) {
+                    floor = top;
+                }
+            }
+        }
+        if (!Double.isNaN(floor) && y - floor <= Math.min(1.0D, height)
+                && isSafe(world, to, centerX, floor, centerZ, halfWidth, height)) {
+            return relocate(to, centerX, floor, centerZ);
+        }
+        VoxelShape feetShape = world.getBlockAt(to.getBlockX(), feetRow, to.getBlockZ()).getCollisionShape();
+        if (feetShape.getBoundingBoxes().isEmpty()) {
+            return null;
+        }
+        double feetOffset = y - feetRow;
+        double ceilingTop = feetRow + shapeTop(feetShape);
+        if (shapeBottom(feetShape) <= feetOffset + EPSILON && ceilingTop > y
+                && ceilingTop - y <= Math.min(1.0D, height)
+                && isSafe(world, to, centerX, ceilingTop, centerZ, halfWidth, height)) {
+            return relocate(to, centerX, ceilingTop, centerZ);
+        }
+        return null;
+    }
+
+    private static boolean isSafe(World world, Location to, double x, double y, double z,
+                                  double halfWidth, double height) {
+        double deltaX = x - to.getX();
+        double deltaY = y - to.getY();
+        double deltaZ = z - to.getZ();
+        return deltaX * deltaX + deltaY * deltaY + deltaZ * deltaZ <= MAX_CORRECTION_SQUARED
+                && !collides(world, x, y, z, halfWidth, height);
+    }
+
+    private static Location relocate(Location to, double x, double y, double z) {
+        return new Location(to.getWorld(), x, y, z, to.getYaw(), to.getPitch());
+    }
+
+    private static boolean collides(World world, double x, double y, double z, double halfWidth, double height) {
+        BoundingBox box = new BoundingBox(x - halfWidth, y, z - halfWidth, x + halfWidth, y + height, z + halfWidth);
+        int minX = (int) Math.floor(box.getMinX());
+        int maxX = (int) Math.floor(box.getMaxX());
+        int minY = (int) Math.floor(box.getMinY()) - 1;
+        int maxY = (int) Math.floor(box.getMaxY());
+        int minZ = (int) Math.floor(box.getMinZ());
+        int maxZ = (int) Math.floor(box.getMaxZ());
+        for (int blockX = minX; blockX <= maxX; blockX++) {
+            for (int blockY = minY; blockY <= maxY; blockY++) {
+                for (int blockZ = minZ; blockZ <= maxZ; blockZ++) {
+                    Block block = world.getBlockAt(blockX, blockY, blockZ);
+                    if (block.getType().isAir()) {
+                        continue;
+                    }
+                    BoundingBox local = box.clone().shift(-blockX, -blockY, -blockZ);
+                    if (block.getCollisionShape().overlaps(local)) {
+                        return true;
+                    }
+                }
+            }
+        }
+        return false;
+    }
+
+    private static double shapeTop(VoxelShape shape) {
+        double top = 0.0D;
+        for (BoundingBox part : shape.getBoundingBoxes()) {
+            top = Math.max(top, part.getMaxY());
+        }
+        return top;
+    }
+
+    private static double shapeBottom(VoxelShape shape) {
+        double bottom = Double.MAX_VALUE;
+        for (BoundingBox part : shape.getBoundingBoxes()) {
+            bottom = Math.min(bottom, part.getMinY());
+        }
+        return bottom;
+    }
+}

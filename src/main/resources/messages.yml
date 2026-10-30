@@ -271,6 +271,9 @@ broadcast:
     title: "%head% %accent%&l%player%"
     subtitle: "&f%message%"
 
+pearl-glitch:
+  cancelled: "%prefix% &cThat pearl would have put you inside a block, so it was cancelled."
+
 # %limit% %removed% %stored% %dropped%
 totems:
   stored: "%prefix% &cYou can only carry %accent%%limit% &ctotems. %accent%%removed% &cwere moved to your ender chest."

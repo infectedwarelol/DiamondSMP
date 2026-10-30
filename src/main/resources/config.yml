@@ -715,3 +715,11 @@ join-quit:
   # Replace the join and quit messages with the ones in messages.yml.
   # Leave a message empty there to hide it.
   enabled: true
+
+# Stops ender pearls from putting players inside walls, ceilings, slabs,
+# stairs, fences, doors or panes. A landing spot inside a block is moved at
+# most 1 block to a safe spot, or the teleport is cancelled.
+pearl-glitch:
+  enabled: true
+  # Give the pearl back when its teleport is cancelled.
+  refund-on-cancel: true

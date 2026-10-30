@@ -65,6 +65,7 @@ import dev.diamondsmp.core.listener.EnvironmentListener;
 import dev.diamondsmp.core.listener.DeathListener;
 import dev.diamondsmp.core.listener.FreezeListener;
 import dev.diamondsmp.core.listener.MovementListener;
+import dev.diamondsmp.core.listener.PearlListener;
 import dev.diamondsmp.core.listener.ProfileListener;
 import dev.diamondsmp.core.listener.SpawnListener;
 import dev.diamondsmp.core.listener.TeamListener;
@@ -249,6 +250,7 @@ public final class DiamondSMP extends JavaPlugin {
                 new ChatListener(this),
                 new MovementListener(this),
                 new FreezeListener(this),
+                new PearlListener(this),
                 new TotemListener(this),
                 new TeamListener(this),
                 new EnvironmentListener(this),
