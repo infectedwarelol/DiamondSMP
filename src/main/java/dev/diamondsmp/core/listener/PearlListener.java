@@ -24,7 +24,7 @@ public final class PearlListener implements Listener {
     private static final double STANDING_WIDTH = 0.6D;
     private static final double STANDING_HEIGHT = 1.8D;
     private static final double MAX_CORRECTION_SQUARED = 1.0D;
-    private static final double TOLERANCE = 1.0E-3D;
+    private static final double TOLERANCE = 1.0E-7D;
     private static final int SCAN_RADIUS = 2;
 
     private final DiamondSMP plugin;
