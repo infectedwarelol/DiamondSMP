@@ -44,6 +44,20 @@ public final class ConfigFile {
         return configuration;
     }
 
+    public synchronized boolean set(String path, Object value) {
+        YamlConfiguration current = new YamlConfiguration();
+        if (file.isFile()) {
+            try {
+                current.load(file);
+            } catch (IOException | InvalidConfigurationException ex) {
+                plugin.getLogger().log(Level.WARNING, "Could not read " + resource + " to change " + path, ex);
+                return false;
+            }
+        }
+        current.set(path, value);
+        return write(current);
+    }
+
     public void load() {
         if (!file.exists() && plugin.getResource(resource) != null) {
             plugin.saveResource(resource, false);
@@ -206,7 +220,7 @@ public final class ConfigFile {
         }
     }
 
-    private void write(YamlConfiguration target) {
+    private boolean write(YamlConfiguration target) {
         Path path = file.toPath();
         Path temp = path.resolveSibling(file.getName() + "." + System.nanoTime() + ".tmp");
         try {
@@ -217,8 +231,10 @@ public final class ConfigFile {
             } catch (AtomicMoveNotSupportedException ex) {
                 Files.move(temp, path, StandardCopyOption.REPLACE_EXISTING);
             }
+            return true;
         } catch (IOException ex) {
             plugin.getLogger().log(Level.WARNING, "Could not update " + resource, ex);
+            return false;
         } finally {
             try {
                 Files.deleteIfExists(temp);

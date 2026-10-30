@@ -217,8 +217,8 @@ commands:
     usage: /<command> <clear|rain|thunder> [world]
   diamondsmp:
     description: DiamondSMP administration.
-    usage: /<command> <reload|version>
-    aliases: [dsmp]
+    usage: /<command> <reload|version|enable|disable> [feature]
+    aliases: [dsmp, diamond]
 
 permissions:
   diamondsmp.*:

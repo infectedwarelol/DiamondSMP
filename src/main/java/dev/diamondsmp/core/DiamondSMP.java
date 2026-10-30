@@ -429,6 +429,10 @@ public final class DiamondSMP extends JavaPlugin {
         return scheduler;
     }
 
+    public ConfigFile configFile() {
+        return configFile;
+    }
+
     public Messages messages() {
         return messages;
     }

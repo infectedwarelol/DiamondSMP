@@ -37,6 +37,13 @@ general:
 admin:
   reloaded: "%prefix% &#ddededReloaded the configuration in %accent%%time%ms&#ddeded."
   version: "%prefix% &#ddededDiamondSMP %accent%%version% &#ddededon %accent%%server%&#ddeded."
+  feature-enabled: "%prefix% &#ddededEnabled %accent%%feature%&#ddeded and reloaded in %accent%%time%ms&#ddeded."
+  feature-disabled: "%prefix% &#ddededDisabled %accent%%feature%&#ddeded and reloaded in %accent%%time%ms&#ddeded."
+  feature-already-enabled: "%prefix% &c%accent%%feature% &cis already enabled."
+  feature-already-disabled: "%prefix% &c%accent%%feature% &cis already disabled."
+  feature-unknown: "%prefix% &cUnknown feature %accent%%feature%&c."
+  feature-usage: "%prefix% &cUsage: %accent%/diamondsmp %action% <feature>"
+  feature-save-failed: "%prefix% &cCould not save %accent%%feature%&c to config.yml; see the console."
 
 join:
   message: "&8[&a+&8] &#ddeded%player%"
