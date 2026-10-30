@@ -26,6 +26,7 @@ public final class PearlListener implements Listener {
     private static final double MAX_CORRECTION_SQUARED = 1.0D;
     private static final double TOLERANCE = 1.0E-7D;
     private static final int SCAN_RADIUS = 2;
+    private static final double PATH_STEP = 0.05D;
 
     private final DiamondSMP plugin;
 
@@ -115,11 +116,41 @@ public final class PearlListener implements Listener {
             double x = to.getX() + shift.x();
             double y = to.getY() + shift.y();
             double z = to.getZ() + shift.z();
-            if (!collides(world, x, y, z, halfWidth, height)) {
+            if (!crossesObstacle(box, obstacles, shift) && reachable(world, box, obstacles, shift)
+                    && !collides(world, x, y, z, halfWidth, height)) {
                 return new Location(to.getWorld(), x, y, z, to.getYaw(), to.getPitch());
             }
         }
         return null;
+    }
+
+    private static boolean crossesObstacle(BoundingBox box, List<BoundingBox> obstacles, Shift shift) {
+        for (BoundingBox obstacle : obstacles) {
+            if (crosses(box.getCenterX(), shift.x(), obstacle.getCenterX())
+                    || crosses(box.getCenterY(), shift.y(), obstacle.getCenterY())
+                    || crosses(box.getCenterZ(), shift.z(), obstacle.getCenterZ())) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private static boolean crosses(double center, double shift, double obstacleCenter) {
+        return (center - obstacleCenter) * (center + shift - obstacleCenter) < 0.0D;
+    }
+
+    private static boolean reachable(World world, BoundingBox box, List<BoundingBox> obstacles, Shift shift) {
+        int steps = (int) Math.ceil(Math.sqrt(shift.distanceSquared()) / PATH_STEP);
+        for (int step = 1; step < steps; step++) {
+            double fraction = (double) step / steps;
+            BoundingBox moved = box.clone().shift(shift.x() * fraction, shift.y() * fraction, shift.z() * fraction);
+            for (BoundingBox touched : obstacles(world, moved)) {
+                if (!obstacles.contains(touched)) {
+                    return false;
+                }
+            }
+        }
+        return true;
     }
 
     private static void addShift(List<Double> shifts, double shift) {
