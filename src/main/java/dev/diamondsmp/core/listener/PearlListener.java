@@ -14,14 +14,18 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerTeleportEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.util.BoundingBox;
-import org.bukkit.util.VoxelShape;
+
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.List;
 
 public final class PearlListener implements Listener {
 
     private static final double STANDING_WIDTH = 0.6D;
     private static final double STANDING_HEIGHT = 1.8D;
     private static final double MAX_CORRECTION_SQUARED = 1.0D;
-    private static final double EPSILON = 1.0E-7D;
+    private static final double TOLERANCE = 1.0E-3D;
+    private static final int SCAN_RADIUS = 2;
 
     private final DiamondSMP plugin;
 
@@ -68,8 +72,8 @@ public final class PearlListener implements Listener {
     }
 
     private static boolean ownsArea(World world, int blockX, int blockZ) {
-        for (int x = blockX - 1; x <= blockX + 1; x += 2) {
-            for (int z = blockZ - 1; z <= blockZ + 1; z += 2) {
+        for (int x = blockX - SCAN_RADIUS; x <= blockX + SCAN_RADIUS; x += SCAN_RADIUS * 2) {
+            for (int z = blockZ - SCAN_RADIUS; z <= blockZ + SCAN_RADIUS; z += SCAN_RADIUS * 2) {
                 if (!Bukkit.isOwnedByCurrentRegion(world, x >> 4, z >> 4)) {
                     return false;
                 }
@@ -79,56 +83,62 @@ public final class PearlListener implements Listener {
     }
 
     private static Location findSafe(World world, Location to, double halfWidth, double height) {
-        double centerX = to.getBlockX() + 0.5D;
-        double centerZ = to.getBlockZ() + 0.5D;
-        double y = to.getY();
-        if (isSafe(world, to, centerX, y, centerZ, halfWidth, height)) {
-            return relocate(to, centerX, y, centerZ);
+        BoundingBox box = standingBox(to.getX(), to.getY(), to.getZ(), halfWidth, height);
+        List<BoundingBox> obstacles = obstacles(world, box);
+        List<Double> shiftsX = new ArrayList<>();
+        List<Double> shiftsY = new ArrayList<>();
+        List<Double> shiftsZ = new ArrayList<>();
+        shiftsX.add(0.0D);
+        shiftsY.add(0.0D);
+        shiftsZ.add(0.0D);
+        for (BoundingBox obstacle : obstacles) {
+            addShift(shiftsX, obstacle.getMaxX() - box.getMinX());
+            addShift(shiftsX, obstacle.getMinX() - box.getMaxX());
+            addShift(shiftsY, obstacle.getMaxY() - box.getMinY());
+            addShift(shiftsY, obstacle.getMinY() - box.getMaxY());
+            addShift(shiftsZ, obstacle.getMaxZ() - box.getMinZ());
+            addShift(shiftsZ, obstacle.getMinZ() - box.getMaxZ());
         }
-        int feetRow = to.getBlockY();
-        double floor = Double.NaN;
-        for (int row = feetRow; row >= feetRow - 2; row--) {
-            VoxelShape shape = world.getBlockAt(to.getBlockX(), row, to.getBlockZ()).getCollisionShape();
-            double top = row + shapeTop(shape);
-            if (!shape.getBoundingBoxes().isEmpty() && top <= y + EPSILON) {
-                if (Double.isNaN(floor) || top > floor) {
-                    floor = top;
+        List<Shift> shifts = new ArrayList<>();
+        for (double shiftX : shiftsX) {
+            for (double shiftY : shiftsY) {
+                for (double shiftZ : shiftsZ) {
+                    double distanceSquared = shiftX * shiftX + shiftY * shiftY + shiftZ * shiftZ;
+                    if (distanceSquared > 0.0D && distanceSquared <= MAX_CORRECTION_SQUARED) {
+                        shifts.add(new Shift(shiftX, shiftY, shiftZ, distanceSquared));
+                    }
                 }
             }
         }
-        if (!Double.isNaN(floor) && y - floor <= Math.min(1.0D, height)
-                && isSafe(world, to, centerX, floor, centerZ, halfWidth, height)) {
-            return relocate(to, centerX, floor, centerZ);
-        }
-        VoxelShape feetShape = world.getBlockAt(to.getBlockX(), feetRow, to.getBlockZ()).getCollisionShape();
-        if (feetShape.getBoundingBoxes().isEmpty()) {
-            return null;
-        }
-        double feetOffset = y - feetRow;
-        double ceilingTop = feetRow + shapeTop(feetShape);
-        if (shapeBottom(feetShape) <= feetOffset + EPSILON && ceilingTop > y
-                && ceilingTop - y <= Math.min(1.0D, height)
-                && isSafe(world, to, centerX, ceilingTop, centerZ, halfWidth, height)) {
-            return relocate(to, centerX, ceilingTop, centerZ);
+        shifts.sort(Comparator.comparingDouble(Shift::distanceSquared));
+        for (Shift shift : shifts) {
+            double x = to.getX() + shift.x();
+            double y = to.getY() + shift.y();
+            double z = to.getZ() + shift.z();
+            if (!collides(world, x, y, z, halfWidth, height)) {
+                return new Location(to.getWorld(), x, y, z, to.getYaw(), to.getPitch());
+            }
         }
         return null;
     }
 
-    private static boolean isSafe(World world, Location to, double x, double y, double z,
-                                  double halfWidth, double height) {
-        double deltaX = x - to.getX();
-        double deltaY = y - to.getY();
-        double deltaZ = z - to.getZ();
-        return deltaX * deltaX + deltaY * deltaY + deltaZ * deltaZ <= MAX_CORRECTION_SQUARED
-                && !collides(world, x, y, z, halfWidth, height);
+    private static void addShift(List<Double> shifts, double shift) {
+        if (Math.abs(shift) <= 1.0D && !shifts.contains(shift)) {
+            shifts.add(shift);
+        }
     }
 
-    private static Location relocate(Location to, double x, double y, double z) {
-        return new Location(to.getWorld(), x, y, z, to.getYaw(), to.getPitch());
+    private static BoundingBox standingBox(double x, double y, double z, double halfWidth, double height) {
+        return new BoundingBox(x - halfWidth, y, z - halfWidth, x + halfWidth, y + height, z + halfWidth);
     }
 
     private static boolean collides(World world, double x, double y, double z, double halfWidth, double height) {
-        BoundingBox box = new BoundingBox(x - halfWidth, y, z - halfWidth, x + halfWidth, y + height, z + halfWidth);
+        return !obstacles(world, standingBox(x, y, z, halfWidth, height)).isEmpty();
+    }
+
+    private static List<BoundingBox> obstacles(World world, BoundingBox box) {
+        BoundingBox inner = box.clone().expand(-TOLERANCE);
+        List<BoundingBox> found = new ArrayList<>();
         int minX = (int) Math.floor(box.getMinX());
         int maxX = (int) Math.floor(box.getMaxX());
         int minY = (int) Math.floor(box.getMinY()) - 1;
@@ -142,29 +152,18 @@ public final class PearlListener implements Listener {
                     if (block.getType().isAir()) {
                         continue;
                     }
-                    BoundingBox local = box.clone().shift(-blockX, -blockY, -blockZ);
-                    if (block.getCollisionShape().overlaps(local)) {
-                        return true;
+                    for (BoundingBox part : block.getCollisionShape().getBoundingBoxes()) {
+                        BoundingBox placed = part.clone().shift(blockX, blockY, blockZ);
+                        if (placed.overlaps(inner)) {
+                            found.add(placed);
+                        }
                     }
                 }
             }
         }
-        return false;
+        return found;
     }
 
-    private static double shapeTop(VoxelShape shape) {
-        double top = 0.0D;
-        for (BoundingBox part : shape.getBoundingBoxes()) {
-            top = Math.max(top, part.getMaxY());
-        }
-        return top;
-    }
-
-    private static double shapeBottom(VoxelShape shape) {
-        double bottom = Double.MAX_VALUE;
-        for (BoundingBox part : shape.getBoundingBoxes()) {
-            bottom = Math.min(bottom, part.getMinY());
-        }
-        return bottom;
+    private record Shift(double x, double y, double z, double distanceSquared) {
     }
 }
