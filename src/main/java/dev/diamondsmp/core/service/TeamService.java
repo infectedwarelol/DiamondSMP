@@ -1,11 +1,11 @@
 package dev.diamondsmp.core.service;
 
+import com.destroystokyo.paper.profile.PlayerProfile;
 import dev.diamondsmp.core.DiamondSMP;
 import dev.diamondsmp.core.storage.TeamRecord;
 import dev.diamondsmp.core.util.Format;
 import net.kyori.adventure.text.format.NamedTextColor;
 import org.bukkit.Bukkit;
-import org.bukkit.OfflinePlayer;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 
@@ -276,10 +276,18 @@ public final class TeamService implements Service {
         save(team);
     }
 
+    public String nameOf(UUID uuid) {
+        Player online = Bukkit.getPlayer(uuid);
+        if (online != null) {
+            return online.getName();
+        }
+        PlayerProfile profile = Bukkit.createProfile(uuid);
+        return profile.completeFromCache() ? profile.getName() : null;
+    }
+
     public UUID memberByName(Team team, String name) {
         for (UUID member : team.members) {
-            Player online = Bukkit.getPlayer(member);
-            String known = online != null ? online.getName() : Bukkit.getOfflinePlayer(member).getName();
+            String known = nameOf(member);
             if (name.equalsIgnoreCase(known)) {
                 return member;
             }
@@ -290,9 +298,8 @@ public final class TeamService implements Service {
     public List<String> memberNames(Team team) {
         List<String> names = new ArrayList<>();
         for (UUID member : team.members) {
-            Player online = Bukkit.getPlayer(member);
-            OfflinePlayer offline = online != null ? online : Bukkit.getOfflinePlayer(member);
-            names.add(offline.getName() == null ? member.toString().substring(0, 8) : offline.getName());
+            String known = nameOf(member);
+            names.add(known == null ? member.toString().substring(0, 8) : known);
         }
         Collections.sort(names, String.CASE_INSENSITIVE_ORDER);
         return names;

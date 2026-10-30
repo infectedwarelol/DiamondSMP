@@ -6,7 +6,6 @@ import dev.diamondsmp.core.service.TeamService;
 import dev.diamondsmp.core.storage.PlayerProfile;
 import dev.diamondsmp.core.util.Format;
 import me.clip.placeholderapi.expansion.PlaceholderExpansion;
-import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 import org.jetbrains.annotations.NotNull;
 
@@ -84,7 +83,7 @@ final class DiamondExpansion extends PlaceholderExpansion {
                     .replace("%name_upper%", team.name().toUpperCase(Locale.ROOT))
                     .replace("%name%", team.name());
             case "team_owner" -> {
-                String owner = Bukkit.getOfflinePlayer(team.owner()).getName();
+                String owner = plugin.teams().nameOf(team.owner());
                 yield owner == null ? "" : owner;
             }
             case "team_size", "team_members" -> String.valueOf(team.members().size());

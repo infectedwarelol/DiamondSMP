@@ -202,9 +202,9 @@ public final class TeamCommand extends BaseCommand {
         if (team == null) {
             throw context.fail(context.has(1) ? "teams.unknown" : "teams.not-in-team", "name", context.arg(1, ""));
         }
+        String owner = teams().nameOf(team.owner());
         context.reply("teams.info", "team", tag(team),
-                "owner", Bukkit.getOfflinePlayer(team.owner()).getName() == null ? "?"
-                        : Bukkit.getOfflinePlayer(team.owner()).getName(),
+                "owner", owner == null ? "?" : owner,
                 "size", team.members().size(), "max", teams().maxMembers(),
                 "members", String.join(", ", teams().memberNames(team)),
                 "pvp", plugin.messages().get(team.pvp() ? "general.enabled" : "general.disabled"));
