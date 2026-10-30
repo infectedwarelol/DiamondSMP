@@ -25,8 +25,8 @@ public final class DiamondSMPCommand extends BaseCommand {
         switch (action) {
             case "reload" -> {
                 long started = System.nanoTime();
-                plugin.reloadAll();
-                context.reply("admin.reloaded", "time", (System.nanoTime() - started) / 1_000_000L);
+                plugin.reloadAll(() -> context.reply("admin.reloaded",
+                        "time", (System.nanoTime() - started) / 1_000_000L));
             }
             case "version" -> context.reply("admin.version",
                     "version", plugin.version(),
@@ -60,9 +60,8 @@ public final class DiamondSMPCommand extends BaseCommand {
                     return;
                 }
                 long started = System.nanoTime();
-                plugin.reloadAll();
-                context.reply(enable ? "admin.feature-enabled" : "admin.feature-disabled",
-                        "feature", feature, "time", (System.nanoTime() - started) / 1_000_000L);
+                plugin.reloadAll(() -> context.reply(enable ? "admin.feature-enabled" : "admin.feature-disabled",
+                        "feature", feature, "time", (System.nanoTime() - started) / 1_000_000L));
             });
         });
     }

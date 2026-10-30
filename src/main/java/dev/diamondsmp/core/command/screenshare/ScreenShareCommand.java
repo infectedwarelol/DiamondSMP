@@ -46,8 +46,8 @@ public final class ScreenShareCommand extends BaseCommand {
             case "info" -> info(context);
             case "list" -> list(context);
             default -> {
-                plugin.reloadAll();
-                context.reply("screenshare.reloaded", "points", plugin.freezePoints().size());
+                plugin.reloadAll(() -> context.reply("screenshare.reloaded",
+                        "points", plugin.freezePoints().size()));
             }
         }
     }

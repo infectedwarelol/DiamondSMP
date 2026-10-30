@@ -58,7 +58,7 @@ public final class ConfigFile {
         return write(current);
     }
 
-    public void load() {
+    public synchronized void load() {
         if (!file.exists() && plugin.getResource(resource) != null) {
             plugin.saveResource(resource, false);
         }

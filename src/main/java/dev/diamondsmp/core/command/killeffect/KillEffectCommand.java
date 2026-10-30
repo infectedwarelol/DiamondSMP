@@ -45,8 +45,8 @@ public final class KillEffectCommand extends BaseCommand {
             case "give" -> grant(context, true);
             case "take" -> grant(context, false);
             case "reload" -> {
-                plugin.reloadAll();
-                context.reply("killeffect.reloaded", "count", plugin.killEffects().available().size());
+                plugin.reloadAll(() -> context.reply("killeffect.reloaded",
+                        "count", plugin.killEffects().available().size()));
             }
             default -> throw context.usage();
         }

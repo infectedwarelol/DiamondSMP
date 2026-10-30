@@ -331,9 +331,22 @@ public final class DiamondSMP extends JavaPlugin {
         }
     }
 
-    public void reloadAll() {
-        configFile.load();
-        messages.reload();
+    public void reloadAll(Runnable then) {
+        scheduler.async(() -> {
+            try {
+                configFile.load();
+                messages.reload();
+            } catch (RuntimeException ex) {
+                getLogger().log(Level.SEVERE, "Could not read the configuration files", ex);
+            }
+            scheduler.global(() -> {
+                applyReload();
+                then.run();
+            });
+        });
+    }
+
+    private void applyReload() {
         messages.tokens(links());
         for (Service service : services) {
             service.reload();

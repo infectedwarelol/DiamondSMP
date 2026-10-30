@@ -48,8 +48,7 @@ public final class KillStreakCommand extends BaseCommand {
         if (!context.sender().hasPermission(RELOAD)) {
             throw context.fail("general.no-permission");
         }
-        plugin.reloadAll();
-        context.reply("killstreak.reloaded");
+        plugin.reloadAll(() -> context.reply("killstreak.reloaded"));
     }
 
     private void show(CommandContext context, String name) {
